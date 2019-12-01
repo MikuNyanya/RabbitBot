@@ -9,6 +9,7 @@ import cc.moecraft.icq.user.GroupUser;
 import cc.moecraft.icq.user.User;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import gugugu.entity.GroupUserInfo;
 import lombok.*;
 
 /**
@@ -26,9 +27,19 @@ public class EventGroupMessage extends EventGroupOrDiscussMessage
     @Expose
     public Anonymous anonymous;
 
+    /**
+     * 群号
+     */
     @SerializedName("group_id")
     @Expose
     public Long groupId;
+
+    /**
+     * 群消息里获取到的发送人信息
+     */
+    @SerializedName("sender")
+    @Expose
+    public GroupUserInfo groupUserInfo;
 
     @SerializedName("sub_type")
     @Expose
@@ -80,6 +91,10 @@ public class EventGroupMessage extends EventGroupOrDiscussMessage
         }
     }
 
+    /**
+     * @deprecated 该方法调用接口，走缓存，而且信息不完全，所以不建议使用
+     */
+    @Deprecated
     @Override
     public User getSender()
     {

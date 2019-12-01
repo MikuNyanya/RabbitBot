@@ -14,10 +14,7 @@ import cc.moecraft.test.icq.features.codec.CommandDecode;
 import cc.moecraft.test.icq.features.codec.CommandEncode;
 import cc.moecraft.test.icq.features.say.CommandSay;
 import cc.moecraft.test.icq.features.say.CommandSayRaw;
-import cc.moecraft.test.icq.listeners.ExceptionListener;
-import cc.moecraft.test.icq.listeners.RequestListener;
-import cc.moecraft.test.icq.listeners.SimpleTextLoggingListener;
-import cc.moecraft.test.icq.listeners.TestListener;
+import cc.moecraft.test.icq.listeners.*;
 
 /**
  * 功能测试机器人!
@@ -29,8 +26,7 @@ import cc.moecraft.test.icq.listeners.TestListener;
  * @author Vanilla (https://github.com/VergeDX)
  * @since 2019-03-21 20:26
  */
-public class TestBot
-{
+public class TestBot {
     /**
      * 要注册的指令
      */
@@ -60,24 +56,24 @@ public class TestBot
      */
     private static IcqListener[] listeners = new IcqListener[]{
             new TestListener(),
+            new TestGroupListener(),
             new RequestListener(),
             new AntiRecallListener(),
             new AnnoyingListener(),
             new ExceptionListener()
     };
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         // 创建机器人对象 ( 传入配置 )
-        PicqBotX bot = new PicqBotX(new PicqConfig(31092)
+        PicqBotX bot = new PicqBotX(new PicqConfig(31033)
                 .setDebug(true)
-                .setSecret("This is secret")
-                .setAccessToken("Brq4KSm+3UdaUJnLZ+AJfj**v-vePWL$")
+//                .setSecret("This is secret")
+//                .setAccessToken("Brq4KSm+3UdaUJnLZ+AJfj**v-vePWL$")
         );
 
         // 添加一个机器人账户 ( 名字, 发送URL, 发送端口 )
-        bot.addAccount("Bot00", "127.0.0.1", 31090);
-        bot.addAccount("Bot01", "127.0.0.1", 31091);
+        bot.addAccount("Bot00", "127.0.0.1", 31032);
+//        bot.addAccount("Bot01", "127.0.0.1", 31091);
 
         // 启用HyExp ( 非必要 )
         bot.setUniversalHyExpSupport(true);
