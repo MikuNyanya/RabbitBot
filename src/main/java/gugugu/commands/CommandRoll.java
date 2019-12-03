@@ -5,6 +5,8 @@ import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
+import gugugu.entity.InfoGroupUser;
+import utils.RandomUtil;
 
 import java.util.ArrayList;
 
@@ -13,11 +15,9 @@ import java.util.ArrayList;
  * @date 2019/11/30 23:33
  * for the Reisen
  * <p>
- * 清屏指令
+ * 随机数指令
  */
-public class CommandCls implements GroupCommand {
-    private static String clsMessage = null;
-
+public class CommandRoll implements GroupCommand {
     /**
      * 执行指令
      *
@@ -30,17 +30,27 @@ public class CommandCls implements GroupCommand {
      */
     @Override
     public String groupMessage(EventGroupMessage event, GroupUser sender, Group group, String command, ArrayList<String> args) {
-        if (clsMessage == null) {
-            clsMessage = "";
-            for (int i = 0; i < 20; i++) clsMessage += "\n";
-            clsMessage += "已清屏!";
+        //随机数 0 - 100 包含0
+        int rollNum = RandomUtil.roll();
+        //实际不需要0，排除掉
+        if (0 == rollNum) {
+            rollNum = 1;
         }
 
-        return clsMessage;
+        //群员信息
+        InfoGroupUser groupUserInfo = event.getGroupUserInfo();
+        //附加指令
+        String commandParam = "";
+        if (null != args && args.size() > 0) {
+            commandParam = String.format("为[%s]", args.get(0));
+        }
+
+        //【群员名称】 装饰性语句 "roll="随机数
+        return String.format("[%s]%s roll=%s", groupUserInfo.getGroupUserName(), commandParam, rollNum);
     }
 
     @Override
     public CommandProperties properties() {
-        return new CommandProperties("clear", "cls","CLS","清屏");
+        return new CommandProperties("roll", "r", "R");
     }
 }

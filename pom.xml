@@ -48,16 +48,30 @@
     </repositories>
 
     <dependencies>
+        <!--上一个作者的日志工具-->
         <dependency>
             <groupId>com.github.hydevelop</groupId>
             <artifactId>HyLogger</artifactId>
             <version>4.0.254</version>
         </dependency>
 
+        <!--  Quartz是一个开源的作业调度框架-->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz-jobs</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+
+        <!--一个轻量化代码的工具 lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.6</version>
+            <version>1.18.8</version>
             <scope>provided</scope>
         </dependency>
 

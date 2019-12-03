@@ -3,6 +3,7 @@ package gugugu.entity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import utils.StringUtil;
 
 /**
  * @author MikuLink
@@ -11,7 +12,7 @@ import lombok.Getter;
  * 群用户信息对象
  */
 @Getter
-public class GroupUserInfo {
+public class InfoGroupUser {
     /**
      * 年龄
      */
@@ -77,6 +78,14 @@ public class GroupUserInfo {
         } else {
             return sex;
         }
+    }
+
+    //不设置群名片的话，card则为空，这时候直接使用本命
+    public String getGroupUserName(){
+        if(StringUtil.isEmpty(card)){
+            return nickname;
+        }
+        return card;
     }
 
 }
