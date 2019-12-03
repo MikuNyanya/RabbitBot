@@ -3,7 +3,9 @@ package gugugu.listeners;
 import cc.moecraft.icq.event.EventHandler;
 import cc.moecraft.icq.event.IcqListener;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
+import gugugu.constant.ConstantCommon;
 import utils.RandomUtil;
+import utils.StringUtil;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -58,14 +60,19 @@ public class GroupListener extends IcqListener {
             LAST_MSG_MAP.put(groupId, "");
         }
 
+        //屏蔽正常指令
+        if (StringUtil.isNotEmpty(groupMsg) && ConstantCommon.COMMAND_INDEX.equalsIgnoreCase(groupMsg.substring(0, 1))) {
+            return;
+        }
+
         //群复读，两个相同的消息，复读一次，并重置计数
         if (LAST_MSG_MAP.get(groupId).equals(groupMsg)) {
             if (REPEATER_KILLER_LIST.contains(groupMsg) || REPEATER_STOP_LIST.contains(groupMsg)) {
                 //打断
-                groupMsg = REPEATER_STOP_LIST.get(RandomUtil.roll(REPEATER_STOP_LIST.size()));
+                groupMsg = REPEATER_STOP_LIST.get(RandomUtil.roll(REPEATER_STOP_LIST.size() - 1));
             } else if (RandomUtil.rollBoolean(-90)) {
                 //打断复读
-                groupMsg = REPEATER_KILLER_LIST.get(RandomUtil.roll(REPEATER_KILLER_LIST.size()));
+                groupMsg = REPEATER_KILLER_LIST.get(RandomUtil.roll(REPEATER_KILLER_LIST.size() - 1));
             }
             event.getHttpApi().sendGroupMsg(event.groupId, groupMsg);
             LAST_MSG_MAP.put(groupId, "");

@@ -15,13 +15,29 @@ public class NumberUtil {
      * @return 是否为纯数字
      */
     public static boolean isNumber(String str) {
-        if(StringUtil.isEmpty(str)){
+        if (StringUtil.isEmpty(str)) {
             return false;
         }
-//        for(Char c : str){
-//            str[i];
-//        }
+        char[] cc = str.toCharArray();
+        for (char c : cc) {
+            if (!RegexUtil.regex(String.valueOf(c), "[0-9]")) {
+                return false;
+            }
+        }
 
         return true;
+    }
+
+    /**
+     * 字符串转化为数字
+     *
+     * @param str 输入字符串
+     * @return 输出数字
+     */
+    public static int toInt(String str) {
+        if (StringUtil.isEmpty(str) || !isNumber(str)) {
+            return 0;
+        }
+        return Integer.valueOf(str);
     }
 }

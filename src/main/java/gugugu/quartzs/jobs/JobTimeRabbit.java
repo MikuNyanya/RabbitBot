@@ -54,6 +54,9 @@ public class JobTimeRabbit implements Job {
         int hour = DateUtil.getHour();
 
         switch (hour) {
+            //半夜0点
+            case 0:
+                return ConstantCommon.NEXT_LINE + "新的一天开始啦ヽ(#`Д´)ノ";
             //凌晨4点
             case 4:
                 return ConstantCommon.NEXT_LINE + "还有人活着嘛~";
