@@ -38,7 +38,7 @@ public class CommandRollArgs implements GroupCommand {
         }
 
         //随机出一个结果
-        int rollNum = RandomUtil.roll(args.size());
+        int rollNum = RandomUtil.roll(args.size() - 1);
 
         //群员信息
         InfoGroupUser groupUserInfo = event.getGroupUserInfo();

@@ -34,7 +34,7 @@ public class NumberUtil {
      * @param str 输入字符串
      * @return 输出数字
      */
-    public static int toInt(String str) {
+    public static Integer toInt(String str) {
         if (StringUtil.isEmpty(str) || !isNumber(str)) {
             return 0;
         }

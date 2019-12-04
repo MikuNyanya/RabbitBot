@@ -43,8 +43,7 @@ import static java.util.Arrays.asList;
  * @author Hykilpikonna
  */
 @Getter
-public class EventManager
-{
+public class EventManager {
     private final PicqBotX bot;
 
     private final EventParser eventParser;
@@ -96,8 +95,7 @@ public class EventManager
             EventRequest.class
     );
 
-    public EventManager(PicqBotX bot)
-    {
+    public EventManager(PicqBotX bot) {
         this.bot = bot;
         this.eventParser = new EventParser(this);
     }
@@ -107,43 +105,34 @@ public class EventManager
      *
      * @param listener 监听器
      */
-    public void registerListener(IcqListener listener)
-    {
+    public void registerListener(IcqListener listener) {
         registeredListeners.add(listener);
 
-        for (Method method : listener.getClass().getMethods())
-        {
-            if (method.getParameterCount() != 1)
-            {
+        for (Method method : listener.getClass().getMethods()) {
+            if (method.getParameterCount() != 1) {
                 continue;
             }
 
             Class<?> event = method.getParameterTypes()[0];
 
-            if (!Event.class.isAssignableFrom(event))
-            {
+            if (!Event.class.isAssignableFrom(event)) {
                 continue;
             }
-            if (!method.isAnnotationPresent(EventHandler.class))
-            {
+            if (!method.isAnnotationPresent(EventHandler.class)) {
                 continue;
             }
 
             for (Class<? extends Event> eventClass : eventClasses) // 向下注册所有子类
             {
-                if (!event.isAssignableFrom(eventClass))
-                {
+                if (!event.isAssignableFrom(eventClass)) {
                     continue;
                 }
 
                 String mapKey = eventClass.getName();
 
-                if (registeredMethods.containsKey(mapKey))
-                {
+                if (registeredMethods.containsKey(mapKey)) {
                     registeredMethods.get(mapKey).add(new RegisteredListenerMethod(method, listener));
-                }
-                else
-                {
+                } else {
                     registeredMethods.put(mapKey, new ArrayList<>(Collections.singletonList(new RegisteredListenerMethod(method, listener))));
                 }
             }
@@ -155,10 +144,8 @@ public class EventManager
      *
      * @param listeners 很多个监听器
      */
-    public void registerListeners(IcqListener... listeners)
-    {
-        for (IcqListener listener : listeners)
-        {
+    public void registerListeners(IcqListener... listeners) {
+        for (IcqListener listener : listeners) {
             registerListener(listener);
         }
     }
@@ -168,47 +155,36 @@ public class EventManager
      *
      * @param event 事件对象
      */
-    public void call(Event event)
-    {
+    public void call(Event event) {
         event.setBot(bot);
 
-        if (event instanceof EventMessage)
-        {
+        if (event instanceof EventMessage) {
             ((EventMessage) event).message = CQUtils.decodeMessage(((EventMessage) event).getMessage());
         }
 
         String mapKey = event.getClass().getName();
 
-        if (!registeredMethods.containsKey(mapKey))
-        {
+        if (!registeredMethods.containsKey(mapKey)) {
             return;
         }
 
         registeredMethods.get(mapKey).forEach(registeredListenerMethod ->
         {
-            try
-            {
+            try {
                 registeredListenerMethod.call(event);
-            }
-            catch (IllegalAccessException e)
-            {
+            } catch (IllegalAccessException e) {
                 e.printStackTrace(); // 这些理论上绝对不会出现
-            }
-            catch (Throwable e)
-            {
+            } catch (Throwable e) {
+                e.printStackTrace();
                 callError(event, e);
             }
         });
     }
 
-    public void callError(Event event, Throwable throwable)
-    {
-        if (event instanceof EventLocalException && ((EventLocalException) event).getParentEvent() instanceof EventLocalException)
-        {
+    public void callError(Event event, Throwable throwable) {
+        if (event instanceof EventLocalException && ((EventLocalException) event).getParentEvent() instanceof EventLocalException) {
             throwable.printStackTrace(); // 如果这个事件是报错事件, 而且这个事件报的错也是报错事件的话, 怎么办呢....
-        }
-        else
-        {
+        } else {
             call(new EventLocalException(throwable instanceof InvocationTargetException ? throwable.getCause() : throwable, event));
         }
     }

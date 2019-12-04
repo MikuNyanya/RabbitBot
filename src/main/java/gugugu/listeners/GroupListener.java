@@ -70,7 +70,7 @@ public class GroupListener extends IcqListener {
             if (REPEATER_KILLER_LIST.contains(groupMsg) || REPEATER_STOP_LIST.contains(groupMsg)) {
                 //打断
                 groupMsg = REPEATER_STOP_LIST.get(RandomUtil.roll(REPEATER_STOP_LIST.size() - 1));
-            } else if (RandomUtil.rollBoolean(-90)) {
+            } else if (RandomUtil.rollBoolean(-80)) {
                 //打断复读
                 groupMsg = REPEATER_KILLER_LIST.get(RandomUtil.roll(REPEATER_KILLER_LIST.size() - 1));
             }

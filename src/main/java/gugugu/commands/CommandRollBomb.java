@@ -35,6 +35,8 @@ public class CommandRollBomb implements GroupCommand {
     private final String GAME_OFF = "0";
     //状态-游戏已开启
     private final String GAME_ON = "1";
+    //状态-游戏已结束
+    private final String GAME_BOMB_END = "2";
     //最大总数
     private final int MAX_NUM_COUNT = 200;
     //本局总数
@@ -114,8 +116,8 @@ public class CommandRollBomb implements GroupCommand {
             return ConstantRollBomb.GAME_PARAM_NUMBER_ONLY;
         }
 
-        int numCnt = NumberUtil.toInt(numCntStr);
-        int bombCnt = NumberUtil.toInt(bombCntStr);
+        Integer numCnt = NumberUtil.toInt(numCntStr);
+        Integer bombCnt = NumberUtil.toInt(bombCntStr);
 
         //边界校验
         if (numCnt > MAX_NUM_COUNT) {
@@ -140,7 +142,7 @@ public class CommandRollBomb implements GroupCommand {
         list_bomb.clear();
         i = 0;
         do {
-            int radBomb = RandomUtil.roll(bombCnt);
+            int radBomb = RandomUtil.roll(numCnt);
             //如果随机到了重复的雷，再随机一次
             if (list_bomb.contains(radBomb)) {
                 continue;
@@ -155,7 +157,10 @@ public class CommandRollBomb implements GroupCommand {
         //存储本局总数
         NOW_NUM_COUNT = numCnt;
 
-        return String.format("===[随机雷]初始化完毕===\n池子总数量:%s\n雷数：%s\n撒~哈吉马路哟~", numCnt, bombCnt);
+        //改变游戏状态
+        GAME_STATUS = GAME_ON;
+
+        return String.format("===[随机雷]初始化完毕===\n池子总数量:%s\n雷数：%s", numCnt, bombCnt);
     }
 
     //结束游戏
@@ -171,7 +176,7 @@ public class CommandRollBomb implements GroupCommand {
         list_bomb.clear();
         map_noob.clear();
 
-        return ConstantRollBomb.GAME_END_LIST.get(ConstantRollBomb.GAME_END_LIST.size() - 1);
+        return ConstantRollBomb.GAME_END_LIST.get(RandomUtil.roll(ConstantRollBomb.GAME_END_LIST.size() - 1));
     }
 
     //选择数字
@@ -179,6 +184,10 @@ public class CommandRollBomb implements GroupCommand {
         //游戏未开始时指令无效
         if (GAME_OFF.equalsIgnoreCase(GAME_STATUS)) {
             return ConstantRollBomb.GAME_NOT_START;
+        }
+        //游戏已结束时指令无效
+        if (GAME_BOMB_END.equalsIgnoreCase(GAME_STATUS)) {
+            return ConstantRollBomb.GAME_BOMB_END;
         }
 
         Long groupUserId = event.getGroupUserInfo().getUserId();
@@ -188,7 +197,7 @@ public class CommandRollBomb implements GroupCommand {
             if (groupUserId.equals(map_noob.get(key).getUserId())) {
                 return String.format("[%s]\n%s",
                         groupUserName,
-                        ConstantRollBomb.GAME_NOOB_SELECT_LIST.get(ConstantRollBomb.GAME_NOOB_SELECT_LIST.size() - 1)
+                        ConstantRollBomb.GAME_NOOB_SELECT_LIST.get(RandomUtil.roll(ConstantRollBomb.GAME_NOOB_SELECT_LIST.size() - 1))
                 );
             }
         }
@@ -202,7 +211,7 @@ public class CommandRollBomb implements GroupCommand {
                 return String.format("[%s],%s", groupUserName, ConstantRollBomb.GAME_PARAM_SELECT_ONLY);
             }
 
-            int numTemp = NumberUtil.toInt(arg);
+            Integer numTemp = NumberUtil.toInt(arg);
             //不能超出范围
             if (numTemp < 0 || numTemp > NOW_NUM_COUNT) {
                 return String.format("[%s],%s", groupUserName, String.format(ConstantRollBomb.GAME_PARAM_SELECT_OVER, NOW_NUM_COUNT));
@@ -219,15 +228,20 @@ public class CommandRollBomb implements GroupCommand {
                 //记录在出局列表中
                 map_noob.put(numTemp, event.getGroupUserInfo());
                 //返回踩雷的结果
-                return String.format(ConstantRollBomb.GAME_NOOB_SELECT_BOOM.get(RandomUtil.roll(ConstantRollBomb.GAME_NOOB_SELECT_BOOM.size() - 1)),
+                String msg = String.format(ConstantRollBomb.GAME_NOOB_SELECT_BOOM.get(RandomUtil.roll(ConstantRollBomb.GAME_NOOB_SELECT_BOOM.size() - 1)),
                         groupUserName, arg);
+                //如果没雷了，就结束游戏
+                if (list_bomb.size() <= 0) {
+                    //变更游戏状态
+                    GAME_STATUS = GAME_BOMB_END;
+                    msg += ("\n\n" + ConstantRollBomb.GAME_BOMB_END_LIST.get(RandomUtil.roll(ConstantRollBomb.GAME_BOMB_END_LIST.size() - 1)));
+                }
+                return msg;
             }
 
             //安全上垒
-            if (list_now.contains(numTemp)) {
-                //移除这个数字
-                list_now.remove(numTemp);
-            }
+            //移除这个数字
+            list_now.remove(numTemp);
         }
 
         //返回安全结果
@@ -261,7 +275,6 @@ public class CommandRollBomb implements GroupCommand {
         //输出列表
         int i = 1;
         StringBuilder msg = new StringBuilder();
-        msg.append(String.format("===%s===\n", commandSecondName));
 
         for (Integer num : temp) {
             msg.append(",");
@@ -271,8 +284,9 @@ public class CommandRollBomb implements GroupCommand {
             }
             i++;
         }
-
-        return msg.substring(1);
+        msg = new StringBuilder(msg.substring(1));
+        msg.insert(0, String.format("===%s===\n", commandSecondName));
+        return msg.toString();
     }
 
     //展示菜鸡
@@ -288,7 +302,7 @@ public class CommandRollBomb implements GroupCommand {
         msg.append("===菜鸡列表===");
         for (Integer num : map_noob.keySet()) {
             InfoGroupUser tempGroupUserInfo = map_noob.get(num);
-            msg.append(String.format("\n[%s]->雷(%s)", num, tempGroupUserInfo.getGroupUserName()));
+            msg.append(String.format("\n[%s]->雷(%s)", tempGroupUserInfo.getGroupUserName(), num));
 
             //边界限制，反正群里没这么多活跃人数
             if (i >= 50) {

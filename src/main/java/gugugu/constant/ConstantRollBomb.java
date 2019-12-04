@@ -14,13 +14,13 @@ public class ConstantRollBomb extends ConstantCommon {
     public static final String EXPLAIN = "[随机雷]，在.rbomb后跟随其他指令来进行操作：\n"
             + "start [numcnt] [bombcnt]/开始 [总数量] [雷数量](开始随机雷，如果不设置数量则使用默认值)\n"
             + "end/结束(结束随机雷)\n"
-            + "select [num1] [num2]/选择 [数字1] [数字2](踩一个数字，可以一次选择多个数字)\n"
+            + "c [num1] [num2]/选择 [数字1] [数字2](踩一个数字，可以一次选择多个数字)\n"
 //            + "numcnt/总数(设置数字总数，不能超出200，默认为50)\n"
 //            + "bombcnt [num]/雷数量 [num](设置雷数量，不能超过剩余安全值数量，默认为1个)\n"
             + "*下面列表类只会显示100个，超出的不显示\n"
             + "listnow/剩余列表(查看当前剩余数字,)\n"
 //            + "listbomb/雷列表(查看本次雷列表)\n"
-            + "listnoob/出局人员(查看已被炸shi的人)\n";
+            + "listnoob/出局人员(查看已被炸shi的人)";
 
     //=====指令=====
     //开始
@@ -28,7 +28,7 @@ public class ConstantRollBomb extends ConstantCommon {
     //结束
     public static final String END = "end";
     //选择一个数字
-    public static final String SELECT = "select";
+    public static final String SELECT = "c";
     //剩余数字列表
     public static final String LIST_NOW = "listnow";
     //剩余雷列表
@@ -37,21 +37,13 @@ public class ConstantRollBomb extends ConstantCommon {
     public static final String LIST_NOOB = "listnoob";
 
     //=====提示信息=====
-    public static final String COMMAND_ERROR = "指令[%s]无效";
-    public static final String GAME_NOT_START = "游戏未开启";
-    public static final String GAME_GAMING = "游戏已开启，正在进行中";
-    public static final List<String> GAME_END_LIST = Arrays.asList(
-            "游戏即将结束\n希望你们玩的还算愉快",
-            "不玩了嘛，那我关了",
-            "好的，游戏要关了哦~",
-            "关，都可以关。。。\n游戏关了",
-            "结束了\n不再来一局嘛~"
+
+    public static final List<String> GAME_BOMB_END_LIST = Arrays.asList(
+            "那么，所有的雷都已经被吃掉了，游戏结束啦~\n你们的胃口可真好。。。\n现在可以使用listnoob查看踩雷记录\n看完记得关掉游戏哦",
+            "已经没有雷了，游戏结束\n可以使用listnoob查看踩雷记录\n看完后请使用end指令关闭游戏",
+            "结束啦，恭喜那些踩雷的幸运儿~"
     );
-    public static final String GAME_ENDING = "游戏并没有开启，不需要结束";
-    public static final String GAME_PARAM_NUMBER_ONLY = "参数必须为纯数字";
-    public static final String GAME_PARAM_NUMBER_TO_SMALL = "设置的数字必须大于0";
-    public static final String GAME_PARAM_SELECT_ONLY = "只能选择纯数字";
-    public static final String GAME_PARAM_SELECT_OVER = "数字不能超出范围(0~%s)";
+
     public static final String GAME_PARAM_SELECT_USED = "数字已经被选择过一次了，试试别的";
     public static final String GAME_NUM_OVER_VALUE = "总数量过大";
     public static final String GAME_BOMB_OVER_VALUE = "雷数量不能超过总数量";
@@ -82,7 +74,9 @@ public class ConstantRollBomb extends ConstantCommon {
             "'[%s]!You shall not pass!'\n——甘道夫雷(%s)",
             "'丢人！[%s]马上给我退出战场！'\n——凛冬雷(%s)",
             "'只要是活着的东西，就算是[%s]也杀给你看！'\n——两仪式雷(%s)",
-            "'[%s]？是踩雷的friends呢！'\n——加帕里雷(%s)"
+            "'[%s]？是踩雷的friends呢！'\n——加帕里雷(%s)",
+            "'来陪我玩吧！要把[%s]玩坏哦！'\n——芙兰雷(%s)",
+            "'[%s]感到罪恶爬上了脊背'\n——undertale雷(%s)"
     );
     public static final List<String> GAME_NOOB_SELECT_SAFE = Arrays.asList(
             "[%s]安全上垒",
