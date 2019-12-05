@@ -5,7 +5,8 @@ import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
-import gugugu.bots.BotRabbit;
+import gugugu.constant.ConstantFreeTime;
+import utils.RandomUtil;
 
 import java.util.ArrayList;
 
@@ -14,9 +15,9 @@ import java.util.ArrayList;
  * @date 2019/11/30 23:33
  * for the Reisen
  * <p>
- * 系统简述
+ * 说些日常句子
  */
-public class CommandSystem implements GroupCommand {
+public class CommandSay implements GroupCommand {
     /**
      * 执行指令
      *
@@ -29,20 +30,14 @@ public class CommandSystem implements GroupCommand {
      */
     @Override
     public String groupMessage(EventGroupMessage event, GroupUser sender, Group group, String command, ArrayList<String> args) {
-        StringBuilder msg = new StringBuilder();
-        msg.append("==========\n");
-        msg.append("[Name] " + BotRabbit.BOT_NAME + "(RabbitBot)\n");
-        msg.append("[Birthday] 2019-12-3\n");
-        msg.append("[Version] V0.4\n");
-        msg.append("System Online\n");
-        msg.append("\\兔子万岁/\n");
-        msg.append("==========");
-
-        return msg.toString();
+        if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() <= 0) {
+            return ConstantFreeTime.MSG_TYPE_FREE_TIME_EMPTY;
+        }
+        return ConstantFreeTime.MSG_TYPE_FREE_TIME.get(RandomUtil.roll(ConstantFreeTime.MSG_TYPE_FREE_TIME.size() - 1));
     }
 
     @Override
     public CommandProperties properties() {
-        return new CommandProperties("System", "system");
+        return new CommandProperties("Say", "say", "说话");
     }
 }

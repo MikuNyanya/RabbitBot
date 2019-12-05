@@ -67,4 +67,22 @@ public class StringUtil {
         return str.trim();
     }
 
+    /**
+     * 匹配ABABA句式
+     * 妮可妮可妮
+     *
+     * @param str 需要匹配的字符串
+     * @return 是否符合句式
+     */
+    public static boolean isABABA(String str) {
+        if (isEmpty(str) || str.length() < 5) {
+            return false;
+        }
+        char a = str.charAt(0);
+        char b = str.charAt(1);
+        String ababa_str = String.format("%s%s%s%s%s", a, b, a, b, a);
+
+        return ababa_str.equalsIgnoreCase(str);
+    }
+
 }

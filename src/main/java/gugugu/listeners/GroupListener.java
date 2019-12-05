@@ -3,7 +3,9 @@ package gugugu.listeners;
 import cc.moecraft.icq.event.EventHandler;
 import cc.moecraft.icq.event.IcqListener;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
+import gugugu.constant.ConstantBlackList;
 import gugugu.constant.ConstantCommon;
+import gugugu.constant.ConstantFreeTime;
 import utils.RandomUtil;
 import utils.StringUtil;
 
@@ -19,7 +21,7 @@ import java.util.Map;
  * 所有群消息监听
  */
 public class GroupListener extends IcqListener {
-    //保存群最后一条消息
+    //保存群最后一条消息，用于复读
     private static Map<Long, String> LAST_MSG_MAP = new HashMap<>();
     private static final List<String> REPEATER_KILLER_LIST = Arrays.asList(
             "一只兔叽及时出现，打断了复读（￣▽￣）／",
@@ -31,14 +33,32 @@ public class GroupListener extends IcqListener {
             "啊。。。你够了=A=",
             "这么搞真的不会出BUG么。。。",
             "你是笨蛋嘛=A=",
-            "ヽ(｀Д´)ﾉ︵ ┻━┻ ┻━┻"
+            "不要复读兔叽的话ヽ(｀Д´)ﾉ︵ ┻━┻ ┻━┻"
     );
 
     @EventHandler
     public void onPMEvent(EventGroupMessage event) {
-        //群复读
-        groupRepeater(event);
+        //黑名单
+        //黑名单
+        Long senderId = event.getSenderId();
+        if (ConstantBlackList.BLACK_LIST.contains(senderId)) {
+            return;
+        }
 
+        //每次只会触发一个回复
+        //群复读
+        boolean groupRep = groupRepeater(event);
+        if (groupRep) {
+            return;
+        }
+
+        //ABABA 句式检索
+        groupRep = groupABABA(event);
+        if (groupRep) {
+            return;
+        }
+
+        //关键词检索 未完成
         if (event.getMessage().equals("兔子")) {
             event.getHttpApi().sendGroupMsg(event.groupId, "\\兔子/");
         }
@@ -49,8 +69,9 @@ public class GroupListener extends IcqListener {
      * 群复读
      *
      * @param event 群消息监控
+     * @return bol值 表示有没有进行群复读
      */
-    private void groupRepeater(EventGroupMessage event) {
+    private boolean groupRepeater(EventGroupMessage event) {
         //接收到的群消息
         String groupMsg = event.getMessage();
         Long groupId = event.getGroupId();
@@ -62,7 +83,7 @@ public class GroupListener extends IcqListener {
 
         //屏蔽正常指令
         if (StringUtil.isNotEmpty(groupMsg) && ConstantCommon.COMMAND_INDEX.equalsIgnoreCase(groupMsg.substring(0, 1))) {
-            return;
+            return false;
         }
 
         //群复读，两个相同的消息，复读一次，并重置计数
@@ -76,9 +97,30 @@ public class GroupListener extends IcqListener {
             }
             event.getHttpApi().sendGroupMsg(event.groupId, groupMsg);
             LAST_MSG_MAP.put(groupId, "");
-            return;
+            return true;
         }
         //覆盖最后消息
         LAST_MSG_MAP.put(groupId, groupMsg);
+        return false;
+    }
+
+    /**
+     * 跟随回复ABABA句式
+     *
+     * @param event 群消息监控
+     * @return bol值 表示有没有进行群复读
+     */
+    private boolean groupABABA(EventGroupMessage event) {
+        //接收到的群消息
+        String groupMsg = event.getMessage();
+
+        //检查句式
+        if (!StringUtil.isABABA(groupMsg)) {
+            return false;
+        }
+        String msg = ConstantFreeTime.MSG_TYPE_ABABA.get(RandomUtil.roll(ConstantFreeTime.MSG_TYPE_ABABA.size() - 1));
+        event.getHttpApi().sendGroupMsg(event.groupId, msg);
+        //回复群消息
+        return true;
     }
 }

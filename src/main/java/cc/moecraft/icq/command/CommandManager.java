@@ -10,6 +10,7 @@ import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.event.events.message.EventPrivateMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.User;
+import gugugu.constant.ConstantBlackList;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -118,7 +119,7 @@ public class CommandManager {
         if (runner instanceof EverywhereCommand) {
             event.respond(((EverywhereCommand) runner).run(event, user, args.getCommandName(), args.getArgs()));
         } else if (isGM && runner instanceof GroupCommand) {
-            EventGroupMessage eventGroupMessage =  (EventGroupMessage) event;
+            EventGroupMessage eventGroupMessage = (EventGroupMessage) event;
             event.respond(((GroupCommand) runner).groupMessage(eventGroupMessage,
                     bot.getGroupUserManager().getUserFromID(eventGroupMessage.getGroupId(), group), group,
                     args.getCommandName(), args.getArgs()));

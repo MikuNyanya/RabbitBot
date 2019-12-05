@@ -6,6 +6,7 @@ import cc.moecraft.icq.event.events.message.EventDiscussMessage;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.event.events.message.EventPrivateMessage;
+import gugugu.constant.ConstantBlackList;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -22,44 +23,42 @@ import java.util.Map;
  * @author Hykilpikonna
  */
 @RequiredArgsConstructor
-public class CommandListener extends IcqListener
-{
+public class CommandListener extends IcqListener {
     private final CommandManager commandManager;
 
     @Getter
     private Map<String, Thread> runningAsyncThreads = new LinkedHashMap<>();
 
     @EventHandler
-    public void onPrivateMessage(EventPrivateMessage event)
-    {
+    public void onPrivateMessage(EventPrivateMessage event) {
         run(event);
     }
 
     @EventHandler
-    public void onGroupMessage(EventGroupMessage event)
-    {
+    public void onGroupMessage(EventGroupMessage event) {
         run(event);
     }
 
     @EventHandler
-    public void onDiscussMessage(EventDiscussMessage event)
-    {
+    public void onDiscussMessage(EventDiscussMessage event) {
         run(event);
     }
 
-    private void run(EventMessage event)
-    {
+    private void run(EventMessage event) {
+        //黑名单
+        Long senderId = event.getSenderId();
+        if (ConstantBlackList.BLACK_LIST.contains(senderId)) {
+            return;
+        }
+
         CommandRunnable runnable = new CommandRunnable(event);
 
-        if (event.getBot().getConfig().isUseAsyncCommands())
-        {
+        if (event.getBot().getConfig().isUseAsyncCommands()) {
             Thread thread = new Thread(runnable, "Thread-" + System.currentTimeMillis());
             thread.start();
             runningAsyncThreads.put(thread.getName(), thread);
             runnable.setCallback(() -> runningAsyncThreads.remove(thread.getName()));
-        }
-        else
-        {
+        } else {
             runnable.run();
         }
     }
@@ -67,26 +66,21 @@ public class CommandListener extends IcqListener
     @Setter
     @Getter
     @RequiredArgsConstructor
-    private class CommandRunnable implements Runnable
-    {
+    private class CommandRunnable implements Runnable {
         private final EventMessage event;
         private Runnable callback;
 
         @Override
-        public void run()
-        {
-            try
-            {
+        public void run() {
+            try {
                 commandManager.runCommand(event);
-            }
-            catch (Throwable e)
-            {
+            } catch (Throwable e) {
+                e.printStackTrace();
                 event.getBot().getEventManager().callError(event, e);
                 event.getBot().getConfig().getCommandErrorHandler().accept(e);
             }
 
-            if (callback != null)
-            {
+            if (callback != null) {
                 callback.run();
             }
         }
