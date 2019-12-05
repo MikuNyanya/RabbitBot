@@ -90,10 +90,10 @@ public class GroupListener extends IcqListener {
         if (LAST_MSG_MAP.get(groupId).equals(groupMsg)) {
             if (REPEATER_KILLER_LIST.contains(groupMsg) || REPEATER_STOP_LIST.contains(groupMsg)) {
                 //打断
-                groupMsg = REPEATER_STOP_LIST.get(RandomUtil.roll(REPEATER_STOP_LIST.size() - 1));
+                groupMsg = RandomUtil.rollStrFromList(REPEATER_STOP_LIST);
             } else if (RandomUtil.rollBoolean(-80)) {
                 //打断复读
-                groupMsg = REPEATER_KILLER_LIST.get(RandomUtil.roll(REPEATER_KILLER_LIST.size() - 1));
+                groupMsg = RandomUtil.rollStrFromList(REPEATER_KILLER_LIST);
             }
             event.getHttpApi().sendGroupMsg(event.groupId, groupMsg);
             LAST_MSG_MAP.put(groupId, "");
@@ -118,7 +118,7 @@ public class GroupListener extends IcqListener {
         if (!StringUtil.isABABA(groupMsg)) {
             return false;
         }
-        String msg = ConstantFreeTime.MSG_TYPE_ABABA.get(RandomUtil.roll(ConstantFreeTime.MSG_TYPE_ABABA.size() - 1));
+        String msg = RandomUtil.rollStrFromList(ConstantFreeTime.MSG_TYPE_ABABA);
         event.getHttpApi().sendGroupMsg(event.groupId, msg);
         //回复群消息
         return true;

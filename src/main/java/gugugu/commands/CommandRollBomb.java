@@ -176,7 +176,7 @@ public class CommandRollBomb implements GroupCommand {
         list_bomb.clear();
         map_noob.clear();
 
-        return ConstantRollBomb.GAME_END_LIST.get(RandomUtil.roll(ConstantRollBomb.GAME_END_LIST.size() - 1));
+        return RandomUtil.rollStrFromList(ConstantRollBomb.GAME_END_LIST);
     }
 
     //选择数字
@@ -197,7 +197,7 @@ public class CommandRollBomb implements GroupCommand {
             if (groupUserId.equals(map_noob.get(key).getUserId())) {
                 return String.format("[%s]\n%s",
                         groupUserName,
-                        ConstantRollBomb.GAME_NOOB_SELECT_LIST.get(RandomUtil.roll(ConstantRollBomb.GAME_NOOB_SELECT_LIST.size() - 1))
+                        RandomUtil.rollStrFromList(ConstantRollBomb.GAME_NOOB_SELECT_LIST)
                 );
             }
         }
@@ -228,13 +228,13 @@ public class CommandRollBomb implements GroupCommand {
                 //记录在出局列表中
                 map_noob.put(numTemp, event.getGroupUserInfo());
                 //返回踩雷的结果
-                String msg = String.format(ConstantRollBomb.GAME_NOOB_SELECT_BOOM.get(RandomUtil.roll(ConstantRollBomb.GAME_NOOB_SELECT_BOOM.size() - 1)),
+                String msg = String.format(RandomUtil.rollStrFromList(ConstantRollBomb.GAME_NOOB_SELECT_BOOM),
                         groupUserName, arg);
                 //如果没雷了，就结束游戏
                 if (list_bomb.size() <= 0) {
                     //变更游戏状态
                     GAME_STATUS = GAME_BOMB_END;
-                    msg += ("\n\n" + ConstantRollBomb.GAME_BOMB_END_LIST.get(RandomUtil.roll(ConstantRollBomb.GAME_BOMB_END_LIST.size() - 1)));
+                    msg += ("\n\n" + RandomUtil.rollStrFromList(ConstantRollBomb.GAME_BOMB_END_LIST));
                 }
                 return msg;
             }
@@ -245,7 +245,7 @@ public class CommandRollBomb implements GroupCommand {
         }
 
         //返回安全结果
-        return String.format(ConstantRollBomb.GAME_NOOB_SELECT_SAFE.get(RandomUtil.roll(ConstantRollBomb.GAME_NOOB_SELECT_SAFE.size() - 1)),
+        return String.format(RandomUtil.rollStrFromList(ConstantRollBomb.GAME_NOOB_SELECT_SAFE),
                 groupUserName);
     }
 

@@ -33,7 +33,7 @@ public class CommandSay implements GroupCommand {
         if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() <= 0) {
             return ConstantFreeTime.MSG_TYPE_FREE_TIME_EMPTY;
         }
-        return ConstantFreeTime.MSG_TYPE_FREE_TIME.get(RandomUtil.roll(ConstantFreeTime.MSG_TYPE_FREE_TIME.size() - 1));
+        return RandomUtil.rollStrFromList(ConstantFreeTime.MSG_TYPE_FREE_TIME);
     }
 
     @Override

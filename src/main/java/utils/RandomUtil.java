@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -51,5 +52,21 @@ public class RandomUtil {
         //算上加成
         randNum += addition;
         return randNum >= 0;
+    }
+
+    /**
+     * 返回列表中的一条随机字符串
+     *
+     * @param strList 目标列表
+     * @return 列表中的随机一条
+     */
+    public static String rollStrFromList(List<String> strList) {
+        if (null == strList || strList.size() <= 0) {
+            return "";
+        }
+        //获取消息
+        String msg = strList.get(RandomUtil.roll(strList.size() - 1));
+        //针对换行符做处理
+        return msg.replaceAll("\\\\n","\n");
     }
 }

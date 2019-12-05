@@ -84,5 +84,4 @@ public class StringUtil {
 
         return ababa_str.equalsIgnoreCase(str);
     }
-
 }

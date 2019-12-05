@@ -126,7 +126,7 @@ public class CommandABomb implements GroupCommand {
         now_min = 0;
         now_max = 100;
 
-        return ConstantABomb.GAME_END_LIST.get(RandomUtil.roll(ConstantABomb.GAME_END_LIST.size() - 1));
+        return RandomUtil.rollStrFromList(ConstantABomb.GAME_END_LIST);
     }
 
     //选择数字
@@ -160,23 +160,23 @@ public class CommandABomb implements GroupCommand {
         }
         //不能超出安全范围
         if (numTemp < now_min || numTemp > now_max) {
-            return String.format("[%s],%s", groupUserName, ConstantABomb.GAME_NOOB_SELECT_REPEAT.get(RandomUtil.roll(ConstantABomb.GAME_NOOB_SELECT_REPEAT.size() - 1)));
+            return String.format("[%s],%s", groupUserName, RandomUtil.rollStrFromList(ConstantABomb.GAME_NOOB_SELECT_REPEAT));
         }
 
         //判断踩雷了没
         if (bomb_num.equals(numTemp)) {
             //返回踩雷的结果
-            String msg = String.format(ConstantABomb.GAME_NOOB_SELECT_BOOM.get(RandomUtil.roll(ConstantABomb.GAME_NOOB_SELECT_BOOM.size() - 1)),
+            String msg = String.format(RandomUtil.rollStrFromList(ConstantABomb.GAME_NOOB_SELECT_BOOM),
                     groupUserName, cNum);
 
             //结束游戏 变更游戏状态
             GAME_STATUS = GAME_BOMB_END;
-            msg += ("\n\n" + String.format(ConstantABomb.GAME_BOMB_END_LIST.get(RandomUtil.roll(ConstantABomb.GAME_BOMB_END_LIST.size() - 1)), groupUserName));
+            msg += ("\n\n" + String.format(RandomUtil.rollStrFromList(ConstantABomb.GAME_BOMB_END_LIST), groupUserName));
             return msg;
         }
 
         //返回安全结果
-        String msg = String.format(ConstantABomb.GAME_NOOB_SELECT_SAFE.get(RandomUtil.roll(ConstantABomb.GAME_NOOB_SELECT_SAFE.size() - 1)),
+        String msg = String.format(RandomUtil.rollStrFromList(ConstantABomb.GAME_NOOB_SELECT_SAFE),
                 groupUserName);
 
         if (numTemp > bomb_num) {
