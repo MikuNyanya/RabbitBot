@@ -10,7 +10,7 @@ public class ConstantFile extends ConstantCommon {
     //客制化 常规语句 文件相对路径
     public static final String APPEND_FREE_TIME_FILE_PATH = "src/main/resources/files/free_time.txt";
     //客制化 关键词响应语句 文件相对路径
-    public static final String APPEND_KEYWORD_FILE_PATH = "src/main/resources/files/key_word.txt";
+    public static final String APPEND_KEYWORD_FILE_NORMAL_PATH = "src/main/resources/files/key_word_normal.txt";
 
     //加载文件 到系统
     public static final String FILE_COMMAND_LOAD = "load";

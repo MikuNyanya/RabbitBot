@@ -12,6 +12,7 @@ import java.util.List;
 public class ConstantBlackList {
     //黑名单 针对所有功能 填写qq号即可
     public static final List<Long> BLACK_LIST = Arrays.asList(
-            0L
+            0L,
+            2413572936L //盲盲2号机
     );
 }

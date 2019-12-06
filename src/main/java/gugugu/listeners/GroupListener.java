@@ -6,7 +6,9 @@ import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import gugugu.constant.ConstantBlackList;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantFreeTime;
+import gugugu.constant.ConstantKeyWord;
 import utils.RandomUtil;
+import utils.RegexUtil;
 import utils.StringUtil;
 
 import java.util.Arrays;
@@ -26,7 +28,7 @@ public class GroupListener extends IcqListener {
     private static final List<String> REPEATER_KILLER_LIST = Arrays.asList(
             "一只兔叽及时出现，打断了复读（￣▽￣）／",
             "Nope,不许复读",
-            "一只兔叽一般路过，并顺便打断了复读=w="
+            "兔叽咬坏了复读机"
     );
     private static final List<String> REPEATER_STOP_LIST = Arrays.asList(
             "请不要复读兔叽的话←_←",
@@ -38,6 +40,11 @@ public class GroupListener extends IcqListener {
 
     @EventHandler
     public void onPMEvent(EventGroupMessage event) {
+        //过滤掉消息为空的
+        if (StringUtil.isEmpty(event.getMessage())) {
+            return;
+        }
+
         //黑名单
         //黑名单
         Long senderId = event.getSenderId();
@@ -58,11 +65,8 @@ public class GroupListener extends IcqListener {
             return;
         }
 
-        //关键词检索 未完成
-        if (event.getMessage().equals("兔子")) {
-            event.getHttpApi().sendGroupMsg(event.groupId, "\\兔子/");
-        }
-
+        //关键词全匹配
+        groupKeyWord(event);
     }
 
     /**
@@ -82,7 +86,7 @@ public class GroupListener extends IcqListener {
         }
 
         //屏蔽正常指令
-        if (StringUtil.isNotEmpty(groupMsg) && ConstantCommon.COMMAND_INDEX.equalsIgnoreCase(groupMsg.substring(0, 1))) {
+        if (ConstantCommon.COMMAND_INDEX.equalsIgnoreCase(groupMsg.substring(0, 1))) {
             return false;
         }
 
@@ -108,7 +112,7 @@ public class GroupListener extends IcqListener {
      * 跟随回复ABABA句式
      *
      * @param event 群消息监控
-     * @return bol值 表示有没有进行群复读
+     * @return bol值 表示有没有进行群消息回复
      */
     private boolean groupABABA(EventGroupMessage event) {
         //接收到的群消息
@@ -119,8 +123,40 @@ public class GroupListener extends IcqListener {
             return false;
         }
         String msg = RandomUtil.rollStrFromList(ConstantFreeTime.MSG_TYPE_ABABA);
-        event.getHttpApi().sendGroupMsg(event.groupId, msg);
         //回复群消息
+        event.getHttpApi().sendGroupMsg(event.groupId, msg);
         return true;
+    }
+
+    /**
+     * 群消息关键词检测
+     *
+     * @param event 群消息监控
+     * @return bol值 表示有没有进行群消息回复
+     */
+    private boolean groupKeyWord(EventGroupMessage event) {
+        String groupMsg = event.getMessage();
+
+        //循环mapkey，找到包含关键词的key，然后拆分key确认是否全匹配，如果不是继续循环到下一个key
+        for (String keyRegex : ConstantKeyWord.key_wrod_normal.keySet()) {
+            //正则匹配
+            boolean regex = false;
+            for (String oneKey : keyRegex.split("\\|")) {
+                if (RegexUtil.regex(groupMsg, "^" + oneKey + "$")) {
+                    regex = true;
+                    break;
+                }
+            }
+
+            if (!regex) {
+                continue;
+            }
+            //随机选择回复
+            String msg = RandomUtil.rollStrFromList(ConstantKeyWord.key_wrod_normal.get(keyRegex));
+            //回复群消息
+            event.getHttpApi().sendGroupMsg(event.groupId, msg);
+            return true;
+        }
+        return false;
     }
 }

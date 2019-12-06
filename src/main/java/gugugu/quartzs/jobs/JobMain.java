@@ -7,6 +7,7 @@ import gugugu.constant.ConstantFreeTime;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import utils.DateUtil;
 import utils.RandomUtil;
 
 import java.util.Map;
@@ -42,10 +43,10 @@ public class JobMain implements Job {
         }
 
         //大晚上的就不发了
-//        int hour = DateUtil.getHour();
-//        if (hour < 7) {
-//            return;
-//        }
+        int hour = DateUtil.getHour();
+        if (hour < 7) {
+            return;
+        }
 
         //获取链接，参数是机器人的qq号
         IcqHttpApi icqHttpApi = BotRabbit.bot.getAccountManager().getIdIndex().get(1020992834L).getHttpApi();

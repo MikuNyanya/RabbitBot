@@ -33,7 +33,7 @@ public class CommandSystem implements GroupCommand {
         msg.append("==========\n");
         msg.append("[Name] " + BotRabbit.BOT_NAME + "(RabbitBot)\n");
         msg.append("[Birthday] 2019-12-3\n");
-        msg.append("[Version] V0.4\n");
+        msg.append("[Version] V0.5\n");
         msg.append("System Online\n");
         msg.append("\\兔子万岁/\n");
         msg.append("==========");

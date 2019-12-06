@@ -11,6 +11,7 @@ public class Main {
         BotRabbit.start();
         //加载客制化内容
         FileManager.loadFreeTime();
+        FileManager.loadKeyWordNormal();
         System.out.println("======Append ready======");
         //启动定时任务
         new RabbitBotJob().jobStart();

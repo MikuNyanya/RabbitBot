@@ -16,6 +16,7 @@ public class ConstantCommon {
     public static final String COMMAND_INDEX = ".";
 
     public static final String COMMAND_ERROR = "指令[%s]无效";
+    public static final String PARAM_ERROR = "参数无效";
     public static final String GAME_NOT_START = "游戏未开启";
     public static final String GAME_BOMB_END = "游戏已结束";
     public static final String GAME_GAMING = "游戏已开启，正在进行中";

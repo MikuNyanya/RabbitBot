@@ -16,7 +16,7 @@ public class FileManager {
     //常规语句 文件
     protected static File freeTimeFile = null;
     //关键词响应 文件
-    protected static File keyWordFile = null;
+    protected static File keyWordNormalFile = null;
 
     /**
      * 加载日常语句文件
@@ -34,5 +34,19 @@ public class FileManager {
         FileManagerFreeTime.doCommand(ConstantFile.FILE_COMMAND_WRITE, args);
     }
 
+    /**
+     * 加载全匹配关键词回复文件
+     */
+    public static void loadKeyWordNormal() {
+        FileManagerKeyWordNormal.doCommand(ConstantFile.FILE_COMMAND_LOAD);
+    }
 
+    /**
+     * 写入全匹配关键词回复
+     *
+     * @param args 每次只能传递一个，参数中第一个为关键词，多个关键词用\分隔，后面的参数都是回复
+     */
+    public static void addKeyWordNormal(String... args) {
+        FileManagerKeyWordNormal.doCommand(ConstantFile.FILE_COMMAND_WRITE, args);
+    }
 }

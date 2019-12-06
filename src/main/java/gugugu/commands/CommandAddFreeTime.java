@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @date 2019/11/30 23:33
  * for the Reisen
  * <p>
- * 说些日常句子
+ * 添加日常句子
  */
 public class CommandAddFreeTime implements GroupCommand {
     /**
