@@ -19,10 +19,10 @@ import java.util.Map;
  * 1分钟执行一次的定时器
  */
 public class JobMain implements Job {
-    //正常间隔(毫秒) 目前为10分钟
-    private static final Long SPLIT_NORMAL = 1000L * 60 * 10;
-    //随机间隔最大值(分钟) 目前最长延迟10分钟
-    private static final Integer SPLIT_RANDOM_MAX = 10;
+    //正常间隔(毫秒) 目前为20分钟
+    private static final Long SPLIT_NORMAL = 1000L * 60 * 20;
+    //随机间隔最大值(分钟) 目前最长延迟15分钟
+    private static final Integer SPLIT_RANDOM_MAX = 15;
 
     //最后发送时间
     private static Long free_time_last_send_time = System.currentTimeMillis();

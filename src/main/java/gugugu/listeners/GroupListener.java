@@ -46,7 +46,6 @@ public class GroupListener extends IcqListener {
         }
 
         //黑名单
-        //黑名单
         Long senderId = event.getSenderId();
         if (ConstantBlackList.BLACK_LIST.contains(senderId)) {
             return;
