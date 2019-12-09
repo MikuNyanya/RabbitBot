@@ -88,8 +88,10 @@ public class CommandAddKeyWordNormal implements GroupCommand {
      */
     private boolean keyReCheck(String keyWord) {
         for (String mapKey : ConstantKeyWord.key_wrod_normal.keySet()) {
-            if (RegexUtil.regex(keyWord, mapKey)) {
-                return true;
+            for (String oneKey : mapKey.split("\\|")) {
+                if (RegexUtil.regex(keyWord, "^" + oneKey + "$")) {
+                    return true;
+                }
             }
         }
         return false;
