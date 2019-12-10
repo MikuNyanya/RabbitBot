@@ -69,4 +69,24 @@ public class RandomUtil {
         //针对换行符做处理
         return msg.replaceAll("\\\\n","\n");
     }
+
+    /**
+     * 返回列表中的一条随机字符串，并从列表中移除这条
+     *
+     * @param strList 目标列表
+     * @return 列表中的随机一条
+     */
+    public static String rollAndDelStrFromList(List<String> strList) {
+        if (null == strList || strList.size() <= 0) {
+            return "";
+        }
+        //随机信息
+        int randomNum = RandomUtil.roll(strList.size() - 1);
+        //获取消息
+        String msg = strList.get(randomNum);
+        //移除信息
+        strList.remove(randomNum);
+        //针对换行符做处理
+        return msg.replaceAll("\\\\n","\n");
+    }
 }

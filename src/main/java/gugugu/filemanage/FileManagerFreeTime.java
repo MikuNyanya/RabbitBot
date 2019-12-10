@@ -6,6 +6,7 @@ import utils.FileUtil;
 import utils.StringUtil;
 
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * create by MikuLink on 2019/12/5 15:44
@@ -57,6 +58,9 @@ public class FileManagerFreeTime extends FileManager {
      * @throws IOException 读写异常
      */
     private static void loadFile() throws IOException {
+        //初始化集合
+        ConstantFreeTime.MSG_TYPE_FREE_TIME = new ArrayList<>();
+
         //创建读取器
         BufferedReader reader = new BufferedReader(new FileReader(freeTimeFile));
         //逐行读取文件
@@ -66,6 +70,8 @@ public class FileManagerFreeTime extends FileManager {
             if (freeTimeStr.length() <= 0) continue;
             ConstantFreeTime.MSG_TYPE_FREE_TIME.add(freeTimeStr);
         }
+        //刷新最大条目数,做伪随机用
+        ConstantFreeTime.MSG_TYPE_FREE_TIME_MAX_SIZE = ConstantFreeTime.MSG_TYPE_FREE_TIME.size();
         //关闭读取器
         reader.close();
     }
@@ -91,6 +97,8 @@ public class FileManagerFreeTime extends FileManager {
             out.write("\r\n" + s);
             //同时把新加的内容同步到系统
             ConstantFreeTime.MSG_TYPE_FREE_TIME.add(s);
+            //刷新最大条目数,做伪随机用
+            ConstantFreeTime.MSG_TYPE_FREE_TIME_MAX_SIZE++;
         }
 
         //关闭写入流

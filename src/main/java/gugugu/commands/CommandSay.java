@@ -6,6 +6,7 @@ import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 import gugugu.constant.ConstantFreeTime;
+import gugugu.filemanage.FileManager;
 import utils.RandomUtil;
 
 import java.util.ArrayList;
@@ -33,7 +34,13 @@ public class CommandSay implements GroupCommand {
         if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() <= 0) {
             return ConstantFreeTime.MSG_TYPE_FREE_TIME_EMPTY;
         }
-        return RandomUtil.rollStrFromList(ConstantFreeTime.MSG_TYPE_FREE_TIME);
+        //从列表中删除获取的消息，实现伪随机，不然重复率太高了，体验比较差
+        String msg = RandomUtil.rollAndDelStrFromList(ConstantFreeTime.MSG_TYPE_FREE_TIME);
+        //删到五分之一时重新加载集合
+        if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() < ConstantFreeTime.MSG_TYPE_FREE_TIME_MAX_SIZE / 5) {
+            FileManager.loadFreeTime();
+        }
+        return msg;
     }
 
     @Override

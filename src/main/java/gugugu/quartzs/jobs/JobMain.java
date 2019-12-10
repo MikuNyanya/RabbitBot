@@ -4,6 +4,7 @@ import cc.moecraft.icq.accounts.BotAccount;
 import cc.moecraft.icq.sender.IcqHttpApi;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantFreeTime;
+import gugugu.filemanage.FileManager;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -52,7 +53,13 @@ public class JobMain implements Job {
         IcqHttpApi icqHttpApi = BotRabbit.bot.getAccountManager().getIdIndex().get(1020992834L).getHttpApi();
 
         //选出一条信息
-        String msg = RandomUtil.rollStrFromList(ConstantFreeTime.MSG_TYPE_FREE_TIME);
+        //从列表中删除获取的消息，实现伪随机，不然重复率太高了，体验比较差
+        String msg = RandomUtil.rollAndDelStrFromList(ConstantFreeTime.MSG_TYPE_FREE_TIME);
+
+        //删到五分之一时重新加载集合
+        if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() < ConstantFreeTime.MSG_TYPE_FREE_TIME_MAX_SIZE / 5) {
+            FileManager.loadFreeTime();
+        }
 
         //给每个群发送报时
         Map<Long, Map<BotAccount, Long>> groupList = BotRabbit.bot.getAccountManager().getGroupAccountIndex();
