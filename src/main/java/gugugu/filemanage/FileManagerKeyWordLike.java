@@ -1,7 +1,6 @@
 package gugugu.filemanage;
 
 import gugugu.constant.ConstantFile;
-import gugugu.constant.ConstantFreeTime;
 import gugugu.constant.ConstantKeyWord;
 import utils.FileUtil;
 import utils.StringUtil;
@@ -15,9 +14,9 @@ import java.util.List;
  * create by MikuLink on 2019/12/5 15:44
  * for the Reisen
  * <p>
- * 全匹配关键词检索文件专用管理器
+ * 模糊匹配关键词检索文件专用管理器
  */
-public class FileManagerKeyWordNormal extends FileManager {
+public class FileManagerKeyWordLike extends FileManager {
 
     /**
      * 文件初始化
@@ -27,10 +26,10 @@ public class FileManagerKeyWordNormal extends FileManager {
      */
     private static void fileInit() throws IOException {
         //先载入文件
-        if (null != keyWordNormalFile) {
+        if (null != keyWordLikeFile) {
             return;
         }
-        keyWordNormalFile = FileUtil.fileCheck(ConstantFile.APPEND_KEYWORD_FILE_NORMAL_PATH);
+        keyWordLikeFile = FileUtil.fileCheck(ConstantFile.APPEND_KEYWORD_FILE_LIKE_PATH);
     }
 
     /**
@@ -62,9 +61,9 @@ public class FileManagerKeyWordNormal extends FileManager {
      */
     private static void loadFile() throws IOException {
         //创建读取器
-        BufferedReader reader = new BufferedReader(new FileReader(keyWordNormalFile));
+        BufferedReader reader = new BufferedReader(new FileReader(keyWordLikeFile));
 
-        String tempKey =null;
+        String tempKey = null;
         List<String> tempList = null;
 
         //逐行读取文件
@@ -79,7 +78,7 @@ public class FileManagerKeyWordNormal extends FileManager {
             tempList = Arrays.asList(freeTimeStr.split("\\|"));
 
             //内容同步到系统
-            ConstantKeyWord.key_wrod_normal.put(tempKey, tempList);
+            ConstantKeyWord.key_wrod_like.put(tempKey, tempList);
         }
         //关闭读取器
         reader.close();
@@ -98,7 +97,7 @@ public class FileManagerKeyWordNormal extends FileManager {
         }
 
         //创建写入流
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(ConstantFile.APPEND_KEYWORD_FILE_NORMAL_PATH, true)));
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(ConstantFile.APPEND_KEYWORD_FILE_LIKE_PATH, true)));
         //index
         int i = 0;
         //热更新
@@ -127,14 +126,12 @@ public class FileManagerKeyWordNormal extends FileManager {
             //追加回复
             fileSb.append(s);
             repList.add(s);
-
-
         }
         //写入内容
         out.write("\r\n" + fileSb.toString());
 
         //把新加的内容同步到系统
-        ConstantKeyWord.key_wrod_normal.put(keyWord, repList);
+        ConstantKeyWord.key_wrod_like.put(keyWord, repList);
 
         //关闭写入流
         out.close();

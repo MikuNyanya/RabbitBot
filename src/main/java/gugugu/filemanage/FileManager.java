@@ -17,6 +17,8 @@ public class FileManager {
     protected static File freeTimeFile = null;
     //关键词响应 文件
     protected static File keyWordNormalFile = null;
+    //模糊关键词 文件
+    protected static File keyWordLikeFile = null;
 
     /**
      * 加载日常语句文件
@@ -48,5 +50,21 @@ public class FileManager {
      */
     public static void addKeyWordNormal(String... args) {
         FileManagerKeyWordNormal.doCommand(ConstantFile.FILE_COMMAND_WRITE, args);
+    }
+
+    /**
+     * 加载模糊匹配关键词回复文件
+     */
+    public static void loadKeyWordLike() {
+        FileManagerKeyWordLike.doCommand(ConstantFile.FILE_COMMAND_LOAD);
+    }
+
+    /**
+     * 写入模糊匹配关键词回复
+     *
+     * @param args 每次只能传递一个，参数中第一个为关键词，多个关键词组用\分隔，关键词组里多个关键词用&分隔，后面的参数都是回复
+     */
+    public static void addKeyWordLike(String... args) {
+        FileManagerKeyWordLike.doCommand(ConstantFile.FILE_COMMAND_WRITE, args);
     }
 }

@@ -3,17 +3,12 @@ package gugugu.listeners;
 import cc.moecraft.icq.event.EventHandler;
 import cc.moecraft.icq.event.IcqListener;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
-import gugugu.constant.ConstantBlackList;
-import gugugu.constant.ConstantCommon;
-import gugugu.constant.ConstantFreeTime;
-import gugugu.constant.ConstantKeyWord;
+import gugugu.constant.*;
 import utils.RandomUtil;
 import utils.RegexUtil;
 import utils.StringUtil;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,18 +20,6 @@ import java.util.Map;
 public class GroupListener extends IcqListener {
     //保存群最后一条消息，用于复读
     private static Map<Long, String> LAST_MSG_MAP = new HashMap<>();
-    private static final List<String> REPEATER_KILLER_LIST = Arrays.asList(
-            "一只兔叽及时出现，打断了复读（￣▽￣）／",
-            "Nope,不许复读",
-            "兔叽咬坏了复读机"
-    );
-    private static final List<String> REPEATER_STOP_LIST = Arrays.asList(
-            "请不要复读兔叽的话←_←",
-            "啊。。。你够了=A=",
-            "这么搞真的不会出BUG么。。。",
-            "你是笨蛋嘛=A=",
-            "不要复读兔叽的话ヽ(｀Д´)ﾉ︵ ┻━┻ ┻━┻"
-    );
 
     @EventHandler
     public void onPMEvent(EventGroupMessage event) {
@@ -65,7 +48,13 @@ public class GroupListener extends IcqListener {
         }
 
         //关键词全匹配
-        groupKeyWord(event);
+        groupRep = groupKeyWord(event);
+        if (groupRep) {
+            return;
+        }
+
+        //关键词匹配(模糊)
+        groupKeyWordLike(event);
     }
 
     /**
@@ -91,12 +80,12 @@ public class GroupListener extends IcqListener {
 
         //群复读，两个相同的消息，复读一次，并重置计数
         if (LAST_MSG_MAP.get(groupId).equals(groupMsg)) {
-            if (REPEATER_KILLER_LIST.contains(groupMsg) || REPEATER_STOP_LIST.contains(groupMsg)) {
+            if (ConstantRepeater.REPEATER_KILLER_LIST.contains(groupMsg) || ConstantRepeater.REPEATER_STOP_LIST.contains(groupMsg)) {
                 //打断
-                groupMsg = RandomUtil.rollStrFromList(REPEATER_STOP_LIST);
+                groupMsg = RandomUtil.rollStrFromList(ConstantRepeater.REPEATER_STOP_LIST);
             } else if (RandomUtil.rollBoolean(-80)) {
                 //打断复读
-                groupMsg = RandomUtil.rollStrFromList(REPEATER_KILLER_LIST);
+                groupMsg = RandomUtil.rollStrFromList(ConstantRepeater.REPEATER_KILLER_LIST);
             }
             event.getHttpApi().sendGroupMsg(event.groupId, groupMsg);
             LAST_MSG_MAP.put(groupId, "");
@@ -157,5 +146,62 @@ public class GroupListener extends IcqListener {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 群消息关键词检测(模糊)
+     *
+     * @param event 群消息监控
+     * @return bol值 表示有没有进行群消息回复
+     */
+    private boolean groupKeyWordLike(EventGroupMessage event) {
+        String groupMsg = event.getMessage();
+
+        //循环mapkey，找到包含关键词的key，然后拆分key确认是否全匹配，如果不是继续循环到下一个key
+        for (String keyRegex : ConstantKeyWord.key_wrod_like.keySet()) {
+            //正则匹配
+            boolean isRegex = false;
+            for (String keyWords : keyRegex.split("\\|")) {
+                //拼接正则
+                String regex = getKeyWordLikeRegex(keyWords);
+
+                //进行正则匹配
+                if (RegexUtil.regex(groupMsg, regex)) {
+                    isRegex = true;
+                    break;
+                }
+            }
+
+            if (!isRegex) {
+                continue;
+            }
+            //随机选择回复
+            String msg = RandomUtil.rollStrFromList(ConstantKeyWord.key_wrod_like.get(keyRegex));
+            //回复群消息
+            event.getHttpApi().sendGroupMsg(event.groupId, msg);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 解析模糊关键词，组成正则
+     *
+     * @param keyWords 模糊匹配关键词原始字符串
+     * @return 模糊匹配正则表达式
+     */
+    private String getKeyWordLikeRegex(String keyWords) {
+        StringBuilder regex = new StringBuilder();
+        boolean isFirst = true;
+        for (String key : keyWords.split("&")) {
+            if (isFirst) {
+                regex.append(key);
+                isFirst = false;
+                continue;
+            }
+            regex.append("\\S*");
+            regex.append(key);
+        }
+        return regex.toString();
     }
 }

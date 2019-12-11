@@ -11,6 +11,8 @@ public class ConstantFile extends ConstantCommon {
     public static final String APPEND_FREE_TIME_FILE_PATH = "src/main/resources/files/free_time.txt";
     //客制化 关键词响应语句 文件相对路径
     public static final String APPEND_KEYWORD_FILE_NORMAL_PATH = "src/main/resources/files/key_word_normal.txt";
+    //客制化 模糊关键词响应语句 文件相对路径
+    public static final String APPEND_KEYWORD_FILE_LIKE_PATH = "src/main/resources/files/key_word_like.txt";
 
     //加载文件 到系统
     public static final String FILE_COMMAND_LOAD = "load";

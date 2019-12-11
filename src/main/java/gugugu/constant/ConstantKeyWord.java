@@ -23,6 +23,9 @@ public class ConstantKeyWord extends ConstantCommon {
     //存放全匹配关键词的map，key为关键词，多个关键词以|区分，value为对应的回复列表
     public static Map<String, List<String>> key_wrod_normal = new HashMap<>();
 
+    //存放模糊匹配关键词的map，key为关键词组合列表，每个关键词组合之间用|区分，每个组合里的关键词用&区分，value为对应的回复列表
+    public static Map<String, List<String>> key_wrod_like = new HashMap<>();
+
     //关键词最大长度
     public static final int KEY_WORD_MAX_SIZE = 50;
     public static final String KEY_WORD_OVER = "关键词长度超出限制";
