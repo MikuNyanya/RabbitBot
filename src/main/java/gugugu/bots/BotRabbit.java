@@ -86,7 +86,8 @@ public class BotRabbit {
             new CommandABomb(),
             new CommandSay(),
             new CommandAddFreeTime(),
-            new CommandAddKeyWordNormal()
+            new CommandAddKeyWordNormal(),
+            new CommandAddKeyWordLike()
     };
 
     /**

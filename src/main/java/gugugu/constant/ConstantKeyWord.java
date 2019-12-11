@@ -20,6 +20,16 @@ public class ConstantKeyWord extends ConstantCommon {
             + "*每个回复语句限制在100字以内\n"
             + "*换行输入'\\n'";
 
+    public static final String EXPLAIN_LIKE = "格式：[.addkwl 关键词1_1&关键词1_2|关键词2_1&关键词2_2 回复语句1 回复语句2 ...]"
+            + "在.addkwl后跟随关键词和回复语句进行添加，比如：\n"
+            + ".addkwl 兔叽&早安|早安&兔叽 兔叽向你道早安 这里是兔叽，早上好哦\n"
+            + "*每组关键词之间使用|间隔\n"
+            + "*每组关键词中的关键词之间使用&间隔\n"
+            + "*每组关键词限制在50字以内\n"
+            + "*每个回复语句之间使用1个空格间隔\n"
+            + "*每个回复语句限制在100字以内\n"
+            + "*换行输入'\\n'";
+
     //存放全匹配关键词的map，key为关键词，多个关键词以|区分，value为对应的回复列表
     public static Map<String, List<String>> key_wrod_normal = new HashMap<>();
 
@@ -33,5 +43,6 @@ public class ConstantKeyWord extends ConstantCommon {
     public static final int KEY_WORD_RESPONSE_MAX_SIZE = 100;
     public static final String KEY_WORD_RESPONSE_OVER = "关键词长度超出限制";
     public static final String KEY_WORD_SAVE_SUCCESS = "关键词回复保存成功";
+    public static final String KEY_WORD_LIKE_SAVE_SUCCESS = "模糊关键词回复保存成功";
 
 }
