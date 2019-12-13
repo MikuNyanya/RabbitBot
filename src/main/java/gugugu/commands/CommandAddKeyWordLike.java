@@ -7,7 +7,9 @@ import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 import gugugu.constant.ConstantKeyWord;
 import gugugu.filemanage.FileManager;
-import utils.RegexUtil;
+import gugugu.filemanage.FileManagerKeyWordLike;
+import gugugu.filemanage.FileManagerKeyWordNormal;
+import utils.StringUtil;
 
 import java.util.ArrayList;
 
@@ -53,13 +55,14 @@ public class CommandAddKeyWordLike implements GroupCommand {
                     if (keyWords.length() > ConstantKeyWord.KEY_WORD_MAX_SIZE) {
                         return ConstantKeyWord.KEY_WORD_OVER;
                     }
-                    //todo 判断关键词是否已存在
-//                    for(String keyWord : keyWords.split("&")){
-//                        //关键词是否已存在
-//                        if (keyReCheck(keyWords)) {
-//                            return String.format(ConstantKeyWord.KEY_WORD_EXISTS, keyWords);
-//                        }
-//                    }
+
+                    //判断关键词是否已存在 需要判断全匹配和模糊匹配两种
+                    for (String keyWord : keyWords.split("&")) {
+                        if (StringUtil.isNotEmpty(FileManagerKeyWordLike.keyWordLikeRegex(keyWord))
+                                || StringUtil.isNotEmpty(FileManagerKeyWordNormal.keyWordNormalRegex(keyWord))) {
+                            return String.format(ConstantKeyWord.KEY_WORD_EXISTS, keyWords);
+                        }
+                    }
                 }
                 continue;
             }
@@ -81,22 +84,5 @@ public class CommandAddKeyWordLike implements GroupCommand {
     @Override
     public CommandProperties properties() {
         return new CommandProperties("AddKeyWordLike", "addkwl");
-    }
-
-    /**
-     * 检查关键词是否已存在
-     *
-     * @param keyWord 新的关键词
-     * @return 是否已存的关键词
-     */
-    private boolean keyReCheck(String keyWord) {
-        for (String mapKey : ConstantKeyWord.key_wrod_normal.keySet()) {
-            for (String oneKey : mapKey.split("\\|")) {
-                if (RegexUtil.regex(keyWord, "^" + oneKey + "$")) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

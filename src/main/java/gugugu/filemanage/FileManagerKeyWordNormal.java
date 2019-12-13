@@ -1,9 +1,9 @@
 package gugugu.filemanage;
 
 import gugugu.constant.ConstantFile;
-import gugugu.constant.ConstantFreeTime;
 import gugugu.constant.ConstantKeyWord;
 import utils.FileUtil;
+import utils.RegexUtil;
 import utils.StringUtil;
 
 import java.io.*;
@@ -64,7 +64,7 @@ public class FileManagerKeyWordNormal extends FileManager {
         //创建读取器
         BufferedReader reader = new BufferedReader(new FileReader(keyWordNormalFile));
 
-        String tempKey =null;
+        String tempKey = null;
         List<String> tempList = null;
 
         //逐行读取文件
@@ -138,6 +138,26 @@ public class FileManagerKeyWordNormal extends FileManager {
 
         //关闭写入流
         out.close();
+    }
+
+    /**
+     * 关键词全匹配
+     *
+     * @param inputKey 输入的信息
+     * @return 如果匹配到了，则返回map的key，否则为null
+     */
+    public static String keyWordNormalRegex(String inputKey) {
+        //循环mapkey，找到包含关键词的key，然后拆分key确认是否全匹配，如果不是继续循环到下一个key
+        for (String keyRegex : ConstantKeyWord.key_wrod_normal.keySet()) {
+            //正则匹配
+            for (String oneKey : keyRegex.split("\\|")) {
+                //找到关键词，返回map的key
+                if (RegexUtil.regex(inputKey, "^" + oneKey + "$")) {
+                    return keyRegex;
+                }
+            }
+        }
+        return null;
     }
 
 }

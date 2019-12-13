@@ -4,8 +4,9 @@ import cc.moecraft.icq.event.EventHandler;
 import cc.moecraft.icq.event.IcqListener;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import gugugu.constant.*;
+import gugugu.filemanage.FileManagerKeyWordLike;
+import gugugu.filemanage.FileManagerKeyWordNormal;
 import utils.RandomUtil;
-import utils.RegexUtil;
 import utils.StringUtil;
 
 import java.util.HashMap;
@@ -28,6 +29,11 @@ public class GroupListener extends IcqListener {
             return;
         }
 
+        //屏蔽正常指令
+        if (ConstantCommon.COMMAND_INDEX.equalsIgnoreCase(event.getMessage().substring(0, 1))) {
+            return;
+        }
+
         //黑名单
         Long senderId = event.getSenderId();
         if (ConstantBlackList.BLACK_LIST.contains(senderId)) {
@@ -35,14 +41,8 @@ public class GroupListener extends IcqListener {
         }
 
         //每次只会触发一个回复
-        //群复读
-        boolean groupRep = groupRepeater(event);
-        if (groupRep) {
-            return;
-        }
-
         //ABABA 句式检索
-        groupRep = groupABABA(event);
+        boolean groupRep = groupABABA(event);
         if (groupRep) {
             return;
         }
@@ -54,7 +54,16 @@ public class GroupListener extends IcqListener {
         }
 
         //关键词匹配(模糊)
-        groupKeyWordLike(event);
+        groupRep = groupKeyWordLike(event);
+        if (groupRep) {
+            return;
+        }
+
+        //群复读
+        groupRep = groupRepeater(event);
+        if (groupRep) {
+            return;
+        }
     }
 
     /**
@@ -71,11 +80,6 @@ public class GroupListener extends IcqListener {
         //第一次消息初始化
         if (!LAST_MSG_MAP.containsKey(groupId)) {
             LAST_MSG_MAP.put(groupId, "");
-        }
-
-        //屏蔽正常指令
-        if (ConstantCommon.COMMAND_INDEX.equalsIgnoreCase(groupMsg.substring(0, 1))) {
-            return false;
         }
 
         //群复读，两个相同的消息，复读一次，并重置计数
@@ -125,27 +129,18 @@ public class GroupListener extends IcqListener {
     private boolean groupKeyWord(EventGroupMessage event) {
         String groupMsg = event.getMessage();
 
-        //循环mapkey，找到包含关键词的key，然后拆分key确认是否全匹配，如果不是继续循环到下一个key
-        for (String keyRegex : ConstantKeyWord.key_wrod_normal.keySet()) {
-            //正则匹配
-            boolean regex = false;
-            for (String oneKey : keyRegex.split("\\|")) {
-                if (RegexUtil.regex(groupMsg, "^" + oneKey + "$")) {
-                    regex = true;
-                    break;
-                }
-            }
-
-            if (!regex) {
-                continue;
-            }
-            //随机选择回复
-            String msg = RandomUtil.rollStrFromList(ConstantKeyWord.key_wrod_normal.get(keyRegex));
-            //回复群消息
-            event.getHttpApi().sendGroupMsg(event.groupId, msg);
-            return true;
+        //全匹配关键词
+        String mapKey = FileManagerKeyWordNormal.keyWordNormalRegex(groupMsg);
+        if (StringUtil.isEmpty(mapKey)) {
+            return false;
         }
-        return false;
+
+        //随机选择回复
+        String msg = RandomUtil.rollStrFromList(ConstantKeyWord.key_wrod_normal.get(mapKey));
+        //回复群消息
+        event.getHttpApi().sendGroupMsg(event.groupId, msg);
+        return true;
+
     }
 
     /**
@@ -157,51 +152,16 @@ public class GroupListener extends IcqListener {
     private boolean groupKeyWordLike(EventGroupMessage event) {
         String groupMsg = event.getMessage();
 
-        //循环mapkey，找到包含关键词的key，然后拆分key确认是否全匹配，如果不是继续循环到下一个key
-        for (String keyRegex : ConstantKeyWord.key_wrod_like.keySet()) {
-            //正则匹配
-            boolean isRegex = false;
-            for (String keyWords : keyRegex.split("\\|")) {
-                //拼接正则
-                String regex = getKeyWordLikeRegex(keyWords);
-
-                //进行正则匹配
-                if (RegexUtil.regex(groupMsg, regex)) {
-                    isRegex = true;
-                    break;
-                }
-            }
-
-            if (!isRegex) {
-                continue;
-            }
-            //随机选择回复
-            String msg = RandomUtil.rollStrFromList(ConstantKeyWord.key_wrod_like.get(keyRegex));
-            //回复群消息
-            event.getHttpApi().sendGroupMsg(event.groupId, msg);
-            return true;
+        //检测模糊关键词
+        String mapKey = FileManagerKeyWordLike.keyWordLikeRegex(groupMsg);
+        if (StringUtil.isEmpty(mapKey)) {
+            return false;
         }
-        return false;
-    }
 
-    /**
-     * 解析模糊关键词，组成正则
-     *
-     * @param keyWords 模糊匹配关键词原始字符串
-     * @return 模糊匹配正则表达式
-     */
-    private String getKeyWordLikeRegex(String keyWords) {
-        StringBuilder regex = new StringBuilder();
-        boolean isFirst = true;
-        for (String key : keyWords.split("&")) {
-            if (isFirst) {
-                regex.append(key);
-                isFirst = false;
-                continue;
-            }
-            regex.append("\\S*");
-            regex.append(key);
-        }
-        return regex.toString();
+        //随机选择回复
+        String msg = RandomUtil.rollStrFromList(ConstantKeyWord.key_wrod_like.get(mapKey));
+        //回复群消息
+        event.getHttpApi().sendGroupMsg(event.groupId, msg);
+        return true;
     }
 }
