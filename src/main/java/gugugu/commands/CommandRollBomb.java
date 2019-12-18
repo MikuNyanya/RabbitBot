@@ -93,7 +93,7 @@ public class CommandRollBomb implements GroupCommand {
 
     @Override
     public CommandProperties properties() {
-        return new CommandProperties("RollBomb", "rbomb");
+        return new CommandProperties("RollBomb", "rb");
     }
 
     //游戏开始

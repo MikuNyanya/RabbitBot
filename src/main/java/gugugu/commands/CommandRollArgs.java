@@ -48,6 +48,6 @@ public class CommandRollArgs implements GroupCommand {
 
     @Override
     public CommandProperties properties() {
-        return new CommandProperties("rollArgs", "roll", "ROLL");
+        return new CommandProperties("rollArgs", "roll");
     }
 }

@@ -90,7 +90,7 @@ public class CommandABomb implements GroupCommand {
 
     @Override
     public CommandProperties properties() {
-        return new CommandProperties("aBomb", "abomb", "ab");
+        return new CommandProperties("aBomb", "ab");
     }
 
     //游戏开始

@@ -76,6 +76,7 @@ public class BotRabbit {
      * 要注册的指令
      */
     private static IcqCommand[] commands = new IcqCommand[]{
+            new CommandHelp(),
             new CommandSystem(),
             new CommandCls(),
             new CommandRoll(),

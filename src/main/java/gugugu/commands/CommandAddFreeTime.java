@@ -54,6 +54,6 @@ public class CommandAddFreeTime implements GroupCommand {
 
     @Override
     public CommandProperties properties() {
-        return new CommandProperties("AddNichijou", "addnj", "添加日常话语");
+        return new CommandProperties("AddNichijou", "addnj");
     }
 }

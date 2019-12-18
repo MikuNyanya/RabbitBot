@@ -51,6 +51,6 @@ public class CommandRoll implements GroupCommand {
 
     @Override
     public CommandProperties properties() {
-        return new CommandProperties("roll", "r", "R");
+        return new CommandProperties("roll", "r");
     }
 }
