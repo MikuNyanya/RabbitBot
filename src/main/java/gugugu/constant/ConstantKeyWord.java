@@ -1,5 +1,6 @@
 package gugugu.constant;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,9 @@ public class ConstantKeyWord extends ConstantCommon {
 
     //存放全匹配关键词的map，key为关键词，多个关键词以|区分，value为对应的回复列表
     public static Map<String, List<String>> key_wrod_normal = new HashMap<>();
+
+    //存放模糊匹配关键词的list，由于hashmap数据存入是无序的，无法控制关键词优先级，所以用list存储，然后再去map获取回复
+    public static List<String> key_wrod_like_list = new ArrayList<>();
 
     //存放模糊匹配关键词的map，key为关键词组合列表，每个关键词组合之间用|区分，每个组合里的关键词用&区分，value为对应的回复列表
     public static Map<String, List<String>> key_wrod_like = new HashMap<>();

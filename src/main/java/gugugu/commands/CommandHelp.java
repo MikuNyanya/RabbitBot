@@ -30,7 +30,7 @@ public class CommandHelp implements GroupCommand {
     @Override
     public String groupMessage(EventGroupMessage event, GroupUser sender, Group group, String command, ArrayList<String> args) {
         StringBuilder msg = new StringBuilder();
-        msg.append("这里是[" + BotRabbit.BOT_NAME + "(RabbitBot)]，一个居无定所的机器人\n");
+        msg.append("这里是[" + BotRabbit.BOT_NAME + "(RabbitBot)]，一个居无定所的群机器人\n");
         msg.append("===指令列表===\n");
         msg.append(".r 生成一个1-100的随机数\n");
         msg.append(".roll 在提供的几个参数里随机选择一个，输入该指令以查看详解\n");

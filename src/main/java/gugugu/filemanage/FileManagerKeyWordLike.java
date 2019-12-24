@@ -79,6 +79,7 @@ public class FileManagerKeyWordLike extends FileManager {
             tempList = Arrays.asList(freeTimeStr.split("\\|"));
 
             //内容同步到系统
+            ConstantKeyWord.key_wrod_like_list.add(tempKey);
             ConstantKeyWord.key_wrod_like.put(tempKey, tempList);
         }
         //关闭读取器
@@ -132,6 +133,7 @@ public class FileManagerKeyWordLike extends FileManager {
         out.write("\r\n" + fileSb.toString());
 
         //把新加的内容同步到系统
+        ConstantKeyWord.key_wrod_like_list.add(keyWord);
         ConstantKeyWord.key_wrod_like.put(keyWord, repList);
 
         //关闭写入流
@@ -145,7 +147,8 @@ public class FileManagerKeyWordLike extends FileManager {
      * @return 匹配到的key，可以用来获取回复列表
      */
     public static String keyWordLikeRegex(String inputKey) {
-        for (String keyRegex : ConstantKeyWord.key_wrod_like.keySet()) {
+        //去keylist寻找关键词
+        for (String keyRegex : ConstantKeyWord.key_wrod_like_list) {
             //正则匹配
             for (String keyWords : keyRegex.split("\\|")) {
                 //拼接正则
