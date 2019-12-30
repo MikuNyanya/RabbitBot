@@ -32,9 +32,7 @@ public class ConstantFreeTime extends ConstantCommon {
             "妮可妮可妮",
             "兔子兔子兔",
             "兔叽兔叽兔",
-            "兔砸兔砸兔",
-            "铃子铃子铃",
-            "夕月夕月夕"
+            "兔砸兔砸兔"
     );
 
 }

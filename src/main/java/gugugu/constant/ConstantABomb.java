@@ -11,10 +11,10 @@ import java.util.List;
  */
 public class ConstantABomb extends ConstantCommon {
     //指令列表
-    public static final String EXPLAIN = "[一个正在睡觉的雷]\n在.abomb或者.ab后跟随其他指令来进行操作：\n"
-            + "start/开始 [总数量] [雷数量](你们即将要去打扰一颗正在睡觉的雷)\n"
+    public static final String EXPLAIN = "[一个正在睡觉的雷]\n在.ab后跟随其他指令来进行操作：\n"
+            + "start/开始(你们即将要去打扰一颗正在睡觉的雷)\n"
             + "end/结束(放过那颗雷吧)\n"
-            + "c [num1]/选择 [数字](选择一个数字)";
+            + "c [num1]/选择一个数字";
 
     //=====指令=====
     //开始

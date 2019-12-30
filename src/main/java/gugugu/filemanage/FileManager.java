@@ -19,6 +19,8 @@ public class FileManager {
     protected static File keyWordNormalFile = null;
     //模糊关键词 文件
     protected static File keyWordLikeFile = null;
+    //扭蛋 文件
+    protected static File capsuleToy = null;
 
     /**
      * 加载日常语句文件
@@ -66,5 +68,21 @@ public class FileManager {
      */
     public static void addKeyWordLike(String... args) {
         FileManagerKeyWordLike.doCommand(ConstantFile.FILE_COMMAND_WRITE, args);
+    }
+
+    /**
+     * 加载扭蛋列表
+     */
+    public static void loadCapsuleToy() {
+        FileManagerCapsuleToy.doCommand(ConstantFile.FILE_COMMAND_LOAD, null);
+    }
+
+    /**
+     * 写入模糊匹配关键词回复
+     *
+     * @param capsuleToy 扭蛋
+     */
+    public static void addCapsuleToy(String capsuleToy) {
+        FileManagerCapsuleToy.doCommand(ConstantFile.FILE_COMMAND_WRITE, capsuleToy);
     }
 }

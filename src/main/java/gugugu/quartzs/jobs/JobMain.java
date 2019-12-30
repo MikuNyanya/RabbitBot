@@ -20,10 +20,10 @@ import java.util.Map;
  * 1分钟执行一次的定时器
  */
 public class JobMain implements Job {
-    //正常间隔(毫秒) 目前为60分钟
-    private static final Long SPLIT_NORMAL = 1000L * 60 * 60;
-    //随机间隔最大值(分钟) 目前最长延迟30分钟
-    private static final Integer SPLIT_RANDOM_MAX = 30;
+    //正常间隔(毫秒) 目前为2小时
+    private static final Long SPLIT_NORMAL = 1000L * 60 * 60 * 2;
+    //随机间隔最大值(分钟) 目前最长延迟1小时
+    private static final Integer SPLIT_RANDOM_MAX = 60;
 
     //最后发送时间
     private static Long free_time_last_send_time = System.currentTimeMillis();
@@ -56,12 +56,12 @@ public class JobMain implements Job {
         //从列表中删除获取的消息，实现伪随机，不然重复率太高了，体验比较差
         String msg = RandomUtil.rollAndDelStrFromList(ConstantFreeTime.MSG_TYPE_FREE_TIME);
 
-        //删到五分之一时重新加载集合
-        if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() < ConstantFreeTime.MSG_TYPE_FREE_TIME_MAX_SIZE / 5) {
+        //删到六分之一时重新加载集合
+        if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() < ConstantFreeTime.MSG_TYPE_FREE_TIME_MAX_SIZE / 6) {
             FileManager.loadFreeTime();
         }
 
-        //给每个群发送报时
+        //给每个群发送消息
         Map<Long, Map<BotAccount, Long>> groupList = BotRabbit.bot.getAccountManager().getGroupAccountIndex();
         for (Long groupId : groupList.keySet()) {
             icqHttpApi.sendGroupMsg(groupId, msg);
