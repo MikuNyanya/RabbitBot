@@ -1,7 +1,9 @@
 package gugugu.constant;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * create by MikuLink on 2019/12/30 14:26
@@ -9,7 +11,12 @@ import java.util.List;
  * 扭蛋
  */
 public class ConstantCapsuleToy {
+    //扭蛋列表
     public static List<String> MSG_CAPSULE_TOY = Arrays.asList();
+    //操作间隔 账号，操作时间戳
+    public static Map<Long, Long> CAPSULE_TOY_SPLIT_MAP = new HashMap<>();
+    //操作间隔
+    public static final Long CAPSULE_TOY_SPLIT_TIME = 1000L * 60;
 
     public static final String EXPLAIN_ADD = "使用以下格式指令添加一个扭蛋\n"
             + ".扭蛋 add 胡萝卜\n"
@@ -22,6 +29,7 @@ public class ConstantCapsuleToy {
     public static final String MSG_CAPSULE_TOY_ADD_SUCCESS = "扭蛋[%s]添加完成";
 
     //错误提示
+    public static final String CAPSULE_TOY_SPLIT_ERROR = "[%s]%s秒后可以扭蛋";
     public static final String COMMAND_SECOND_ERROR = "扭蛋指令错误";
     public static final String CAPSULE_TOY_ADD_EMPTY = "你得告诉我添加什么扭蛋";
     public static final String CAPSULE_TOY_ADD_RE = "[%s]已经在扭蛋池里了";

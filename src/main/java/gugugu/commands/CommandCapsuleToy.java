@@ -6,6 +6,7 @@ import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 import gugugu.constant.ConstantCapsuleToy;
+import gugugu.entity.InfoGroupUser;
 import gugugu.filemanage.FileManager;
 import utils.RandomUtil;
 import utils.StringUtil;
@@ -33,11 +34,18 @@ public class CommandCapsuleToy implements GroupCommand {
     @Override
     public String groupMessage(EventGroupMessage event, GroupUser sender, Group group, String command, ArrayList<String> args) {
         if (null == args || args.size() <= 0) {
+            //操作间隔判断
+            String timeCheck = timeCheck(event.getGroupUserInfo());
+            if (StringUtil.isNotEmpty(timeCheck)) {
+                return timeCheck;
+            }
             //进行扭蛋
             String capsuleToy = capsuleToySelect();
             if (StringUtil.isEmpty(capsuleToy)) {
                 return ConstantCapsuleToy.CAPSULE_TOY_HAS_NOTHING;
             }
+            //刷新操作间隔
+            ConstantCapsuleToy.CAPSULE_TOY_SPLIT_MAP.put(event.getGroupUserInfo().getUserId(), System.currentTimeMillis());
             //群名片
             String groupUserName = event.getGroupUserInfo().getGroupUserName();
             return String.format(ConstantCapsuleToy.MSG_CAPSULE_TOY_RESULT, groupUserName, capsuleToy);
@@ -103,4 +111,31 @@ public class CommandCapsuleToy implements GroupCommand {
         FileManager.addCapsuleToy(capsuleToy);
         return String.format(ConstantCapsuleToy.MSG_CAPSULE_TOY_ADD_SUCCESS, capsuleToy);
     }
+
+    /**
+     * 操作间隔控制
+     *
+     * @return
+     */
+    private String timeCheck(InfoGroupUser groupUser) {
+        Long qq = groupUser.getUserId();
+        String name = groupUser.getGroupUserName();
+
+        if (!ConstantCapsuleToy.CAPSULE_TOY_SPLIT_MAP.containsKey(qq)) {
+            return null;
+        }
+        Long lastTime = ConstantCapsuleToy.CAPSULE_TOY_SPLIT_MAP.get(qq);
+        if (null == lastTime) {
+            return null;
+        }
+        Long nowTime = System.currentTimeMillis();
+        Long splitTime = nowTime - lastTime;
+        //判断是否允许操作
+        if (splitTime <= ConstantCapsuleToy.CAPSULE_TOY_SPLIT_TIME) {
+            return String.format(ConstantCapsuleToy.CAPSULE_TOY_SPLIT_ERROR, name, (ConstantCapsuleToy.CAPSULE_TOY_SPLIT_TIME - splitTime) / 1000);
+        }
+        //其他情况允许操作
+        return null;
+    }
+
 }

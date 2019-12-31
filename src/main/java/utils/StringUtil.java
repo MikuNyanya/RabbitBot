@@ -80,6 +80,10 @@ public class StringUtil {
         }
         char a = str.charAt(0);
         char b = str.charAt(1);
+        //两个字符不能相同
+        if (a == b) {
+            return false;
+        }
         String ababa_str = String.format("%s%s%s%s%s", a, b, a, b, a);
 
         return ababa_str.equalsIgnoreCase(str);
