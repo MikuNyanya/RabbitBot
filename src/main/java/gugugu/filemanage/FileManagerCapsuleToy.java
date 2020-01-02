@@ -72,6 +72,8 @@ public class FileManagerCapsuleToy extends FileManager {
         }
         //关闭读取器
         reader.close();
+        //刷新最大元素数目
+        ConstantCapsuleToy.CAPSULE_TOY_SPLIT_MAX_SIZE = ConstantCapsuleToy.MSG_CAPSULE_TOY.size();
     }
 
     /**
@@ -92,6 +94,8 @@ public class FileManagerCapsuleToy extends FileManager {
         out.write("\r\n" + text);
         //同时把新加的内容同步到系统
         ConstantCapsuleToy.MSG_CAPSULE_TOY.add(text);
+        //刷新最大数目
+        ConstantCapsuleToy.CAPSULE_TOY_SPLIT_MAX_SIZE++;
 
         //关闭写入流
         out.close();

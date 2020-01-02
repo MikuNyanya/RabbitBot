@@ -84,7 +84,14 @@ public class CommandCapsuleToy implements GroupCommand {
             FileManager.loadCapsuleToy();
         }
         //扭个蛋
-        return RandomUtil.rollStrFromList(ConstantCapsuleToy.MSG_CAPSULE_TOY);
+        String capsuleToy = RandomUtil.rollStrFromList(ConstantCapsuleToy.MSG_CAPSULE_TOY);
+        //删除这个扭蛋，实现伪随机
+        ConstantCapsuleToy.MSG_CAPSULE_TOY.remove(capsuleToy);
+        //元素少于1/6的时候，重新加载
+        if (ConstantCapsuleToy.MSG_CAPSULE_TOY.size() < ConstantCapsuleToy.CAPSULE_TOY_SPLIT_MAX_SIZE / 6) {
+            FileManager.loadCapsuleToy();
+        }
+        return capsuleToy;
     }
 
     /**

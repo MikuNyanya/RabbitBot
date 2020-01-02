@@ -24,6 +24,12 @@ public class GroupListener extends IcqListener {
 
     @EventHandler
     public void onPMEvent(EventGroupMessage event) {
+        //黑名单
+        Long senderId = event.getSenderId();
+        if (ConstantBlackList.BLACK_LIST.contains(senderId)) {
+            return;
+        }
+
         //过滤掉消息为空的
         if (StringUtil.isEmpty(event.getMessage())) {
             return;
@@ -31,12 +37,6 @@ public class GroupListener extends IcqListener {
 
         //屏蔽正常指令
         if (ConstantCommon.COMMAND_INDEX.equalsIgnoreCase(event.getMessage().substring(0, 1))) {
-            return;
-        }
-
-        //黑名单
-        Long senderId = event.getSenderId();
-        if (ConstantBlackList.BLACK_LIST.contains(senderId)) {
             return;
         }
 

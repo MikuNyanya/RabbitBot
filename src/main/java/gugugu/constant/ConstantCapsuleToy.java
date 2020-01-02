@@ -17,6 +17,8 @@ public class ConstantCapsuleToy {
     public static Map<Long, Long> CAPSULE_TOY_SPLIT_MAP = new HashMap<>();
     //操作间隔
     public static final Long CAPSULE_TOY_SPLIT_TIME = 1000L * 60;
+    //集合总长度
+    public static Integer CAPSULE_TOY_SPLIT_MAX_SIZE = 0;
 
     public static final String EXPLAIN_ADD = "使用以下格式指令添加一个扭蛋\n"
             + ".扭蛋 add 胡萝卜\n"
