@@ -45,7 +45,7 @@ public class JobMain implements Job {
 
         //大晚上的就不发了
         int hour = DateUtil.getHour();
-        if (hour < 7) {
+        if (hour < 8) {
             return;
         }
 
