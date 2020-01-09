@@ -18,6 +18,8 @@ import gugugu.listeners.SimpleTextLoggingListener;
 public class BotRabbit {
     //机器人名称
     public static final String BOT_NAME = "兔叽";
+    //qq号
+    public static final Long BOT_QQ = 1020992834L;
     //picq端口
     private static final int SOCKET_PORT = 31033;
     //酷Q端口
@@ -89,7 +91,8 @@ public class BotRabbit {
             new CommandAddFreeTime(),
             new CommandAddKeyWordNormal(),
             new CommandAddKeyWordLike(),
-            new CommandCapsuleToy()
+            new CommandCapsuleToy(),
+            new CommandWeiboNews()
     };
 
     /**

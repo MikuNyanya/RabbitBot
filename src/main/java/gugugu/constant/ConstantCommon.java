@@ -14,8 +14,23 @@ public class ConstantCommon {
     public static final String NEXT_LINE = "\n";
     //指令前缀
     public static final String COMMAND_INDEX = ".";
+    //开关-开
+    public static final String ON = "on";
+    //开关-关
+    public static final String OFF = "off";
+    //文本-执行
+    public static final String EXEC = "exec";
+
+    //群主
+    public static final String OWNER = "owner";
+    //管理
+    public static final String ADMIN = "admin";
+    //群员
+    public static final String MEMBER = "member";
+
 
     public static final String COMMAND_ERROR = "指令[%s]无效";
+    public static final String COMMAND_ROLE_ADMIN = "该指令需要管理权限";
     public static final String PARAM_ERROR = "参数无效";
     public static final String GAME_NOT_START = "游戏未开启";
     public static final String GAME_BOMB_END = "游戏已结束";

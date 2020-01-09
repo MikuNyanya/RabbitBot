@@ -2,6 +2,7 @@ package gugugu.entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import gugugu.constant.ConstantCommon;
 import lombok.Getter;
 import utils.StringUtil;
 
@@ -65,6 +66,9 @@ public class InfoGroupUser {
 
     /**
      * 权限
+     * owner    群主
+     * admin    管理员
+     * member   群员
      */
     @SerializedName("role")
     @Expose
@@ -81,11 +85,18 @@ public class InfoGroupUser {
     }
 
     //不设置群名片的话，card则为空，这时候直接使用本命
-    public String getGroupUserName(){
-        if(StringUtil.isEmpty(card)){
+    public String getGroupUserName() {
+        if (StringUtil.isEmpty(card)) {
             return nickname;
         }
         return card;
     }
 
+    //是否为管理，群主也算进去
+    public boolean isAdmin() {
+        if (StringUtil.isEmpty(role)) {
+            return false;
+        }
+        return ConstantCommon.OWNER.equalsIgnoreCase(role) || ConstantCommon.ADMIN.equalsIgnoreCase(role);
+    }
 }

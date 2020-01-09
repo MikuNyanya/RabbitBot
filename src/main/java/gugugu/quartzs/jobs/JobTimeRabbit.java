@@ -1,17 +1,14 @@
 package gugugu.quartzs.jobs;
 
-import cc.moecraft.icq.accounts.BotAccount;
-import cc.moecraft.icq.sender.IcqHttpApi;
 import gugugu.bots.BotRabbit;
 import gugugu.commands.CommandRP;
 import gugugu.constant.ConstantCommon;
+import gugugu.service.RabbitBotService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import utils.DateUtil;
 
 import java.util.Date;
-import java.util.Map;
 
 /**
  * create by MikuLink on 2019/12/3 12:58
@@ -22,7 +19,7 @@ import java.util.Map;
 public class JobTimeRabbit implements Job {
 
     @Override
-    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    public void execute(JobExecutionContext jobExecutionContext) {
         //报时兔子
         timeRabbit();
 
@@ -39,14 +36,8 @@ public class JobTimeRabbit implements Job {
         //群报时，时间间隔交给定时器，这里返回值取当前时间即可
         String msg = String.format("这里是%s报时：%s%s", BotRabbit.BOT_NAME, DateUtil.toString(new Date()), msgEx);
 
-        //获取链接，参数是机器人的qq号
-        IcqHttpApi icqHttpApi = BotRabbit.bot.getAccountManager().getIdIndex().get(1020992834L).getHttpApi();
-
         //给每个群发送报时
-        Map<Long, Map<BotAccount, Long>> groupList = BotRabbit.bot.getAccountManager().getGroupAccountIndex();
-        for (Long groupId : groupList.keySet()) {
-            icqHttpApi.sendGroupMsg(groupId, msg);
-        }
+        RabbitBotService.sendEveryGroupMsg(msg);
     }
 
     //获取附加短语，可以放一些彩蛋性质的东西，会附带在报时消息尾部

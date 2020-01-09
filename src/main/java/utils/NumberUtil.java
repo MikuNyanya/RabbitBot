@@ -29,7 +29,7 @@ public class NumberUtil {
     }
 
     /**
-     * 字符串转化为数字
+     * 字符串转化为Integer数字
      *
      * @param str 输入字符串
      * @return 输出数字
@@ -39,5 +39,18 @@ public class NumberUtil {
             return 0;
         }
         return Integer.valueOf(str);
+    }
+
+    /**
+     * 字符串转化为Long数字
+     *
+     * @param str 输入字符串
+     * @return 输出数字
+     */
+    public static Long toLong(String str) {
+        if (StringUtil.isEmpty(str) || !isNumber(str)) {
+            return 0L;
+        }
+        return Long.valueOf(str);
     }
 }
