@@ -16,4 +16,10 @@ public class InfoUser {
     private String name;
     //用户简介
     private String description;
+    //用户头像链接，50x50的小图
+    private String profile_image_url;
+    //用户头像链接，180x180的中图
+    private String avatar_large;
+    //用户头像链接，原图
+    private String avatar_hd;
 }

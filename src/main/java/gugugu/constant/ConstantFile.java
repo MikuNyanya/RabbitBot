@@ -21,5 +21,8 @@ public class ConstantFile extends ConstantCommon {
     //对文件写入
     public static final String FILE_COMMAND_WRITE = "write";
 
-
+    public static final String SRC_PATH_EMPTY = "原路径为空";
+    public static final String DES_PATH_EMPTY = "目标路径为空";
+    public static final String SRC_PATH_NOT_EXISTS = "原路径或文件不存在";
+    public static final String DES_PATH_NOT_EXISTS = "目标路径或文件不存在";
 }
