@@ -63,11 +63,15 @@ public class WeiboNewsService {
 
         //发送微博
         for (InfoStatuses info : statuses) {
+            //过滤转发微博
+            if (null != info.getRetweeted_status()) {
+                continue;
+            }
             //解析微博报文
             String msg = parseWeiboBody(info);
             //给每个群发送消息
-            RabbitBotService.sendEveryGroupMsg(msg.toString());
-            //每次发送之间间隔一点时间，免得瞬间刷屏
+            RabbitBotService.sendEveryGroupMsg(msg);
+            //每次发送之间间隔一点时间，免得瞬间刷屏太厉害
             Thread.sleep(1000L * 5);
         }
     }

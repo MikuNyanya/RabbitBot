@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class GroupListener extends IcqListener {
     //保存群最后一条消息，用于复读
-    private static Map<Long, String> LAST_MSG_MAP = new HashMap<>();
+    private static Map<Long, String[]> LAST_MSG_MAP = new HashMap<>();
 
     @EventHandler
     public void onPMEvent(EventGroupMessage event) {
@@ -79,25 +79,34 @@ public class GroupListener extends IcqListener {
 
         //第一次消息初始化
         if (!LAST_MSG_MAP.containsKey(groupId)) {
-            LAST_MSG_MAP.put(groupId, "");
+            LAST_MSG_MAP.put(groupId, new String[2]);
         }
 
-        //群复读，两个相同的消息，复读一次，并重置计数
-        if (LAST_MSG_MAP.get(groupId).equals(groupMsg)) {
-            if (ConstantRepeater.REPEATER_KILLER_LIST.contains(groupMsg) || ConstantRepeater.REPEATER_STOP_LIST.contains(groupMsg)) {
-                //打断
-                groupMsg = RandomUtil.rollStrFromList(ConstantRepeater.REPEATER_STOP_LIST);
-            } else if (RandomUtil.rollBoolean(-80)) {
-                //打断复读
-                groupMsg = RandomUtil.rollStrFromList(ConstantRepeater.REPEATER_KILLER_LIST);
-            }
-            event.getHttpApi().sendGroupMsg(event.groupId, groupMsg);
-            LAST_MSG_MAP.put(groupId, "");
-            return true;
+        String[] msgs = LAST_MSG_MAP.get(groupId);
+        //群复读，三个相同的消息，复读一次，并重置计数
+        if ((StringUtil.isEmpty(msgs[0]) || StringUtil.isEmpty(msgs[1]))
+                || !(msgs[0].equals(msgs[1]) && msgs[0].equals(groupMsg))) {
+            //刷新消息列表
+            msgs[1] = msgs[0];
+            msgs[0] = groupMsg;
+            LAST_MSG_MAP.put(groupId, msgs);
+            return false;
         }
-        //覆盖最后消息
-        LAST_MSG_MAP.put(groupId, groupMsg);
-        return false;
+
+        //概率打断复读，100%对复读打断复读的语句做出反应
+        if (ConstantRepeater.REPEATER_KILLER_LIST.contains(groupMsg) || ConstantRepeater.REPEATER_STOP_LIST.contains(groupMsg)) {
+            //打断复读的复读
+            groupMsg = RandomUtil.rollStrFromList(ConstantRepeater.REPEATER_STOP_LIST);
+        } else if (RandomUtil.rollBoolean(-80)) {
+            //打断复读
+            groupMsg = RandomUtil.rollStrFromList(ConstantRepeater.REPEATER_KILLER_LIST);
+        }
+
+        //正常复读
+        event.getHttpApi().sendGroupMsg(event.groupId, groupMsg);
+        //复读一次后，重置复读计数
+        LAST_MSG_MAP.put(groupId, new String[2]);
+        return true;
     }
 
     /**

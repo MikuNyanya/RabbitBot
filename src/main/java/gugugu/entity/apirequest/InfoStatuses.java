@@ -22,4 +22,6 @@ public class InfoStatuses {
     private List<InfoPicUrl> pic_urls;
     //用户信息
     private InfoUser user;
+    //转发微博
+    private InfoRetweetedStatus retweeted_status;
 }
