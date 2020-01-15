@@ -1,5 +1,6 @@
 package gugugu.quartzs.jobs;
 
+import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantFreeTime;
 import gugugu.constant.ConstantWeiboNews;
 import gugugu.filemanage.FileManager;
@@ -81,8 +82,7 @@ public class JobMain implements Job {
             //执行一次微博消息推送
             WeiboNewsService.doPushWeiboNews();
         } catch (Exception ex) {
-            //todo 输出异常日志
-            ex.printStackTrace();
+            BotRabbit.bot.getLogger().error("微博消息推送执行异常", ex);
         }
 
         //刷新最后发送时间

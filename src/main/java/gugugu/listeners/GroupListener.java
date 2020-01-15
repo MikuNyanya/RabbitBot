@@ -3,12 +3,15 @@ package gugugu.listeners;
 import cc.moecraft.icq.event.EventHandler;
 import cc.moecraft.icq.event.IcqListener;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
+import gugugu.bots.BotRabbit;
 import gugugu.constant.*;
 import gugugu.filemanage.FileManagerKeyWordLike;
 import gugugu.filemanage.FileManagerKeyWordNormal;
+import gugugu.service.ImageService;
 import utils.RandomUtil;
 import utils.StringUtil;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,45 +27,49 @@ public class GroupListener extends IcqListener {
 
     @EventHandler
     public void onPMEvent(EventGroupMessage event) {
-        //黑名单
-        Long senderId = event.getSenderId();
-        if (ConstantBlackList.BLACK_LIST.contains(senderId)) {
-            return;
-        }
+        try {
+            //黑名单
+            Long senderId = event.getSenderId();
+            if (ConstantBlackList.BLACK_LIST.contains(senderId)) {
+                return;
+            }
 
-        //过滤掉消息为空的
-        if (StringUtil.isEmpty(event.getMessage())) {
-            return;
-        }
+            //过滤掉消息为空的
+            if (StringUtil.isEmpty(event.getMessage())) {
+                return;
+            }
 
-        //屏蔽正常指令
-        if (ConstantCommon.COMMAND_INDEX.equalsIgnoreCase(event.getMessage().substring(0, 1))) {
-            return;
-        }
+            //屏蔽正常指令
+            if (ConstantCommon.COMMAND_INDEX.equalsIgnoreCase(event.getMessage().substring(0, 1))) {
+                return;
+            }
 
-        //每次只会触发一个回复
-        //ABABA 句式检索
-        boolean groupRep = groupABABA(event);
-        if (groupRep) {
-            return;
-        }
+            //每次只会触发一个回复
+            //ABABA 句式检索
+            boolean groupRep = groupABABA(event);
+            if (groupRep) {
+                return;
+            }
 
-        //关键词全匹配
-        groupRep = groupKeyWord(event);
-        if (groupRep) {
-            return;
-        }
+            //关键词全匹配
+            groupRep = groupKeyWord(event);
+            if (groupRep) {
+                return;
+            }
 
-        //关键词匹配(模糊)
-        groupRep = groupKeyWordLike(event);
-        if (groupRep) {
-            return;
-        }
+            //关键词匹配(模糊)
+            groupRep = groupKeyWordLike(event);
+            if (groupRep) {
+                return;
+            }
 
-        //群复读
-        groupRep = groupRepeater(event);
-        if (groupRep) {
-            return;
+            //群复读
+            groupRep = groupRepeater(event);
+            if (groupRep) {
+                return;
+            }
+        } catch (Exception ex) {
+            BotRabbit.bot.getLogger().error(String.format("群消息业务处理异常，groupId:%s,msg:%s", event.getGroupId(), event.getMessage()), ex);
         }
     }
 
@@ -158,8 +165,17 @@ public class GroupListener extends IcqListener {
      * @param event 群消息监控
      * @return bol值 表示有没有进行群消息回复
      */
-    private boolean groupKeyWordLike(EventGroupMessage event) {
+    private boolean groupKeyWordLike(EventGroupMessage event) throws IOException {
         String groupMsg = event.getMessage();
+
+        //检测图片关键词
+        if (groupMsg.contains("咕") || groupMsg.contains("鸽")) {
+            String gugugImageCQ = ImageService.getGuguguRandom();
+            //回复群消息
+            event.getHttpApi().sendGroupMsg(event.groupId, gugugImageCQ);
+            return true;
+        }
+
 
         //检测模糊关键词
         String mapKey = FileManagerKeyWordLike.keyWordLikeRegex(groupMsg);

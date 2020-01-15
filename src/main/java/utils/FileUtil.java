@@ -40,6 +40,19 @@ public class FileUtil {
     }
 
     /**
+     * 检验文件
+     *
+     * @param filePath 文件路径
+     * @return 指定路径的文件
+     */
+    public static boolean exists(String filePath) {
+        File file = new File(filePath);
+
+        //存在则直接返回
+        return file.exists();
+    }
+
+    /**
      * 复制文件
      *
      * @param srcPathStr 原文件完整路径
@@ -48,7 +61,7 @@ public class FileUtil {
      */
     public static void copy(String srcPathStr, String desPathStr) throws IOException {
         //获取源文件的名称
-        String newFileName = srcPathStr.substring(srcPathStr.lastIndexOf("\\") + 1);
+        String newFileName = getFileName(srcPathStr);
         //目标文件地址
         desPathStr = desPathStr + File.separator + newFileName;
 
@@ -90,8 +103,66 @@ public class FileUtil {
             throw new IOException(ConstantFile.SRC_PATH_NOT_EXISTS);
         }
         //获取原文件名称+后缀
-        String srcFileName = srcPathStr.substring(srcPathStr.lastIndexOf("\\") + 1);
+        String srcFileName = srcPathStr.substring(srcPathStr.lastIndexOf(File.separator) + 1);
 
         return srcFile.renameTo(new File(desPathStr + File.separator + srcFileName));
+    }
+
+    /**
+     * 根据文件路径获取文件名称
+     *
+     * @param filePath 文件路径
+     * @return 文件名称
+     */
+    public static String getFileName(String filePath) {
+        if (StringUtil.isEmpty(filePath)) {
+            return "";
+        }
+        if (!filePath.contains(File.separator)) {
+            return filePath;
+        }
+        //截取最后一个分隔符后面的字段
+        return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+    }
+
+    /**
+     * 读取指定目录下所有文件，文件夹以及文件夹下的子文件的列表
+     *
+     * @param path 指定目录
+     * @return 文件对象列表
+     */
+    public static File[] getListFiles(String path) {
+        if (exists(path)) {
+            return null;
+        }
+        return new File(path).listFiles();
+    }
+
+    /**
+     * 读取指定目录下所有文件，文件夹的名称
+     *
+     * @param path 指定目录
+     * @return 文件，文件夹名称列表
+     */
+    public static String[] getList(String path) {
+        if (!exists(path)) {
+            return null;
+        }
+        return new File(path).list();
+    }
+
+    /**
+     * 获取文件后缀
+     * @param fileName 文件名
+     * @return 文件后缀
+     */
+    public static String getFileSuffix(String fileName){
+        if (StringUtil.isEmpty(fileName)) {
+            return "";
+        }
+        if(!fileName.contains(".")){
+            return "";
+        }
+        return fileName.substring(fileName.lastIndexOf("."));
     }
 }

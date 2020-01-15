@@ -5,6 +5,7 @@ import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
+import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantWeiboNews;
 import gugugu.entity.InfoGroupUser;
 import gugugu.service.WeiboNewsService;
@@ -97,8 +98,7 @@ public class CommandWeiboNews implements GroupCommand {
         try {
             WeiboNewsService.doPushWeiboNews();
         } catch (Exception ex) {
-            //todo 输出异常日志
-            ex.printStackTrace();
+            BotRabbit.bot.getLogger().error("主动微博消息推送执行异常", ex);
             return ConstantWeiboNews.EXEC_ERROR;
         }
         return "";

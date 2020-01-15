@@ -393,3 +393,9 @@ E=mc^2
 LevelUp！
 -1s
 寝取
+幸运兔脚
+萝卜炸弹
+超级玉米
+糖果罐地雷
+MayDay！MayDay！
+world.execute(me);

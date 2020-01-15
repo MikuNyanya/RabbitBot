@@ -5,6 +5,8 @@ import gugugu.constant.ConstantImage;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * create by MikuLink on 2019/12/12 17:38
@@ -12,6 +14,7 @@ import java.net.URL;
  * 图片
  */
 public class ImageUtil {
+    private static final List<String> IMAGE_SUFFIXS = Arrays.asList(".jpg", ".jpeg", ".gif", ".png");
 
     /**
      * 下载图片到本地
@@ -82,7 +85,7 @@ public class ImageUtil {
      * 判断文件是否存在
      *
      * @param imageUrl 文件路径
-     * @return  是否存在
+     * @return 是否存在
      */
     public static boolean isExists(String imageUrl) {
         if (StringUtil.isEmpty(imageUrl)) {
@@ -91,5 +94,33 @@ public class ImageUtil {
         //创建本地文件
         File result = new File(imageUrl);
         return result.exists();
+    }
+
+    /**
+     * 是否为图片文件
+     *
+     * @param fileName 文件名称
+     * @return 是否为图片
+     */
+    public static boolean isImage(String fileName) {
+        String suffix = FileUtil.getFileSuffix(fileName);
+        if (StringUtil.isEmpty(suffix)) {
+            return false;
+        }
+
+         return IMAGE_SUFFIXS.contains(suffix);
+    }
+
+    /**
+     * 根据文件名称，生成CQ码(图片已经在酷Q的data\image文件夹下)
+     *
+     * @param imageFullName 图片完整名称，带后缀的那种
+     * @return 生成的CQ码
+     */
+    public static String parseCQ(String imageFullName) {
+        if (StringUtil.isEmpty(imageFullName)) {
+            return "";
+        }
+        return String.format(ConstantImage.IMAGE_CQ, imageFullName);
     }
 }

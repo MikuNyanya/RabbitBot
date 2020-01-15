@@ -16,7 +16,7 @@ public class ConstantWeiboNews extends ConstantCommon {
     //微博新闻扫描间隔 20分钟一次
     public static Long weibo_news_sprit_time = 1000L * 60 * 20;
     //返回报文中最新推文时间标识
-    public static Long sinceId = 4460531857168252L;
+    public static Long sinceId = 4460984749982395L;
 
     public static final String SINCEID = "lasttag";
     public static final String SINCEID_OVERRIDE_SUCCESS = "sinceId覆写完毕";

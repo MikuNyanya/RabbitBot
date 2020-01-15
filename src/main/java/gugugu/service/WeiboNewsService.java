@@ -174,6 +174,6 @@ public class WeiboNewsService {
             return null;
         }
 
-        return String.format(ConstantImage.IMAGE_CQ, imageName);
+        return ImageService.parseCQ(imageName);
     }
 }
