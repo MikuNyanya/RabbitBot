@@ -9,6 +9,9 @@ public class Main {
     public static void main(String[] args) {
         //启动兔机
         BotRabbit.start();
+        //加载配置
+        FileManager.loadConfig();
+        System.out.println("======Config ready======");
         //加载客制化内容
         FileManager.loadFreeTime();
         FileManager.loadKeyWordNormal();

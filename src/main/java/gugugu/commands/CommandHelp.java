@@ -45,6 +45,7 @@ public class CommandHelp implements GroupCommand {
         msg.append("[.addkwn] 添加一个关键词回复（全匹配），输入该指令以查看详解\n");
         msg.append("[.扭蛋] 就是扭蛋\n");
         msg.append("[.扭蛋 add] 新添加一个扭蛋\n");
+        msg.append("[.wbn (on,off,lasttag,token,exec)] 微博消息推送指令，需要群管理权限\n");
         msg.append("=============\n");
         return msg.toString();
     }

@@ -1,6 +1,7 @@
 package gugugu.quartzs.jobs;
 
 import gugugu.bots.BotRabbit;
+import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantFreeTime;
 import gugugu.constant.ConstantWeiboNews;
 import gugugu.filemanage.FileManager;
@@ -70,7 +71,7 @@ public class JobMain implements Job {
     //微信最新消息
     private void weiboNews() {
         //功能开关
-        if (null == ConstantWeiboNews.weibo_news_Status || 0 == ConstantWeiboNews.weibo_news_Status) {
+        if (!ConstantCommon.common_config.containsKey("weiboNewStatus") || "0".equals(ConstantCommon.common_config.get("weiboNewStatus"))) {
             return;
         }
         //检测发送间隔

@@ -14,6 +14,8 @@ import java.io.File;
  */
 public class FileManager {
     //常规语句 文件
+    protected static File configFile = null;
+    //常规语句 文件
     protected static File freeTimeFile = null;
     //关键词响应 文件
     protected static File keyWordNormalFile = null;
@@ -78,11 +80,25 @@ public class FileManager {
     }
 
     /**
-     * 写入模糊匹配关键词回复
+     * 添加扭蛋
      *
      * @param capsuleToy 扭蛋
      */
     public static void addCapsuleToy(String capsuleToy) {
         FileManagerCapsuleToy.doCommand(ConstantFile.FILE_COMMAND_WRITE, capsuleToy);
+    }
+
+    /**
+     * 加载配置
+     */
+    public static void loadConfig() {
+        FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_LOAD);
+    }
+
+    /**
+     * 覆写配置
+     */
+    public static void overwriteConfig() {
+        FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_WRITE);
     }
 }

@@ -1,7 +1,9 @@
 package gugugu.constant;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * create by MikuLink on 2019/12/3 14:39
@@ -48,4 +50,7 @@ public class ConstantCommon {
             "关，都可以关。。。\n游戏关了",
             "结束了\n不再来一局嘛~"
     );
+
+    //公共配置
+    public static Map<String,String> common_config = new HashMap<>();
 }

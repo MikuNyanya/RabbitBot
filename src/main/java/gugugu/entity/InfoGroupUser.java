@@ -2,6 +2,7 @@ package gugugu.entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
 import lombok.Getter;
 import utils.StringUtil;
@@ -94,9 +95,15 @@ public class InfoGroupUser {
 
     //是否为管理，群主也算进去
     public boolean isAdmin() {
+        //最高权限账号
+        if (userId.equals(BotRabbit.MASTER_QQ)) {
+            return true;
+        }
+        //群员
         if (StringUtil.isEmpty(role)) {
             return false;
         }
+        //管理
         return ConstantCommon.OWNER.equalsIgnoreCase(role) || ConstantCommon.ADMIN.equalsIgnoreCase(role);
     }
 }

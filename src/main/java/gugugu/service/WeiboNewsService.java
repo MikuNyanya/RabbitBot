@@ -1,14 +1,17 @@
 package gugugu.service;
 
 import gugugu.apirequest.WeiboHomeTimelineGet;
+import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
 import gugugu.constant.ConstantWeiboNews;
 import gugugu.entity.apirequest.InfoPicUrl;
 import gugugu.entity.apirequest.InfoStatuses;
 import gugugu.entity.apirequest.InfoWeiboHomeTimeline;
 import gugugu.exceptions.RabbitException;
+import gugugu.filemanage.FileManager;
 import utils.FileUtil;
 import utils.ImageUtil;
+import utils.NumberUtil;
 import utils.StringUtil;
 
 import java.io.File;
@@ -31,7 +34,7 @@ public class WeiboNewsService {
      */
     public static InfoWeiboHomeTimeline getWeiboNews(Integer pageSize) throws IOException, RabbitException {
         //检查授权码
-        if (StringUtil.isEmpty(ConstantWeiboNews.accessToken)) {
+        if (!ConstantCommon.common_config.containsKey("weiboToken")) {
             throw new RabbitException(ConstantWeiboNews.NO_ACCESSTOKEN);
         }
 
@@ -40,11 +43,11 @@ public class WeiboNewsService {
         }
 
         WeiboHomeTimelineGet request = new WeiboHomeTimelineGet();
-        request.setAccessToken(ConstantWeiboNews.accessToken);
+        request.setAccessToken(ConstantCommon.common_config.get("weiboToken"));
         request.setPage(1);
         //每次获取最近的5条
         request.setCount(pageSize);
-        request.setSince_id(ConstantWeiboNews.sinceId);
+        request.setSince_id(NumberUtil.toLong(ConstantCommon.common_config.get("sinceId")));
 
         //发送请求
         request.doRequest();
@@ -84,7 +87,10 @@ public class WeiboNewsService {
         Long sinceId = weiboNews.getSince_id();
         //刷新最后推文标识，但如果一次请求中没有获取到新数据，since_id会为0
         if (0 != sinceId) {
-            ConstantWeiboNews.sinceId = sinceId;
+            //刷新sinceId配置
+            ConstantCommon.common_config.put("sinceId", String.valueOf(sinceId));
+            //更新配置文件
+            FileManager.overwriteConfig();
         }
         sendWeiboNewsToEveryGroup(weiboNews.getStatuses());
     }
@@ -174,6 +180,6 @@ public class WeiboNewsService {
             return null;
         }
 
-        return ImageService.parseCQ(imageName);
+        return ImageUtil.parseCQ(imageName);
     }
 }

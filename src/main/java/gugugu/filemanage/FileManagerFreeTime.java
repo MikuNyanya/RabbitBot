@@ -1,5 +1,6 @@
 package gugugu.filemanage;
 
+import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantFreeTime;
 import utils.FileUtil;
@@ -48,7 +49,7 @@ public class FileManagerFreeTime extends FileManager {
                     break;
             }
         } catch (IOException ioEx) {
-            ioEx.printStackTrace();
+            BotRabbit.bot.getLogger().error("日常语句文件读写异常", ioEx);
         }
     }
 

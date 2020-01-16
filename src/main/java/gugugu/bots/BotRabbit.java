@@ -20,6 +20,8 @@ public class BotRabbit {
     public static final String BOT_NAME = "兔叽";
     //qq号
     public static final Long BOT_QQ = 1020992834L;
+    //主(人)账号，也可以写为多个，但我就一个Q号=A=
+    public static final Long MASTER_QQ= 455806936L;
     //picq端口
     private static final int SOCKET_PORT = 31033;
     //酷Q端口
