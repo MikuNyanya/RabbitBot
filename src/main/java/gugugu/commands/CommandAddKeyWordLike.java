@@ -7,8 +7,8 @@ import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 import gugugu.constant.ConstantKeyWord;
 import gugugu.filemanage.FileManager;
-import gugugu.filemanage.FileManagerKeyWordLike;
 import gugugu.filemanage.FileManagerKeyWordNormal;
+import gugugu.service.KeyWordService;
 import utils.StringUtil;
 
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class CommandAddKeyWordLike implements GroupCommand {
 
                     //判断关键词是否已存在 需要判断全匹配和模糊匹配两种
                     for (String keyWord : keyWords.split("&")) {
-                        if (StringUtil.isNotEmpty(FileManagerKeyWordLike.keyWordLikeRegex(keyWord))
+                        if (StringUtil.isNotEmpty(KeyWordService.keyWordLikeRegex(ConstantKeyWord.key_wrod_like_list, keyWord))
                                 || StringUtil.isNotEmpty(FileManagerKeyWordNormal.keyWordNormalRegex(keyWord))) {
                             return String.format(ConstantKeyWord.KEY_WORD_EXISTS, keyWords);
                         }

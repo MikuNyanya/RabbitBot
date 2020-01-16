@@ -9,6 +9,7 @@ import gugugu.constant.ConstantKeyWord;
 import gugugu.filemanage.FileManager;
 import gugugu.filemanage.FileManagerKeyWordLike;
 import gugugu.filemanage.FileManagerKeyWordNormal;
+import gugugu.service.KeyWordService;
 import utils.StringUtil;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class CommandAddKeyWordNormal implements GroupCommand {
                         return ConstantKeyWord.KEY_WORD_OVER;
                     }
                     //判断关键词是否已存在 需要判断全匹配和模糊匹配两种
-                    if (StringUtil.isNotEmpty(FileManagerKeyWordLike.keyWordLikeRegex(oneKey))
+                    if (StringUtil.isNotEmpty(KeyWordService.keyWordLikeRegex(ConstantKeyWord.key_wrod_like_list,oneKey))
                             || StringUtil.isNotEmpty(FileManagerKeyWordNormal.keyWordNormalRegex(oneKey))) {
                         return String.format(ConstantKeyWord.KEY_WORD_EXISTS, oneKey);
                     }

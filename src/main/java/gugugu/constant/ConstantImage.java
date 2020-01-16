@@ -1,7 +1,6 @@
 package gugugu.constant;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * create by MikuLink on 2020/1/10 15:19
@@ -17,8 +16,16 @@ public class ConstantImage extends ConstantCommon {
     //酷Q所需要的图片CQ码 占位符处是文件名（带后缀）
     public static String IMAGE_CQ = "[CQ:image,file=%s]";
 
-    //存放鸽子图路径，目前为项目资源目录下的images，未来想改为网络图片url
-    public static List<String> gugugu_path_list = new ArrayList<>();
+
+    //鸽子图片的map key
+    public static final String IMAGE_MAP_KEY_GUGUGU = "鸽|咕";
+    //图片列表，按key分类 list里面暂时存的是图片文件路径，未来计划改为网络图片链接
+    public static Map<String,List<String>> map_images = new HashMap<>();
+    //图片关键词列表
+    public static final List<String> LIST_KEY_IMAGES = Arrays.asList(
+            IMAGE_MAP_KEY_GUGUGU
+    );
+
 
     public static final String NETWORK_IMAGE_URL_IS_EMPRY = "网络图片链接为空";
 }

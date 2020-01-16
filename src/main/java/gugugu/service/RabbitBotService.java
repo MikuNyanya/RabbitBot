@@ -28,4 +28,18 @@ public class RabbitBotService {
             icqHttpApi.sendGroupMsg(groupId, msg);
         }
     }
+
+    /**
+     * 给指定群发送信息
+     *
+     * @param groupId 群号
+     * @param msg     信息体
+     */
+    public static void sendGroupMsg(Long groupId, String msg) {
+        //获取链接，参数是机器人的qq号
+        IcqHttpApi icqHttpApi = BotRabbit.bot.getAccountManager().getIdIndex().get(BotRabbit.BOT_QQ).getHttpApi();
+
+        //给指定群发送消息
+        icqHttpApi.sendGroupMsg(groupId, msg);
+    }
 }

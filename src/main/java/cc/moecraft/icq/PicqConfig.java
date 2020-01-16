@@ -84,7 +84,7 @@ public class PicqConfig
     private String logPath = "logs";
 
     /** Logger日志文件名 */
-    private String logFileName = "PicqBotX-Log";
+    private String logFileName = "RabbitBot-Log";
 
     /** 是否输出 Init 日志 */
     private boolean logInit = true;

@@ -1,0 +1,260 @@
+package gugugu.service;
+
+import cc.moecraft.icq.event.events.message.EventGroupMessage;
+import gugugu.constant.ConstantFreeTime;
+import gugugu.constant.ConstantImage;
+import gugugu.constant.ConstantKeyWord;
+import gugugu.constant.ConstantRepeater;
+import gugugu.filemanage.FileManagerKeyWordNormal;
+import utils.RandomUtil;
+import utils.RegexUtil;
+import utils.StringUtil;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * create by MikuLink on 2020/1/16 15:40
+ * for the Reisen
+ * 专门处理关键词触发的相关业务
+ */
+public class KeyWordService {
+    private static KeyWordService service = new KeyWordService();
+
+    //单例模式 线程安全 就是可能会由于启动时就加载，而且加载完不会用到而浪费性能，但这里肯定会很频繁的用到，所以无所谓
+    public static KeyWordService getService() {
+        return KeyWordService.service;
+    }
+
+    //私有化构造函数，保证单例
+    private KeyWordService() {
+    }
+
+    //保存群最后一条消息，用于复读
+    private static Map<Long, String[]> LAST_MSG_MAP = new HashMap<>();
+
+    /**
+     * 群消息关键词匹配
+     *
+     * @param event 群消息监听事件
+     */
+    public void keyWordMatchGroup(EventGroupMessage event) throws IOException {
+        //每次只会触发一个回复
+        //ABABA 句式检索
+        boolean groupRep = groupABABA(event);
+        if (groupRep) {
+            return;
+        }
+
+        //图片响应
+        groupRep = groupKeyWordImage(event);
+        if (groupRep) {
+            return;
+        }
+
+        //关键词全匹配
+        groupRep = groupKeyWord(event);
+        if (groupRep) {
+            return;
+        }
+
+        //关键词匹配(模糊)
+        groupRep = groupKeyWordLike(event);
+        if (groupRep) {
+            return;
+        }
+
+        //群复读
+        groupRep = groupRepeater(event);
+        if (groupRep) {
+            return;
+        }
+    }
+
+    /**
+     * 群复读
+     *
+     * @param event 群消息监控
+     * @return bol值 表示有没有进行群复读
+     */
+    private boolean groupRepeater(EventGroupMessage event) {
+        //接收到的群消息
+        String groupMsg = event.getMessage();
+        Long groupId = event.getGroupId();
+
+        //第一次消息初始化
+        if (!LAST_MSG_MAP.containsKey(groupId)) {
+            LAST_MSG_MAP.put(groupId, new String[2]);
+        }
+
+        String[] msgs = LAST_MSG_MAP.get(groupId);
+        //群复读，三个相同的消息，复读一次，并重置计数
+        if ((StringUtil.isEmpty(msgs[0]) || StringUtil.isEmpty(msgs[1]))
+                || !(msgs[0].equals(msgs[1]) && msgs[0].equals(groupMsg))) {
+            //刷新消息列表
+            msgs[1] = msgs[0];
+            msgs[0] = groupMsg;
+            LAST_MSG_MAP.put(groupId, msgs);
+            return false;
+        }
+
+        //概率打断复读，100%对复读打断复读的语句做出反应
+        if (ConstantRepeater.REPEATER_KILLER_LIST.contains(groupMsg) || ConstantRepeater.REPEATER_STOP_LIST.contains(groupMsg)) {
+            //打断复读的复读
+            groupMsg = RandomUtil.rollStrFromList(ConstantRepeater.REPEATER_STOP_LIST);
+        } else if (RandomUtil.rollBoolean(-80)) {
+            //打断复读
+            groupMsg = RandomUtil.rollStrFromList(ConstantRepeater.REPEATER_KILLER_LIST);
+        }
+
+        //正常复读
+        event.getHttpApi().sendGroupMsg(event.groupId, groupMsg);
+        //复读一次后，重置复读计数
+        LAST_MSG_MAP.put(groupId, new String[2]);
+        return true;
+    }
+
+    /**
+     * 跟随回复ABABA句式
+     *
+     * @param event 群消息监控
+     * @return bol值 表示有没有进行群消息回复
+     */
+    private boolean groupABABA(EventGroupMessage event) {
+        //接收到的群消息
+        String groupMsg = event.getMessage();
+
+        //检查句式
+        if (!StringUtil.isABABA(groupMsg)) {
+            return false;
+        }
+        String msg = RandomUtil.rollStrFromList(ConstantFreeTime.MSG_TYPE_ABABA);
+        //回复群消息
+        event.getHttpApi().sendGroupMsg(event.groupId, msg);
+        return true;
+    }
+
+    /**
+     * 群消息关键词检测
+     *
+     * @param event 群消息监控
+     * @return bol值 表示有没有进行群消息回复
+     */
+    private boolean groupKeyWord(EventGroupMessage event) {
+        String groupMsg = event.getMessage();
+
+        //全匹配关键词
+        String mapKey = FileManagerKeyWordNormal.keyWordNormalRegex(groupMsg);
+        if (StringUtil.isEmpty(mapKey)) {
+            return false;
+        }
+
+        //随机选择回复
+        String msg = RandomUtil.rollStrFromList(ConstantKeyWord.key_wrod_normal.get(mapKey));
+        //回复群消息
+        event.getHttpApi().sendGroupMsg(event.groupId, msg);
+        return true;
+
+    }
+
+    /**
+     * 群消息关键词检测(模糊)
+     *
+     * @param event 群消息监控
+     * @return bol值 表示有没有进行群消息回复
+     */
+    private boolean groupKeyWordLike(EventGroupMessage event) {
+        String groupMsg = event.getMessage();
+
+        //检测模糊关键词
+        String mapKey = keyWordLikeRegex(ConstantKeyWord.key_wrod_like_list, groupMsg);
+        if (StringUtil.isEmpty(mapKey)) {
+            return false;
+        }
+
+        //随机选择回复
+        String msg = RandomUtil.rollStrFromList(ConstantKeyWord.key_wrod_like.get(mapKey));
+        //回复群消息
+        event.getHttpApi().sendGroupMsg(event.groupId, msg);
+        return true;
+    }
+
+    /**
+     * 图片关键词触发
+     *
+     * @param event 群消息监控
+     * @return bol值 表示有没有进行群消息回复
+     */
+    private boolean groupKeyWordImage(EventGroupMessage event) throws IOException {
+        String groupMsg = event.getMessage();
+
+        //检测模糊关键词
+        String mapKey = keyWordLikeRegex(ConstantImage.LIST_KEY_IMAGES, groupMsg);
+        if (StringUtil.isEmpty(mapKey)) {
+            return false;
+        }
+
+        String cqStr = "";
+        //根据key选择业务
+        switch (mapKey) {
+            case ConstantImage.IMAGE_MAP_KEY_GUGUGU:
+                cqStr = ImageService.getGuguguRandom();
+                break;
+        }
+        //cq码为空接着往下走业务
+        if (StringUtil.isEmpty(cqStr)) {
+            return false;
+        }
+        //发送图片
+        event.getHttpApi().sendGroupMsg(event.groupId, cqStr);
+        return true;
+    }
+
+    /**
+     * 模糊匹配关键词
+     *
+     * @param inputKey 输入的关键词
+     * @return 匹配到的key，可以用来获取回复列表
+     */
+    public static String keyWordLikeRegex(List<String> keyWrodList, String inputKey) {
+        //去keylist寻找关键词
+        for (String keyRegex : keyWrodList) {
+            //正则匹配
+            for (String keyWords : keyRegex.split("\\|")) {
+                //拼接正则
+                String regex = getKeyWordLikeRegex(keyWords);
+
+                //进行正则匹配
+                if (RegexUtil.regex(inputKey, regex)) {
+                    //匹配到了返回map的完整key
+                    return keyRegex;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 解析模糊关键词，组成正则
+     *
+     * @param keyWords 模糊匹配关键词原始字符串
+     * @return 模糊匹配正则表达式
+     */
+    private static String getKeyWordLikeRegex(String keyWords) {
+        StringBuilder regex = new StringBuilder();
+        boolean isFirst = true;
+        for (String key : keyWords.split("&")) {
+            if (isFirst) {
+                regex.append(key);
+                isFirst = false;
+                continue;
+            }
+            //中间可以间隔任意字符
+            regex.append("\\S*");
+            regex.append(key);
+        }
+        return regex.toString();
+    }
+}

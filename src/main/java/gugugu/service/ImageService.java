@@ -8,6 +8,8 @@ import utils.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * create by MikuLink on 2020/1/15 11:17
@@ -27,21 +29,26 @@ public class ImageService {
         String guguguPath = ConstantImage.DEFAULT_IMAGE_SAVE_PATH + "/gugugu";
         //如果集合为空，读取文件列表
         //只存放路径，由于使用伪随机，所以list里面的内容会一直减少
-        if (ConstantImage.gugugu_path_list.size() <= 0) {
+        List<String> imageGuguguList = ConstantImage.map_images.get(ConstantImage.IMAGE_MAP_KEY_GUGUGU);
+        if (null == imageGuguguList || imageGuguguList.size() <= 0) {
             String[] guguguImages = FileUtil.getList(guguguPath);
             if (null == guguguImages || guguguImages.length <= 0) {
                 return "";
             }
+            imageGuguguList = new ArrayList<>();
             //过滤掉文件夹，和后缀不是图片的文件
             for (String imagePath : guguguImages) {
                 if (!ImageUtil.isImage(imagePath)) {
                     continue;
                 }
                 //刷新内存中的列表
-                ConstantImage.gugugu_path_list.add(imagePath);
+                imageGuguguList.add(imagePath);
             }
+            ConstantImage.map_images.put(ConstantImage.IMAGE_MAP_KEY_GUGUGU, imageGuguguList);
         }
-        String guguguImageFullName = RandomUtil.rollAndDelStrFromList(ConstantImage.gugugu_path_list);
+
+        //列表中有图片，随机一个，使用伪随机
+        String guguguImageFullName = RandomUtil.rollAndDelStrFromList(imageGuguguList);
         //生成CQ码并返回
         return parseCQBuLocalImagePath(guguguPath + File.separator + guguguImageFullName);
     }

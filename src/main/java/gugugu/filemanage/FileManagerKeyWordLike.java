@@ -140,49 +140,4 @@ public class FileManagerKeyWordLike extends FileManager {
         //关闭写入流
         out.close();
     }
-
-    /**
-     * 模糊匹配关键词
-     *
-     * @param inputKey 输入的关键词
-     * @return 匹配到的key，可以用来获取回复列表
-     */
-    public static String keyWordLikeRegex(String inputKey) {
-        //去keylist寻找关键词
-        for (String keyRegex : ConstantKeyWord.key_wrod_like_list) {
-            //正则匹配
-            for (String keyWords : keyRegex.split("\\|")) {
-                //拼接正则
-                String regex = getKeyWordLikeRegex(keyWords);
-
-                //进行正则匹配
-                if (RegexUtil.regex(inputKey, regex)) {
-                    //匹配到了返回map的完整key
-                    return keyRegex;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 解析模糊关键词，组成正则
-     *
-     * @param keyWords 模糊匹配关键词原始字符串
-     * @return 模糊匹配正则表达式
-     */
-    private static String getKeyWordLikeRegex(String keyWords) {
-        StringBuilder regex = new StringBuilder();
-        boolean isFirst = true;
-        for (String key : keyWords.split("&")) {
-            if (isFirst) {
-                regex.append(key);
-                isFirst = false;
-                continue;
-            }
-            regex.append("\\S*");
-            regex.append(key);
-        }
-        return regex.toString();
-    }
 }

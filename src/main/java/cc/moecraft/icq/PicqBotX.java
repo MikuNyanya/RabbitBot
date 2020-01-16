@@ -155,7 +155,7 @@ public class PicqBotX
         }
 
         // 日志对象
-        logger = loggerInstanceManager.getLoggerInstance("PicqBotX", config.isDebug());
+        logger = loggerInstanceManager.getLoggerInstance("RabbitBot", config.isDebug());
         logger.timing.init();
         logResource(logger, config.getColorSupportLevel() == null ? "splash" : "splash-precolored", "version", VERSION);
         logInitDone(logger, "日志管理器     ", 0, 6);
