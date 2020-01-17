@@ -6,6 +6,7 @@ import gugugu.constant.ConstantImage;
 import gugugu.constant.ConstantKeyWord;
 import gugugu.constant.ConstantRepeater;
 import gugugu.filemanage.FileManagerKeyWordNormal;
+import gugugu.service.greetings.*;
 import utils.RandomUtil;
 import utils.RegexUtil;
 import utils.StringUtil;
@@ -42,8 +43,14 @@ public class KeyWordService {
      */
     public void keyWordMatchGroup(EventGroupMessage event) throws IOException {
         //每次只会触发一个回复
+        //特殊关键词，优先匹配
+        boolean groupRep = groupKeyWordGreetings(event);
+        if (groupRep) {
+            return;
+        }
+
         //ABABA 句式检索
-        boolean groupRep = groupABABA(event);
+        groupRep = groupABABA(event);
         if (groupRep) {
             return;
         }
@@ -188,6 +195,8 @@ public class KeyWordService {
      * @return bol值 表示有没有进行群消息回复
      */
     private boolean groupKeyWordImage(EventGroupMessage event) throws IOException {
+        //todo 10秒响应一次
+
         String groupMsg = event.getMessage();
 
         //检测模糊关键词
@@ -209,6 +218,61 @@ public class KeyWordService {
         }
         //发送图片
         event.getHttpApi().sendGroupMsg(event.groupId, cqStr);
+        return true;
+    }
+
+    /**
+     * 时间问候关键词匹配
+     *
+     * @param event 群消息监听时间
+     * @return 是否回复了消息
+     */
+    private boolean groupKeyWordGreetings(EventGroupMessage event) {
+        //5秒触发一次，没必要太严谨
+        if ((System.currentTimeMillis() - ConstantKeyWord.KEY_WORD_GREETINGS_LAST_SEND) < ConstantKeyWord.KEY_WORD_GREETINGS_SPLIT) {
+            return false;
+        }
+
+        String groupMsg = event.getMessage();
+
+        //检测模糊关键词
+        String keyWordEx = keyWordLikeRegex(ConstantKeyWord.LIST_KEY_WORD_GREETINGS, groupMsg);
+        if (StringUtil.isEmpty(keyWordEx)) {
+            return false;
+        }
+
+        GreetingsBase greetingService = null;
+        //根据关键词识别问候类型
+        switch (keyWordEx) {
+            case ConstantKeyWord.KEY_WORD_GREETINGS_MORNING:
+                greetingService = new GreetingsMorning();
+                break;
+            case ConstantKeyWord.KEY_WORD_GREETINGS_NOON:
+                greetingService = new GreetingsNoon();
+                break;
+            case ConstantKeyWord.KEY_WORD_GREETINGS_AFTERNOON:
+                greetingService = new GreetingsAfternoon();
+                break;
+            case ConstantKeyWord.KEY_WORD_GREETINGS_NIGHT:
+                greetingService = new GreetingsNight();
+                break;
+            case ConstantKeyWord.KEY_WORD_GREETINGS_GOOD_NIGHT:
+                greetingService = new GreetingsGoodNight();
+                break;
+        }
+        if (null == greetingService) {
+            return false;
+        }
+
+        String resultMsg = greetingService.getGreetingsByTime();
+        //返回信息为空接着往下走业务
+        if (StringUtil.isEmpty(resultMsg)) {
+            return false;
+        }
+        //发送回复
+        event.getHttpApi().sendGroupMsg(event.groupId, resultMsg);
+        //刷新最后响应时间
+        ConstantKeyWord.KEY_WORD_GREETINGS_LAST_SEND = System.currentTimeMillis();
         return true;
     }
 
