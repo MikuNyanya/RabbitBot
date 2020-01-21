@@ -4,7 +4,6 @@ import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantKeyWord;
 import utils.FileUtil;
-import utils.RegexUtil;
 import utils.StringUtil;
 
 import java.io.*;
@@ -52,7 +51,7 @@ public class FileManagerKeyWordLike extends FileManager {
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("模糊关键词文件读写异常", ioEx);
+            BotRabbit.bot.getLogger().error("模糊关键词文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 

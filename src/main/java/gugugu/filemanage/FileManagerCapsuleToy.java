@@ -49,7 +49,7 @@ public class FileManagerCapsuleToy extends FileManager {
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("扭蛋文件读写异常", ioEx);
+            BotRabbit.bot.getLogger().error("扭蛋文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 

@@ -95,15 +95,29 @@ public class InfoGroupUser {
 
     //是否为管理，群主也算进去
     public boolean isAdmin() {
-        //最高权限账号
-        if (userId.equals(BotRabbit.MASTER_QQ)) {
-            return true;
-        }
-        //群员
         if (StringUtil.isEmpty(role)) {
             return false;
         }
         //管理
         return ConstantCommon.OWNER.equalsIgnoreCase(role) || ConstantCommon.ADMIN.equalsIgnoreCase(role);
+    }
+
+    //是否为群主
+    public boolean isOwner() {
+        //最高权限账号
+        if (userId.equals(BotRabbit.MASTER_QQ)) {
+            return true;
+        }
+        if (StringUtil.isEmpty(role)) {
+            return false;
+        }
+        //群主
+        return ConstantCommon.OWNER.equalsIgnoreCase(role);
+    }
+
+    //是否为最高权限账号
+    public boolean isMaster() {
+        //最高权限账号
+        return userId.equals(BotRabbit.MASTER_QQ);
     }
 }

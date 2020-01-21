@@ -1,3 +1,5 @@
+图片测试
+[CQ:image,file=boring.gif]
 war
 war, war never changes.
 兔叽

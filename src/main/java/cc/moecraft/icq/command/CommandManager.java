@@ -87,8 +87,11 @@ public class CommandManager {
     public void runCommand(EventMessage event) {
         PicqBotX bot = event.getBot();
 
+        //群消息
         final boolean isGM = event instanceof EventGroupMessage;
+        //讨论组消息
         final boolean isDM = event instanceof EventDiscussMessage;
+        //私聊消息
         final boolean isPM = event instanceof EventPrivateMessage;
 
         // 获取Args

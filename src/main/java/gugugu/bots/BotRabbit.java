@@ -70,7 +70,7 @@ public class BotRabbit {
         bot.getCommandManager().registerCommands(commands);
 
         // Debug输出所有已注册的指令
-        bot.getLogger().debug(bot.getCommandManager().getCommands().toString());
+        bot.getLogger().debug("已注册指令：" + bot.getCommandManager().getCommands().toString());
 
         // 启动机器人, 不会占用主线程
         bot.startBot();

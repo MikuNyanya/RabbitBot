@@ -49,7 +49,7 @@ public class FileManagerFreeTime extends FileManager {
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("日常语句文件读写异常", ioEx);
+            BotRabbit.bot.getLogger().error("日常语句文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 

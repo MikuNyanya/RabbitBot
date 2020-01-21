@@ -52,7 +52,7 @@ public class FileManagerKeyWordNormal extends FileManager {
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("关键词文件读写异常", ioEx);
+            BotRabbit.bot.getLogger().error("关键词文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 

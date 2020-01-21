@@ -112,7 +112,7 @@ public class CommandWeiboNews implements GroupCommand {
         try {
             WeiboNewsService.doPushWeiboNews();
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("主动微博消息推送执行异常", ex);
+            BotRabbit.bot.getLogger().error("主动微博消息推送执行异常:" + ex.toString(), ex);
             return ConstantWeiboNews.EXEC_ERROR;
         }
         return "";

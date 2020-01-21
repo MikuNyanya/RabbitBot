@@ -360,7 +360,6 @@ Ass♂Ass♂In
 群主的女装
 bo良ki影
 名画鉴赏师
-Kobe
 不愧是dio轻易做到我们做不到的事情
 典明粥
 阿帕茶
@@ -372,6 +371,7 @@ Kobe
 这也在你算计中吗，jojo！
 白金复印机
 贽殿遮那
+天破壤碎
 U.P.R.P.R.C
 我不做人啦jojo！
 可可萝爆弹
@@ -397,3 +397,6 @@ LevelUp！
 MayDay！MayDay！
 world.execute(me);
 兔锅
+九磅十五便士
+一袋米铀抗几楼
+一袋米我抗二楼

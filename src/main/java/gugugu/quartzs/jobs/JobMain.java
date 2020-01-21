@@ -60,7 +60,11 @@ public class JobMain implements Job {
         }
 
         //给每个群发送消息
-        RabbitBotService.sendEveryGroupMsg(msg);
+        try {
+            RabbitBotService.sendEveryGroupMsg(msg);
+        }catch (Exception ex){
+            BotRabbit.bot.getLogger().error("日常语句推送执行异常:" + ex.toString(), ex);
+        }
 
         //刷新最后发送时间
         free_time_last_send_time = System.currentTimeMillis();
@@ -83,7 +87,7 @@ public class JobMain implements Job {
             //执行一次微博消息推送
             WeiboNewsService.doPushWeiboNews();
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("微博消息推送执行异常", ex);
+            BotRabbit.bot.getLogger().error("微博消息推送执行异常:" + ex.toString(), ex);
         }
 
         //刷新最后发送时间

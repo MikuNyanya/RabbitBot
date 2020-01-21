@@ -30,7 +30,7 @@ public class RabbitBotJob {
             //一分钟跑一次的
             job_1min();
         } catch (SchedulerException sEx) {
-            BotRabbit.bot.getLogger().error("定时器任务启动异常", sEx);
+            BotRabbit.bot.getLogger().error("定时器任务启动异常:" + sEx.toString(), sEx);
         }
     }
 

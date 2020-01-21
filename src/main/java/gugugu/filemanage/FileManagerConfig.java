@@ -50,9 +50,9 @@ public class FileManagerConfig extends FileManager {
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("配置文件读写异常", ioEx);
+            BotRabbit.bot.getLogger().error("配置文件读写异常:" + ioEx.toString(), ioEx);
         } catch (JSONException jsonEx) {
-            BotRabbit.bot.getLogger().error("配置文件json转化异常", jsonEx);
+            BotRabbit.bot.getLogger().error("配置文件json转化异常:" + jsonEx.toString(), jsonEx);
         }
     }
 

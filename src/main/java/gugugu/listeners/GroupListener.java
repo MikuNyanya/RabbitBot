@@ -4,17 +4,10 @@ import cc.moecraft.icq.event.EventHandler;
 import cc.moecraft.icq.event.IcqListener;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import gugugu.bots.BotRabbit;
-import gugugu.constant.*;
-import gugugu.filemanage.FileManagerKeyWordLike;
-import gugugu.filemanage.FileManagerKeyWordNormal;
-import gugugu.service.ImageService;
+import gugugu.constant.ConstantBlackList;
+import gugugu.constant.ConstantCommon;
 import gugugu.service.KeyWordService;
-import utils.RandomUtil;
 import utils.StringUtil;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author MikuLink
@@ -46,7 +39,7 @@ public class GroupListener extends IcqListener {
             //所有关键词匹配业务
             KeyWordService.getService().keyWordMatchGroup(event);
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(String.format("群消息业务处理异常，groupId:%s,msg:%s", event.getGroupId(), event.getMessage()), ex);
+            BotRabbit.bot.getLogger().error(String.format("群消息业务处理异常，groupId:%s,msg:%s，%s", event.getGroupId(), event.getMessage(), ex.toString()), ex);
         }
     }
 }
