@@ -4,10 +4,12 @@ import gugugu.bots.BotRabbit;
 import gugugu.commands.groups.CommandRP;
 import gugugu.constant.ConstantCommon;
 import gugugu.service.RabbitBotService;
+import gugugu.service.WeatherService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import utils.DateUtil;
 
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -22,6 +24,8 @@ public class JobTimeRabbit implements Job {
     public void execute(JobExecutionContext jobExecutionContext) {
         //报时兔子
         timeRabbit();
+        //天气
+        weatherRabbit();
 
         //0点清理
         //RP缓存
@@ -79,5 +83,24 @@ public class JobTimeRabbit implements Job {
 
         CommandRP.MAP_RP.clear();
         BotRabbit.bot.getLogger().debug("每日人品缓存已清除");
+    }
+
+    //天气兔子
+    private void weatherRabbit() {
+        //每天9点，13点，19点进行自动播报
+        int hour = DateUtil.getHour();
+        if (hour != 9 && hour != 13 && hour != 19) {
+            return;
+        }
+
+        try {
+            //获取天气情况，固定获取上海市
+            String msg = WeatherService.getWeatherByCityName("上海市");
+
+            //给每个群发送报时
+            RabbitBotService.sendEveryGroupMsg(msg);
+        } catch (IOException ioEx) {
+            BotRabbit.bot.getLogger().error("天气兔子发生异常:" + ioEx.toString(), ioEx);
+        }
     }
 }

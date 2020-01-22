@@ -32,8 +32,6 @@ public class CommandWeather implements EverywhereCommand {
         if (null == args || args.size() == 0) {
             return "";
         }
-        //todo 外部控制appkey
-
         String inputCity = args.get(0);
         String result = "";
         try {
