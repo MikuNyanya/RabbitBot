@@ -17,10 +17,11 @@ public class Main {
         FileManager.loadFreeTime();
         FileManager.loadKeyWordNormal();
         FileManager.loadKeyWordLike();
+        FileManager.loadAmapAdcode();
         BotRabbit.bot.getLogger().log(AnsiColor.YELLOW + "附加功能加载完毕");
         //启动定时任务
         new RabbitBotJob().jobStart();
         BotRabbit.bot.getLogger().log(AnsiColor.YELLOW + "定时任务已开启");
-        BotRabbit.bot.getLogger().log(AnsiColor.YELLOW + "======Rabbit ready======");
+        BotRabbit.bot.getLogger().log(AnsiColor.GREEN + "======Rabbit ready======");
     }
 }

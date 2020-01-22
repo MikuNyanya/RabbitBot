@@ -1,4 +1,4 @@
-package gugugu.commands;
+package gugugu.commands.groups;
 
 import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.GroupCommand;

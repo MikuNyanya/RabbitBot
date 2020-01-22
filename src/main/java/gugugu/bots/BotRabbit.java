@@ -4,10 +4,16 @@ import cc.moecraft.icq.PicqBotX;
 import cc.moecraft.icq.PicqConfig;
 import cc.moecraft.icq.command.interfaces.IcqCommand;
 import cc.moecraft.icq.event.IcqListener;
-import gugugu.commands.*;
+import gugugu.commands.CommandConfig;
+import gugugu.commands.CommandSystem;
+import gugugu.commands.CommandWeather;
+import gugugu.commands.groups.*;
 import gugugu.constant.ConstantCommon;
 import gugugu.listeners.GroupListener;
 import gugugu.listeners.SimpleTextLoggingListener;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * create by MikuLink on 2019/12/3 13:14
@@ -20,8 +26,8 @@ public class BotRabbit {
     public static final String BOT_NAME = "兔叽";
     //qq号
     public static final Long BOT_QQ = 1020992834L;
-    //主(人)账号，也可以写为多个，但我就一个Q号=A=
-    public static final Long MASTER_QQ= 455806936L;
+    //主(人)账号
+    public static final List<Long> MASTER_QQ = Arrays.asList(455806936L);
     //picq端口
     private static final int SOCKET_PORT = 31033;
     //酷Q端口
@@ -94,7 +100,9 @@ public class BotRabbit {
             new CommandAddKeyWordNormal(),
             new CommandAddKeyWordLike(),
             new CommandCapsuleToy(),
-            new CommandWeiboNews()
+            new CommandWeiboNews(),
+            new CommandWeather(),
+            new CommandConfig()
     };
 
     /**

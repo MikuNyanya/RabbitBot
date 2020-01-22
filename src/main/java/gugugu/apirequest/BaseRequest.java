@@ -1,10 +1,10 @@
 package gugugu.apirequest;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * create by MikuLink on 2020/1/8 18:47
@@ -19,10 +19,5 @@ public class BaseRequest {
     //接口请求授权码
     protected String accessToken;
     //接口参数
-    protected Map<String, Object> paramMap = new HashMap<>();
-
-    //公共入参
-    protected void baseParam() {
-        paramMap.put("access_token", accessToken);
-    }
+    protected JSONObject param = new JSONObject();
 }

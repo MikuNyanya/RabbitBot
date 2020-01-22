@@ -22,7 +22,9 @@ public class FileManager {
     //模糊关键词 文件
     protected static File keyWordLikeFile = null;
     //扭蛋 文件
-    protected static File capsuleToy = null;
+    protected static File capsuleToyFile = null;
+    //高德地图城市代码 文件
+    protected static File amapAdcodeFile = null;
 
     /**
      * 加载日常语句文件
@@ -86,6 +88,13 @@ public class FileManager {
      */
     public static void addCapsuleToy(String capsuleToy) {
         FileManagerCapsuleToy.doCommand(ConstantFile.FILE_COMMAND_WRITE, capsuleToy);
+    }
+
+    /**
+     * 加载高德地图adcode
+     */
+    public static void loadAmapAdcode() {
+        FileManagerAmapAdcode.doCommand(ConstantFile.FILE_COMMAND_LOAD);
     }
 
     /**

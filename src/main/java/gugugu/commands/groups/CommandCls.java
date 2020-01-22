@@ -1,13 +1,10 @@
-package gugugu.commands;
+package gugugu.commands.groups;
 
 import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
-import gugugu.constant.ConstantFreeTime;
-import gugugu.filemanage.FileManager;
-import utils.RandomUtil;
 
 import java.util.ArrayList;
 
@@ -16,9 +13,11 @@ import java.util.ArrayList;
  * @date 2019/11/30 23:33
  * for the Reisen
  * <p>
- * 说些日常句子
+ * 清屏指令
  */
-public class CommandSay implements GroupCommand {
+public class CommandCls implements GroupCommand {
+    private static String clsMessage = null;
+
     /**
      * 执行指令
      *
@@ -31,20 +30,17 @@ public class CommandSay implements GroupCommand {
      */
     @Override
     public String groupMessage(EventGroupMessage event, GroupUser sender, Group group, String command, ArrayList<String> args) {
-        if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() <= 0) {
-            return ConstantFreeTime.MSG_TYPE_FREE_TIME_EMPTY;
+        if (clsMessage == null) {
+            clsMessage = "";
+            for (int i = 0; i < 20; i++) clsMessage += "\n";
+            clsMessage += "已清屏!";
         }
-        //从列表中删除获取的消息，实现伪随机，不然重复率太高了，体验比较差
-        String msg = RandomUtil.rollAndDelStrFromList(ConstantFreeTime.MSG_TYPE_FREE_TIME);
-        //删到五分之一时重新加载集合
-        if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() < ConstantFreeTime.MSG_TYPE_FREE_TIME_MAX_SIZE / 5) {
-            FileManager.loadFreeTime();
-        }
-        return msg;
+
+        return clsMessage;
     }
 
     @Override
     public CommandProperties properties() {
-        return new CommandProperties("Say", "say", "说话");
+        return new CommandProperties("clear", "cls","CLS","清屏");
     }
 }

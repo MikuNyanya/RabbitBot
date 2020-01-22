@@ -1,4 +1,4 @@
-package gugugu.commands;
+package gugugu.commands.groups;
 
 import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.GroupCommand;
@@ -7,7 +7,6 @@ import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 import gugugu.constant.ConstantKeyWord;
 import gugugu.filemanage.FileManager;
-import gugugu.filemanage.FileManagerKeyWordLike;
 import gugugu.filemanage.FileManagerKeyWordNormal;
 import gugugu.service.KeyWordService;
 import utils.StringUtil;
@@ -19,9 +18,9 @@ import java.util.ArrayList;
  * @date 2019/11/30 23:33
  * for the Reisen
  * <p>
- * 添加全匹配的关键词
+ * 添加模糊匹配的关键词
  */
-public class CommandAddKeyWordNormal implements GroupCommand {
+public class CommandAddKeyWordLike implements GroupCommand {
     /**
      * 执行指令
      *
@@ -35,7 +34,7 @@ public class CommandAddKeyWordNormal implements GroupCommand {
     @Override
     public String groupMessage(EventGroupMessage event, GroupUser sender, Group group, String command, ArrayList<String> args) {
         if (null == args || args.size() <= 0) {
-            return ConstantKeyWord.EXPLAIN;
+            return ConstantKeyWord.EXPLAIN_LIKE;
         }
         if (args.size() < 2) {
             return ConstantKeyWord.PARAM_ERROR;
@@ -51,15 +50,18 @@ public class CommandAddKeyWordNormal implements GroupCommand {
             if (i == 1) {
                 String key = args.get(0);
                 //检查关键词格式
-                for (String oneKey : key.split("\\|")) {
+                for (String keyWords : key.split("\\|")) {
                     //关键词长度
-                    if (oneKey.length() > ConstantKeyWord.KEY_WORD_MAX_SIZE) {
+                    if (keyWords.length() > ConstantKeyWord.KEY_WORD_MAX_SIZE) {
                         return ConstantKeyWord.KEY_WORD_OVER;
                     }
+
                     //判断关键词是否已存在 需要判断全匹配和模糊匹配两种
-                    if (StringUtil.isNotEmpty(KeyWordService.keyWordLikeRegex(ConstantKeyWord.key_wrod_like_list,oneKey))
-                            || StringUtil.isNotEmpty(FileManagerKeyWordNormal.keyWordNormalRegex(oneKey))) {
-                        return String.format(ConstantKeyWord.KEY_WORD_EXISTS, oneKey);
+                    for (String keyWord : keyWords.split("&")) {
+                        if (StringUtil.isNotEmpty(KeyWordService.keyWordLikeRegex(ConstantKeyWord.key_wrod_like_list, keyWord))
+                                || StringUtil.isNotEmpty(FileManagerKeyWordNormal.keyWordNormalRegex(keyWord))) {
+                            return String.format(ConstantKeyWord.KEY_WORD_EXISTS, keyWords);
+                        }
                     }
                 }
                 continue;
@@ -74,13 +76,13 @@ public class CommandAddKeyWordNormal implements GroupCommand {
         String[] tempStr = new String[args.size()];
         args.toArray(tempStr);
         //写入文件并添加到list
-        FileManager.addKeyWordNormal(tempStr);
+        FileManager.addKeyWordLike(tempStr);
 
-        return ConstantKeyWord.KEY_WORD_SAVE_SUCCESS;
+        return ConstantKeyWord.KEY_WORD_LIKE_SAVE_SUCCESS;
     }
 
     @Override
     public CommandProperties properties() {
-        return new CommandProperties("AddKeyWordNormal", "addkwn");
+        return new CommandProperties("AddKeyWordLike", "addkwl");
     }
 }

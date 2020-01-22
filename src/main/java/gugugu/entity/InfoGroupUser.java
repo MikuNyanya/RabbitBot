@@ -105,7 +105,7 @@ public class InfoGroupUser {
     //是否为群主
     public boolean isOwner() {
         //最高权限账号
-        if (userId.equals(BotRabbit.MASTER_QQ)) {
+        if (BotRabbit.MASTER_QQ.contains(userId)) {
             return true;
         }
         if (StringUtil.isEmpty(role)) {
@@ -118,6 +118,6 @@ public class InfoGroupUser {
     //是否为最高权限账号
     public boolean isMaster() {
         //最高权限账号
-        return userId.equals(BotRabbit.MASTER_QQ);
+        return BotRabbit.MASTER_QQ.contains(userId);
     }
 }

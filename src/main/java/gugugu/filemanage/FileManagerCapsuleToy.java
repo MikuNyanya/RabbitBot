@@ -25,10 +25,10 @@ public class FileManagerCapsuleToy extends FileManager {
      */
     private static void fileInit() throws IOException {
         //先载入文件
-        if (null != capsuleToy) {
+        if (null != capsuleToyFile) {
             return;
         }
-        capsuleToy = FileUtil.fileCheck(ConstantFile.CAPSULE_TOY_FILE_PATH);
+        capsuleToyFile = FileUtil.fileCheck(ConstantFile.CAPSULE_TOY_FILE_PATH);
     }
 
     /**
@@ -63,7 +63,7 @@ public class FileManagerCapsuleToy extends FileManager {
         ConstantCapsuleToy.MSG_CAPSULE_TOY = new ArrayList<>();
 
         //创建读取器
-        BufferedReader reader = new BufferedReader(new FileReader(capsuleToy));
+        BufferedReader reader = new BufferedReader(new FileReader(capsuleToyFile));
         //逐行读取文件
         String capsuleToy = null;
         while ((capsuleToy = reader.readLine()) != null) {

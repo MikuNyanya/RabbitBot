@@ -1,6 +1,7 @@
-package gugugu.apirequest;
+package gugugu.apirequest.weibo;
 
 import com.alibaba.fastjson.JSONObject;
+import gugugu.apirequest.BaseRequest;
 import gugugu.entity.apirequest.InfoWeiboHomeTimeline;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,17 +61,18 @@ public class WeiboHomeTimelineGet extends BaseRequest {
     public void doRequest() throws IOException {
         //拼装参数
         addParam();
-        body = HttpUtil.get(URL + HttpUtil.parseUrlEncode(paramMap));
+        //请求
+        body = HttpUtil.get(URL + HttpUtil.parseUrlEncode(param));
     }
 
     //拼装参数
     private void addParam() {
-        baseParam();
-        paramMap.put("page", page);
-        paramMap.put("count", count);
-        paramMap.put("since_id", since_id);
-        paramMap.put("feature", feature);
-        paramMap.put("trim_user", trim_user);
+        param.put("access_token", accessToken);
+        param.put("page", page);
+        param.put("count", count);
+        param.put("since_id", since_id);
+        param.put("feature", feature);
+        param.put("trim_user", trim_user);
     }
 
     //获取解析后的结果对象

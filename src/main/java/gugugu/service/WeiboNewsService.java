@@ -1,6 +1,7 @@
 package gugugu.service;
 
-import gugugu.apirequest.WeiboHomeTimelineGet;
+import cc.moecraft.icq.accounts.BotAccount;
+import gugugu.apirequest.weibo.WeiboHomeTimelineGet;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
@@ -18,6 +19,7 @@ import utils.StringUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * create by MikuLink on 2020/1/9 16:42
@@ -74,7 +76,8 @@ public class WeiboNewsService {
             //解析微博报文
             String msg = parseWeiboBody(info);
             //给每个群发送消息
-            for (Long groupId : BotRabbit.bot.getGroupManager().groupCache.keySet()) {
+            Map<Long, Map<BotAccount, Long>> groupList = BotRabbit.bot.getAccountManager().getGroupAccountIndex();
+            for (Long groupId : groupList.keySet()) {
                 RabbitBotService.sendGroupMsg(groupId, msg);
                 //每次发送之间间隔一点时间，免得瞬间刷屏太厉害
                 Thread.sleep(1000L * 5);
@@ -90,9 +93,9 @@ public class WeiboNewsService {
         Long sinceId = weiboNews.getSince_id();
         //刷新最后推文标识，但如果一次请求中没有获取到新数据，since_id会为0
         if (0 != sinceId) {
+            BotRabbit.bot.getLogger().log(String.format("微博sinceId刷新：[%s]->[%s]", ConstantCommon.common_config.get("sinceId"), sinceId));
             //刷新sinceId配置
             ConstantCommon.common_config.put("sinceId", String.valueOf(sinceId));
-            BotRabbit.bot.getLogger().log(String.format("微博sinceId刷新：[%s]->[%s]", ConstantCommon.common_config.get("sinceId"), sinceId));
             //更新配置文件
             FileManager.overwriteConfig();
         }

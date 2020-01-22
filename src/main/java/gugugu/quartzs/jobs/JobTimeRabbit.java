@@ -1,7 +1,7 @@
 package gugugu.quartzs.jobs;
 
 import gugugu.bots.BotRabbit;
-import gugugu.commands.CommandRP;
+import gugugu.commands.groups.CommandRP;
 import gugugu.constant.ConstantCommon;
 import gugugu.service.RabbitBotService;
 import org.quartz.Job;

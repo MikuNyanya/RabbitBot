@@ -22,6 +22,12 @@ public class ConstantCommon {
     public static final String OFF = "off";
     //文本-执行
     public static final String EXEC = "exec";
+    //文本-设置
+    public static final String SET = "set";
+    //文本-删除
+    public static final String DELETE = "delete";
+    //文本-删除(简写)
+    public static final String DEL = "del";
 
     //群主
     public static final String OWNER = "owner";
@@ -33,6 +39,12 @@ public class ConstantCommon {
 
     public static final String COMMAND_ERROR = "指令[%s]无效";
     public static final String COMMAND_ROLE_ADMIN = "该指令需要管理权限";
+    public static final List<String> COMMAND_MASTER_ONLY = Arrays.asList(
+            "只有兔子才能使用这个指令",
+            "你不是兔子！不准用这个指令",
+            "这个指令需要更高的权限",
+            "这个指令只对兔子开放"
+    );
     public static final String PARAM_ERROR = "参数无效";
     public static final String GAME_NOT_START = "游戏未开启";
     public static final String GAME_BOMB_END = "游戏已结束";
@@ -52,5 +64,5 @@ public class ConstantCommon {
     );
 
     //公共配置
-    public static Map<String,String> common_config = new HashMap<>();
+    public static Map<String, String> common_config = new HashMap<>();
 }
