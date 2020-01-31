@@ -3,6 +3,7 @@ package gugugu.quartzs.jobs;
 import gugugu.bots.BotRabbit;
 import gugugu.commands.groups.CommandRP;
 import gugugu.constant.ConstantCommon;
+import gugugu.service.NCoV_2019ReportService;
 import gugugu.service.RabbitBotService;
 import gugugu.service.WeatherService;
 import org.quartz.Job;
@@ -30,6 +31,9 @@ public class JobTimeRabbit implements Job {
         //0点清理
         //RP缓存
         clearRPMap();
+
+        //疫情总览信息推送
+        nCoV();
     }
 
     //报时兔子
@@ -101,6 +105,23 @@ public class JobTimeRabbit implements Job {
             RabbitBotService.sendEveryGroupMsg(msg);
         } catch (IOException ioEx) {
             BotRabbit.bot.getLogger().error("天气兔子发生异常:" + ioEx.toString(), ioEx);
+        }
+    }
+
+    //nCoV疫情兔子
+    private void nCoV() {
+        //每天凌晨3点，早上10点，下午2点，下午7点，下午11点推送
+        //大晚上的就不发了
+        int hour = DateUtil.getHour();
+        if (hour != 3 && hour != 10 & hour != 14 & hour != 19 & hour != 23) {
+            return;
+        }
+
+        try {
+            //执行一次疫情消息推送
+            NCoV_2019ReportService.reportInfoNow();
+        } catch (Exception ex) {
+            BotRabbit.bot.getLogger().error("nCoV疫情消息推送执行异常:" + ex.toString(), ex);
         }
     }
 }
