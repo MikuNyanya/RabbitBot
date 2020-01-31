@@ -2,7 +2,7 @@ package gugugu.apirequest.weibo;
 
 import com.alibaba.fastjson.JSONObject;
 import gugugu.apirequest.BaseRequest;
-import gugugu.entity.apirequest.InfoWeiboHomeTimeline;
+import gugugu.entity.apirequest.weibo.InfoWeiboHomeTimeline;
 import lombok.Getter;
 import lombok.Setter;
 import utils.HttpUtil;

@@ -1,7 +1,7 @@
-package cc.moecraft.test.apirequest;
+package mikulink.rabbit.test.apirequest;
 
 import gugugu.apirequest.weibo.WeiboHomeTimelineGet;
-import gugugu.entity.apirequest.InfoWeiboHomeTimeline;
+import gugugu.entity.apirequest.weibo.InfoWeiboHomeTimeline;
 import org.junit.Test;
 
 /**

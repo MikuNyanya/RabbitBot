@@ -5,6 +5,7 @@ import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantFreeTime;
 import gugugu.constant.ConstantWeiboNews;
 import gugugu.filemanage.FileManager;
+import gugugu.service.NCoV_2019ReportService;
 import gugugu.service.RabbitBotService;
 import gugugu.service.WeiboNewsService;
 import org.quartz.Job;
@@ -35,6 +36,8 @@ public class JobMain implements Job {
         freeTimeRabbit();
         //微博最新消息
         weiboNews();
+        //疫情总览信息推送
+        nCoV();
     }
 
     //日常兔子
@@ -62,7 +65,7 @@ public class JobMain implements Job {
         //给每个群发送消息
         try {
             RabbitBotService.sendEveryGroupMsg(msg);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             BotRabbit.bot.getLogger().error("日常语句推送执行异常:" + ex.toString(), ex);
         }
 
@@ -92,5 +95,22 @@ public class JobMain implements Job {
 
         //刷新最后发送时间
         ConstantWeiboNews.weibo_news_last_send_time = System.currentTimeMillis();
+    }
+
+    //nCoV疫情兔子
+    private void nCoV() {
+        //每天凌晨3点，早上10点，下午2点，下午7点，下午11点推送
+        //大晚上的就不发了
+        int hour = DateUtil.getHour();
+        if (hour != 3 && hour != 10 & hour != 14 & hour != 19 & hour != 23) {
+            return;
+        }
+
+        try {
+            //执行一次疫情消息推送
+            NCoV_2019ReportService.reportInfoNow();
+        } catch (Exception ex) {
+            BotRabbit.bot.getLogger().error("nCoV疫情消息推送执行异常:" + ex.toString(), ex);
+        }
     }
 }

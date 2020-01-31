@@ -1,5 +1,10 @@
 package utils;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,4 +126,22 @@ public class HttpUtil {
         return "?" + urlEncode.substring(1);
     }
 
+
+    //简易爬虫 这块代码作为参考
+    public static void stealBug() throws Exception{
+        //目标页面
+        String danbooru = "https://danbooru.donmai.us/posts?page=1&tags=reisen_udongein_inaba";
+        //通过请求获取到返回的页面
+        String htmlStr = HttpUtil.get(danbooru);
+        //使用jsoup解析html
+        Document document = Jsoup.parse(htmlStr);
+        //选择目标节点，类似于JS的选择器
+        Element element = document.getElementById("posts-container");
+        Elements imgList = element.getElementsByClass("post-preview");
+        for (Element imgElement : imgList) {
+            //拿到所需要的数据
+            String imgUrl = imgElement.attributes().get("data-large-file-url");
+            ImageUtil.downloadImage(imgUrl);
+        }
+    }
 }

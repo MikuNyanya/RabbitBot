@@ -40,6 +40,8 @@ public class ConstantCommon {
     public static final String COMMAND_ERROR = "指令[%s]无效";
     public static final String COMMAND_ROLE_ADMIN = "该指令需要管理权限";
     public static final List<String> COMMAND_MASTER_ONLY = Arrays.asList(
+            "权限不足",
+            "你无权让我执行这条指令ヽ(#`Д´)ノ",
             "只有兔子才能使用这个指令",
             "你不是兔子！不准用这个指令",
             "这个指令需要更高的权限",

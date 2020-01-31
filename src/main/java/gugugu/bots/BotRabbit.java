@@ -102,7 +102,8 @@ public class BotRabbit {
             new CommandCapsuleToy(),
             new CommandWeiboNews(),
             new CommandWeather(),
-            new CommandConfig()
+            new CommandConfig(),
+            new CommandnCov()
     };
 
     /**

@@ -1,4 +1,4 @@
-package gugugu.entity.apirequest;
+package gugugu.entity.apirequest.weibo;
 
 import lombok.Getter;
 import lombok.Setter;
