@@ -1,5 +1,8 @@
 package gugugu.entity.apirequest.dxynCoV;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author MikuLink
  * @date 2020/1/31 23:28
@@ -7,6 +10,8 @@ package gugugu.entity.apirequest.dxynCoV;
  * 省份级别的疫情信息
  * GsonFormat生成
  */
+@Getter
+@Setter
 public class InfoAllnCoV {
 
     /**
@@ -54,182 +59,9 @@ public class InfoAllnCoV {
     private String remark3;
     private String remark4;
     private String remark5;
+    private String note1;
+    private String note2;
+    private String note3;
     private String generalRemark;
     private String abroadRemark;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
-
-    public long getModifyTime() {
-        return modifyTime;
-    }
-
-    public void setModifyTime(long modifyTime) {
-        this.modifyTime = modifyTime;
-    }
-
-    public String getInfectSource() {
-        return infectSource;
-    }
-
-    public void setInfectSource(String infectSource) {
-        this.infectSource = infectSource;
-    }
-
-    public String getPassWay() {
-        return passWay;
-    }
-
-    public void setPassWay(String passWay) {
-        this.passWay = passWay;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
-    public String getDailyPic() {
-        return dailyPic;
-    }
-
-    public void setDailyPic(String dailyPic) {
-        this.dailyPic = dailyPic;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public String getCountRemark() {
-        return countRemark;
-    }
-
-    public void setCountRemark(String countRemark) {
-        this.countRemark = countRemark;
-    }
-
-    public int getConfirmedCount() {
-        return confirmedCount;
-    }
-
-    public void setConfirmedCount(int confirmedCount) {
-        this.confirmedCount = confirmedCount;
-    }
-
-    public int getSuspectedCount() {
-        return suspectedCount;
-    }
-
-    public void setSuspectedCount(int suspectedCount) {
-        this.suspectedCount = suspectedCount;
-    }
-
-    public int getCuredCount() {
-        return curedCount;
-    }
-
-    public void setCuredCount(int curedCount) {
-        this.curedCount = curedCount;
-    }
-
-    public int getDeadCount() {
-        return deadCount;
-    }
-
-    public void setDeadCount(int deadCount) {
-        this.deadCount = deadCount;
-    }
-
-    public String getVirus() {
-        return virus;
-    }
-
-    public void setVirus(String virus) {
-        this.virus = virus;
-    }
-
-    public String getRemark1() {
-        return remark1;
-    }
-
-    public void setRemark1(String remark1) {
-        this.remark1 = remark1;
-    }
-
-    public String getRemark2() {
-        return remark2;
-    }
-
-    public void setRemark2(String remark2) {
-        this.remark2 = remark2;
-    }
-
-    public String getRemark3() {
-        return remark3;
-    }
-
-    public void setRemark3(String remark3) {
-        this.remark3 = remark3;
-    }
-
-    public String getRemark4() {
-        return remark4;
-    }
-
-    public void setRemark4(String remark4) {
-        this.remark4 = remark4;
-    }
-
-    public String getRemark5() {
-        return remark5;
-    }
-
-    public void setRemark5(String remark5) {
-        this.remark5 = remark5;
-    }
-
-    public String getGeneralRemark() {
-        return generalRemark;
-    }
-
-    public void setGeneralRemark(String generalRemark) {
-        this.generalRemark = generalRemark;
-    }
-
-    public String getAbroadRemark() {
-        return abroadRemark;
-    }
-
-    public void setAbroadRemark(String abroadRemark) {
-        this.abroadRemark = abroadRemark;
-    }
 }

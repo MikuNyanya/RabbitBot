@@ -32,9 +32,10 @@ public class NCoV_2019ReportService {
 
         //拼接字符串
         StringBuilder resultStr = new StringBuilder();
-        resultStr.append("病毒：" + info.getVirus());
-        resultStr.append("\n传染源：" + info.getInfectSource());
-        resultStr.append("\n传播途径：" + info.getPassWay());
+        resultStr.append(info.getNote1());
+        resultStr.append("\n" + info.getNote2());
+        resultStr.append("\n" + info.getNote3());
+        resultStr.append("\n" + info.getRemark3());
         resultStr.append("\n" + info.getRemark1());
         resultStr.append("\n" + info.getRemark2());
         resultStr.append("\n确诊病例：" + info.getConfirmedCount());
