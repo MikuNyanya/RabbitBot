@@ -78,7 +78,17 @@ public class WeiboNewsService {
             //给每个群发送消息
             Map<Long, Map<BotAccount, Long>> groupList = BotRabbit.bot.getAccountManager().getGroupAccountIndex();
             for (Long groupId : groupList.keySet()) {
-                RabbitBotService.sendGroupMsg(groupId, msg);
+                //如果超时，重试一次
+                try {
+                    RabbitBotService.sendGroupMsg(groupId, msg);
+                } catch (Exception ex) {
+                    if ("Read timed out".equalsIgnoreCase(ex.getMessage())) {
+                        BotRabbit.bot.getLogger().error("groupId[" + groupId + "]微博消息推送执行异常:" + ex.toString(), ex);
+                        RabbitBotService.sendGroupMsg(groupId, "微博消息推送超时，即将重试");
+                        Thread.sleep(1000L * 3);
+                        RabbitBotService.sendGroupMsg(groupId, msg);
+                    }
+                }
                 //每次发送之间间隔一点时间，免得瞬间刷屏太厉害
                 Thread.sleep(1000L * 5);
             }
