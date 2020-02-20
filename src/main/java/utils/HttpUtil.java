@@ -25,9 +25,9 @@ public class HttpUtil {
     private static final String REQUEST_METHOD_GET = "GET";
     private static final String REQUEST_METHOD_POST = "POST";
     //链接超时时间
-    private static final int CONNECT_TIME_OUT = 5000;
+    private static final int CONNECT_TIME_OUT = 10000;
     //读取超时时间
-    private static final int READ_TIME_OUT = 5000;
+    private static final int READ_TIME_OUT = 10000;
     //编码格式，UTF-8
     private static final String CHARSET_UTF8 = "UTF-8";
 

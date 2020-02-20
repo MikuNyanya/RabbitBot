@@ -14,7 +14,7 @@ public class NumberUtil {
      * @param str 需要判断的字符串
      * @return 是否为纯数字
      */
-    public static boolean isNumber(String str) {
+    public static boolean isNumberOnly(String str) {
         if (StringUtil.isEmpty(str)) {
             return false;
         }
@@ -35,10 +35,23 @@ public class NumberUtil {
      * @return 输出数字
      */
     public static Integer toInt(String str) {
-        if (StringUtil.isEmpty(str) || !isNumber(str)) {
+        if (StringUtil.isEmpty(str) || !isNumberOnly(str)) {
             return 0;
         }
         return Integer.valueOf(str);
+    }
+
+    /**
+     * 字符串转化为Double数字
+     *
+     * @param str 输入字符串
+     * @return 输出数字
+     */
+    public static Double toDouble(String str) {
+        if (StringUtil.isEmpty(str)) {
+            return 0.0;
+        }
+        return Double.valueOf(str);
     }
 
     /**
@@ -48,7 +61,7 @@ public class NumberUtil {
      * @return 输出数字
      */
     public static Long toLong(String str) {
-        if (StringUtil.isEmpty(str) || !isNumber(str)) {
+        if (StringUtil.isEmpty(str) || !isNumberOnly(str)) {
             return 0L;
         }
         return Long.valueOf(str);

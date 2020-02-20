@@ -49,8 +49,10 @@ public class InfoAllnCoV {
     private String summary;
     private boolean deleted;
     private String countRemark;
+    private int currentConfirmedCount;
     private int confirmedCount;
     private int suspectedCount;
+    private int seriousCount;
     private int curedCount;
     private int deadCount;
     private String virus;

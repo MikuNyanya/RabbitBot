@@ -38,10 +38,12 @@ public class NCoV_2019ReportService {
         resultStr.append("\n" + info.getRemark3());
         resultStr.append("\n" + info.getRemark1());
         resultStr.append("\n" + info.getRemark2());
-        resultStr.append("\n确诊病例：" + info.getConfirmedCount());
-        resultStr.append("\n疑似病例：" + info.getSuspectedCount());
-        resultStr.append("\n死亡人数：" + info.getDeadCount());
-        resultStr.append("\n治愈人数：" + info.getCuredCount());
+        resultStr.append("\n总计确诊病例：" + info.getConfirmedCount());
+        resultStr.append("\n当前确诊病例：" + info.getCurrentConfirmedCount());
+        resultStr.append("\n当前疑似病例：" + info.getSuspectedCount());
+        resultStr.append("\n当前重症病例：" + info.getSeriousCount());
+        resultStr.append("\n总计死亡人数：" + info.getDeadCount());
+        resultStr.append("\n总计治愈人数：" + info.getCuredCount());
         resultStr.append("\n=====" + DateUtil.toString(new Date(info.getModifyTime())) + "=====");
 
         RabbitBotService.sendEveryGroupMsg(resultStr.toString());

@@ -112,7 +112,7 @@ public class CommandRollBomb implements GroupCommand {
             bombCntStr = args.get(2);
         }
         //输入参数校验
-        if (!NumberUtil.isNumber(numCntStr) || !NumberUtil.isNumber(bombCntStr)) {
+        if (!NumberUtil.isNumberOnly(numCntStr) || !NumberUtil.isNumberOnly(bombCntStr)) {
             return ConstantRollBomb.GAME_PARAM_NUMBER_ONLY;
         }
 
@@ -207,7 +207,7 @@ public class CommandRollBomb implements GroupCommand {
 
         for (String arg : args) {
             //数值类型检验
-            if (StringUtil.isEmpty(arg) || !NumberUtil.isNumber(arg)) {
+            if (StringUtil.isEmpty(arg) || !NumberUtil.isNumberOnly(arg)) {
                 return String.format("[%s],%s", groupUserName, ConstantRollBomb.GAME_PARAM_SELECT_ONLY);
             }
 

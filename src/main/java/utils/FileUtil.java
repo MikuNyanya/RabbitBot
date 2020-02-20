@@ -53,6 +53,21 @@ public class FileUtil {
     }
 
     /**
+     * 删除文件
+     *
+     * @param filePath 文件路径
+     * @return 是否删除成功
+     */
+    public static boolean delete(String filePath) {
+        File file = new File(filePath);
+        //存在则删除
+        if (file.exists()) {
+            return file.delete();
+        }
+        return true;
+    }
+
+    /**
      * 复制文件
      *
      * @param srcPathStr 原文件完整路径
@@ -153,14 +168,15 @@ public class FileUtil {
 
     /**
      * 获取文件后缀
+     *
      * @param fileName 文件名
      * @return 文件后缀
      */
-    public static String getFileSuffix(String fileName){
+    public static String getFileSuffix(String fileName) {
         if (StringUtil.isEmpty(fileName)) {
             return "";
         }
-        if(!fileName.contains(".")){
+        if (!fileName.contains(".")) {
             return "";
         }
         return fileName.substring(fileName.lastIndexOf("."));

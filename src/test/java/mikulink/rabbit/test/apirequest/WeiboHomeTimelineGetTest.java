@@ -1,6 +1,7 @@
 package mikulink.rabbit.test.apirequest;
 
 import gugugu.apirequest.weibo.WeiboHomeTimelineGet;
+import gugugu.constant.ConstantCommon;
 import gugugu.entity.apirequest.weibo.InfoWeiboHomeTimeline;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ public class WeiboHomeTimelineGetTest {
     public void test() {
         try {
             WeiboHomeTimelineGet request = new WeiboHomeTimelineGet();
-            request.setAccessToken("2.00V1mcpB9MoExC28943f324avCKR9E");
+            request.setAccessToken(ConstantCommon.common_config.get("weiboToken"));
             request.setPage(1);
             request.setCount(3);
 

@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class ImageUtil {
      * @return 图片名称
      */
     public static String downloadImage(String imageUrl) throws IOException {
-        return downloadImage(imageUrl, ConstantImage.DEFAULT_IMAGE_SAVE_PATH);
+        return downloadImage(imageUrl, ConstantImage.DEFAULT_IMAGE_SAVE_PATH, null);
     }
 
     /**
@@ -31,9 +32,24 @@ public class ImageUtil {
      *
      * @param imageUrl 网络图片url
      * @param localUrl 本地储存地址
+     * @param fileName 文件名称，带后缀的那种，如果为空则取链接最后一段作为文件名
      * @return 图片路径
      */
-    public static String downloadImage(String imageUrl, String localUrl) throws IOException {
+    public static String downloadImage(String imageUrl, String localUrl, String fileName) throws IOException {
+        return downloadImage(null, imageUrl, localUrl, fileName);
+    }
+
+    /**
+     * 下载图片到本地
+     *
+     * @param header   http请求header
+     * @param imageUrl 网络图片url
+     * @param localUrl 本地储存地址
+     * @param fileName 文件名称，带后缀的那种，如果为空则取链接最后一段作为文件名
+     * @return 本地图片相对路径
+     * @throws IOException 异常
+     */
+    public static String downloadImage(HashMap<String, String> header, String imageUrl, String localUrl, String fileName) throws IOException {
         if (StringUtil.isEmpty(imageUrl)) {
             throw new IOException(ConstantImage.NETWORK_IMAGE_URL_IS_EMPRY);
         }
@@ -45,6 +61,12 @@ public class ImageUtil {
         conn.setRequestMethod("GET");
         //设置链接超时时间
         conn.setConnectTimeout(5 * 1000);
+        //请求header
+        if (null != header) {
+            for (String key : header.keySet()) {
+                conn.setRequestProperty(key, header.get(key));
+            }
+        }
 
         //获取输出流
         InputStream inStream = conn.getInputStream();
@@ -67,8 +89,10 @@ public class ImageUtil {
             result.mkdirs();
         }
 
-        //使用网络图片的名称和后缀
-        String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+        //如果为空，使用网络图片的名称和后缀
+        if (StringUtil.isEmpty(fileName)) {
+            fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+        }
 
         //写入图片数据
         String fileFullNmae = result + File.separator + fileName;
@@ -108,7 +132,7 @@ public class ImageUtil {
             return false;
         }
 
-         return IMAGE_SUFFIXS.contains(suffix);
+        return IMAGE_SUFFIXS.contains(suffix);
     }
 
     /**

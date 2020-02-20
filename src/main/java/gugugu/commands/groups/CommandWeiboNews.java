@@ -83,7 +83,7 @@ public class CommandWeiboNews implements GroupCommand {
                     return ConstantWeiboNews.SINCEID_OVERRIDE_FAIL;
                 }
                 String sinceIdStr = args.get(1);
-                if (!NumberUtil.isNumber(sinceIdStr)) {
+                if (!NumberUtil.isNumberOnly(sinceIdStr)) {
                     return ConstantWeiboNews.SINCEID_OVERRIDE_FAIL_NOW_NUMBER;
                 }
                 //覆写SINCEID配置

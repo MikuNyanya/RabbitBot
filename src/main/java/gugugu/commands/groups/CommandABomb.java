@@ -149,7 +149,7 @@ public class CommandABomb implements GroupCommand {
         String groupUserName = event.getGroupUserInfo().getGroupUserName();
 
         //数值类型检验
-        if (StringUtil.isEmpty(cNum) || !NumberUtil.isNumber(cNum)) {
+        if (StringUtil.isEmpty(cNum) || !NumberUtil.isNumberOnly(cNum)) {
             return String.format("[%s],%s", groupUserName, ConstantABomb.GAME_PARAM_SELECT_ONLY);
         }
 
