@@ -396,7 +396,6 @@ LevelUp！
 糖果罐地雷
 MayDay！MayDay！
 world.execute(me);
-兔锅
 九磅十五便士
 一袋米铀抗几楼
 一袋米我抗二楼
@@ -409,3 +408,5 @@ world.execute(me);
 阿撒托斯
 奈亚拉托提普
 鸭累鸭累da☆za
+基努·里维斯
+一号线

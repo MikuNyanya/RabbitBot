@@ -60,7 +60,7 @@ public class ImageUtil {
         //设置请求方式
         conn.setRequestMethod("GET");
         //设置链接超时时间
-        conn.setConnectTimeout(5 * 1000);
+//        conn.setConnectTimeout(5 * 1000);
         //请求header
         if (null != header) {
             for (String key : header.keySet()) {

@@ -1,6 +1,7 @@
 package gugugu.service;
 
 import com.alibaba.fastjson.JSONObject;
+import gugugu.bots.BotRabbit;
 import gugugu.entity.apirequest.dxynCoV.InfoAllnCoV;
 import utils.DateUtil;
 import utils.HttpUtil;
@@ -46,7 +47,11 @@ public class NCoV_2019ReportService {
         resultStr.append("\n总计治愈人数：" + info.getCuredCount());
         resultStr.append("\n=====" + DateUtil.toString(new Date(info.getModifyTime())) + "=====");
 
-        RabbitBotService.sendEveryGroupMsg(resultStr.toString());
+        try {
+            RabbitBotService.sendEveryGroupMsg(resultStr.toString());
+        }catch (Exception ex){
+            BotRabbit.bot.getLogger().error("nCoV疫情消息发送异常" + ex.toString(), ex);
+        }
     }
 
 }

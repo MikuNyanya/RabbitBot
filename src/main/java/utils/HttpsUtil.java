@@ -1,6 +1,8 @@
 package utils;
 
 
+import gugugu.bots.BotRabbit;
+
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.URL;
@@ -47,9 +49,9 @@ public class HttpsUtil {
         URL url = new URL(uri);
         HttpsURLConnection httpsConn = (HttpsURLConnection) url.openConnection();
         httpsConn.setSSLSocketFactory(ssf);
-        httpsConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-        httpsConn.setRequestProperty("Authorization", "username");
-        httpsConn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
+        httpsConn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+//        httpsConn.setRequestProperty("Authorization", "username");
+        httpsConn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36");
         /*
         在握手期间，如果 URL 的主机名和服务器的标识主机名不匹配，
         则验证机制可以回调此接口的实现程序来确定是否应该允许此连接。
@@ -94,11 +96,13 @@ public class HttpsUtil {
     }
 
     public static byte[] doGet(String uri) throws IOException {
+        BotRabbit.bot.getLogger().debug("Http get:" + uri);
         HttpsURLConnection httpsConn = getHttpsURLConnection(uri, "GET");
         return getBytesFromStream(httpsConn.getInputStream());
     }
 
     public static byte[] doPost(String uri, String data) throws IOException {
+        BotRabbit.bot.getLogger().debug("Http post:[" + uri + "]，data:" + data);
         HttpsURLConnection httpsConn = getHttpsURLConnection(uri, "POST");
         setBytesToStream(httpsConn.getOutputStream(), data.getBytes());
         return getBytesFromStream(httpsConn.getInputStream());

@@ -1,12 +1,9 @@
 package gugugu.service;
 
-import gugugu.apirequest.imgsearch.PixivImjadIllustGet;
 import gugugu.apirequest.imgsearch.SaucenaoImageSearch;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
-import gugugu.entity.apirequest.imgsearch.pixiv.ImjadPixivResponse;
-import gugugu.entity.apirequest.imgsearch.pixiv.ImjadPixivResult;
 import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchInfoResult;
 import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchResult;
 import utils.*;
@@ -14,7 +11,6 @@ import utils.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -161,7 +157,7 @@ public class ImageService {
                 //暂时只识别pixiv和Danbooru的
                 int indexId = infoResult.getHeader().getIndex_id();
                 if (5 != indexId && 9 != indexId) {
-                    return ConstantImage.SAUCENAO_SEARCH_FAIL_PART;
+                    continue;
                 }
 
                 //过滤掉相似度50一下的 todo 写为可外部调整的配置
@@ -185,101 +181,10 @@ public class ImageService {
         //获取信息，并返回结果
         if (5 == searchResult.getHeader().getIndex_id()) {
             //pixiv
-            return parsePixivImgRequest(searchResult);
+            return PixivService.parsePixivImgRequest(searchResult);
         } else {
             //Danbooru
+            return DanbooruService.parseDanbooruImgRequest(searchResult);
         }
-        return ConstantImage.SAUCENAO_SEARCH_FAIL_PART;
-    }
-
-    /**
-     * 拼装识图结果_p站
-     * 搜索结果只会取一个
-     *
-     * @param infoResult 识图结果
-     * @return 拼装好的群消息
-     */
-    private static String parsePixivImgRequest(SaucenaoSearchInfoResult infoResult) {
-        //p站图片id
-        int pixivId = infoResult.getData().getPixiv_id();
-
-        //根据pid获取图片列表
-        ImjadPixivResult pixivResult = null;
-        try {
-            pixivResult = getImgsByPixivId(pixivId);
-
-            if (null == pixivResult || !"success".equalsIgnoreCase(pixivResult.getStatus())) {
-                return ConstantImage.PIXIV_ID_GET_FAIL_GROUP_MESSAGE + "(" + pixivId + ")";
-            }
-
-            //Saucenao搜索结果相似度
-            String similarity = infoResult.getHeader().getSimilarity();
-
-            List<ImjadPixivResponse> responses = pixivResult.getResponse();
-            ImjadPixivResponse response = responses.get(0);
-            //图片标题
-            String title = response.getTitle();
-            //图片简介
-            String caption = response.getCaption();
-            //作者名称
-            String memberName = response.getUser().getName();
-            //图片创建时间
-            String createDate = response.getCreated_time();
-
-            //图片cq码
-            String pixivImgCQ = null;
-            String pixivImgLocalPath = getPixivImgByPixivImgUrl(response.getImage_urls().getMedium());
-            if (StringUtil.isEmpty(pixivImgLocalPath)) {
-                pixivImgCQ = ConstantImage.PIXIV_IMAGE_DOWNLOAD_FAIL;
-            } else {
-                pixivImgCQ = parseCQBuLocalImagePath(pixivImgLocalPath);
-            }
-
-            StringBuilder resultStr = new StringBuilder();
-            resultStr.append(pixivImgCQ);
-            resultStr.append("\n[相似度] " + similarity + "%");
-            resultStr.append("\n[P站id] " + pixivId);
-            resultStr.append("\n[标题] " + title);
-            resultStr.append("\n[作者] " + memberName);
-            resultStr.append("\n[上传时间] " + createDate);
-//            resultStr.append("\n[图片简介] " + caption);
-            return resultStr.toString();
-        } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("ImageService " + ConstantImage.IMJAD_PIXIV_ID_API_ERROR + ioEx.toString(), ioEx);
-            return ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE;
-        }
-    }
-
-    /**
-     * 根据pid获取p站图片地址
-     * 因为有多P，所以返回的是集合
-     *
-     * @param pixivId p站图片id
-     * @return 接口返回结果
-     */
-    private static ImjadPixivResult getImgsByPixivId(int pixivId) throws IOException {
-        PixivImjadIllustGet request = new PixivImjadIllustGet();
-        request.setPixivId(pixivId);
-        request.doRequest();
-        if (!request.isSuccess()) {
-            return null;
-        }
-        return request.getEntity();
-    }
-
-    /**
-     * 根据p站图片链接下载图片
-     * 带图片后缀的那种，比如
-     * https://i.pximg.net/img-original/img/2018/03/31/01/10/08/67994735_p0.png
-     *
-     * @param url p站图片链接
-     * @return 下载后的本地连接
-     */
-    private static String getPixivImgByPixivImgUrl(String url) throws IOException {
-        //加入p站防爬链
-        HashMap<String, String> header = new HashMap<>();
-        header.put("referer", "http://www.pixiv.net/");
-        //下载图片
-        return ImageUtil.downloadImage(header, url, ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "pixiv", null);
     }
 }

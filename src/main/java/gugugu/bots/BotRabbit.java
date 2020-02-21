@@ -4,10 +4,7 @@ import cc.moecraft.icq.PicqBotX;
 import cc.moecraft.icq.PicqConfig;
 import cc.moecraft.icq.command.interfaces.IcqCommand;
 import cc.moecraft.icq.event.IcqListener;
-import gugugu.commands.CommandConfig;
-import gugugu.commands.CommandImageSearch;
-import gugugu.commands.CommandSystem;
-import gugugu.commands.CommandWeather;
+import gugugu.commands.*;
 import gugugu.commands.groups.*;
 import gugugu.constant.ConstantCommon;
 import gugugu.listeners.GroupListener;
@@ -107,7 +104,9 @@ public class BotRabbit {
             new CommandWeather(),
             new CommandConfig(),
             new CommandnCov(),
-            new CommandImageSearch()
+            new CommandImageSearch(),
+            new CommandPixivRank(),
+            new CommandAnimeSearch()
     };
 
     /**

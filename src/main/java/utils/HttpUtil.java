@@ -57,6 +57,8 @@ public class HttpUtil {
 
         //关闭流
         rspInputStream.close();
+        //断开连接
+        httpURLConnection.disconnect();
         return rspStr;
     }
 

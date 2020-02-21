@@ -47,9 +47,18 @@ public class ConstantImage extends ConstantCommon {
     public static final String IMJAD_PIXIV_ID_API_ERROR = "imjad Pixiv Api请求异常";
     public static final String IMJAD_PIXIV_ID_API_FAIL = "imjad Pixiv Api请求失败";
 
+    //配置，忽略p站图片
+    public static final String PIXIV_IMAGE_IGNORE = "pixivImageIgnore";
+    public static final String PIXIV_IMAGE_IGNORE_WARNING = "[P站图片已忽略加载]";
+    public static final String PIXIV_IMAGE_DOWNLOAD_FAIL = "[P站图片下载失败]";
+    public static final String PIXIV_IMAGE_RANK_ERROR = "P站日榜信息获取异常";
+    public static final String PIXIV_IMAGE_RANK_JOB_ERROR = "P站日榜信息推送异常";
+
     public static final String PIXIV_ID_GET_FAIL_GROUP_MESSAGE = "根据P站图片id获取信息失败";
     public static final String PIXIV_ID_GET_ERROR_GROUP_MESSAGE = "根据P站图片id获取信息异常";
-    public static final String PIXIV_IMAGE_DOWNLOAD_FAIL = "[P站图片下载失败]";
 
-
+    public static final String DANBOORU_ID_GET_NOT_FOUND = "根据Danbooru图片id没有找到图片";
+    public static final String DANBOORU_IMAGE_DOWNLOAD_FAIL = "Danbooru图片下载失败";
+    public static final String DANBOORU_ID_GET_FAIL_GROUP_MESSAGE = "根据Danbooru图片id获取信息失败";
+    public static final String DANBOORU_ID_GET_ERROR_GROUP_MESSAGE = "根据Danbooru图片id获取信息异常";
 }

@@ -4,8 +4,8 @@ import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.EverywhereCommand;
 import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.User;
-import gugugu.constant.ConstantImage;
-import gugugu.service.ImageService;
+import gugugu.constant.ConstantAnime;
+import gugugu.service.WhatAnimeService;
 import utils.StringUtil;
 
 import java.util.ArrayList;
@@ -15,9 +15,9 @@ import java.util.ArrayList;
  * @date 2020/02/19 16:10
  * for the Reisen
  * <p>
- * 搜图指令
+ * 以图搜番指令
  */
-public class CommandImageSearch implements EverywhereCommand {
+public class CommandAnimeSearch implements EverywhereCommand {
     /**
      * 执行指令
      *
@@ -30,22 +30,23 @@ public class CommandImageSearch implements EverywhereCommand {
     @Override
     public String run(EventMessage event, User sender, String command, ArrayList<String> args) {
         if (null == args || args.size() == 0) {
-            return ConstantImage.IMAGE_SEARCH_NO_IMAGE_INPUT;
+            return ConstantAnime.ANIME_SEARCH_NO_IMAGE_INPUT;
         }
         //获取传入图片，解析CQ中的网络图片链接
         String imgCQ = args.get(0);
         if (!imgCQ.contains("[CQ:image")) {
-            return ConstantImage.IMAGE_SEARCH_NO_IMAGE_INPUT;
+            return ConstantAnime.ANIME_SEARCH_NO_IMAGE_INPUT;
         }
         String imgUrl = StringUtil.getCQImageUrl(imgCQ);
         if (StringUtil.isEmpty(imgUrl)) {
-            return ConstantImage.IMAGE_SEARCH_IMAGE_URL_PARSE_FAIL;
+            return ConstantAnime.ANIME_SEARCH_IMAGE_URL_PARSE_FAIL;
         }
-        return ImageService.searchImgFromSaucenao(imgUrl);
+        //搜番，然后把图片加在最上面
+        return imgCQ + "\n" + WhatAnimeService.searchAnimeFromWhatAnime(imgUrl);
     }
 
     @Override
     public CommandProperties properties() {
-        return new CommandProperties("ImageSearch", "搜图");
+        return new CommandProperties("AnimeSearch", "搜番", "animesearch");
     }
 }

@@ -18,7 +18,17 @@ public class RabbitBotService {
      *
      * @param msg 信息体
      */
-    public static void sendEveryGroupMsg(String msg) {
+    public static void sendEveryGroupMsg(String msg) throws InterruptedException {
+        sendEveryGroupMsg(msg, null);
+    }
+
+    /**
+     * 给每个群发信息，每条消息中间加入间隔
+     *
+     * @param msg 消息
+     * @param spritSecond 间隔，秒
+     */
+    public static void sendEveryGroupMsg(String msg, Long spritSecond) throws InterruptedException {
         //获取链接，参数是机器人的qq号
         IcqHttpApi icqHttpApi = BotRabbit.bot.getAccountManager().getIdIndex().get(BotRabbit.BOT_QQ).getHttpApi();
 
@@ -26,6 +36,11 @@ public class RabbitBotService {
         Map<Long, Map<BotAccount, Long>> groupList = BotRabbit.bot.getAccountManager().getGroupAccountIndex();
         for (Long groupId : groupList.keySet()) {
             icqHttpApi.sendGroupMsg(groupId, msg);
+
+            //间隔
+            if (null != spritSecond) {
+                Thread.sleep(1000 * spritSecond);
+            }
         }
     }
 

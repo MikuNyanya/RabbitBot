@@ -3,15 +3,18 @@ package gugugu.quartzs.jobs;
 import gugugu.bots.BotRabbit;
 import gugugu.commands.groups.CommandRP;
 import gugugu.constant.ConstantCommon;
+import gugugu.constant.ConstantImage;
+import gugugu.entity.InfoPixivRankImage;
 import gugugu.service.NCoV_2019ReportService;
+import gugugu.service.PixivService;
 import gugugu.service.RabbitBotService;
 import gugugu.service.WeatherService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import utils.DateUtil;
 
-import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * create by MikuLink on 2019/12/3 12:58
@@ -34,6 +37,10 @@ public class JobTimeRabbit implements Job {
 
         //疫情总览信息推送
         nCoV();
+
+        //pixiv日榜，最好放在最后执行，要下载图片
+        //也可以另起一个线程，但我懒
+        pixivRankDay();
     }
 
     //报时兔子
@@ -43,9 +50,12 @@ public class JobTimeRabbit implements Job {
 
         //群报时，时间间隔交给定时器，这里返回值取当前时间即可
         String msg = String.format("这里是%s报时：%s%s", BotRabbit.BOT_NAME, DateUtil.toString(new Date()), msgEx);
-
-        //给每个群发送报时
-        RabbitBotService.sendEveryGroupMsg(msg);
+        try {
+            //给每个群发送报时
+            RabbitBotService.sendEveryGroupMsg(msg);
+        } catch (Exception ex) {
+            BotRabbit.bot.getLogger().error("报时兔子 消息发送异常" + ex.toString(), ex);
+        }
     }
 
     //获取附加短语，可以放一些彩蛋性质的东西，会附带在报时消息尾部
@@ -103,7 +113,7 @@ public class JobTimeRabbit implements Job {
 
             //给每个群发送报时
             RabbitBotService.sendEveryGroupMsg(msg);
-        } catch (IOException ioEx) {
+        } catch (Exception ioEx) {
             BotRabbit.bot.getLogger().error("天气兔子发生异常:" + ioEx.toString(), ioEx);
         }
     }
@@ -122,6 +132,28 @@ public class JobTimeRabbit implements Job {
             NCoV_2019ReportService.reportInfoNow();
         } catch (Exception ex) {
             BotRabbit.bot.getLogger().error("nCoV疫情消息推送执行异常:" + ex.toString(), ex);
+        }
+    }
+
+    //P站日榜兔子
+    private void pixivRankDay() {
+        //每天晚上19点推送日榜信息
+        int hour = DateUtil.getHour();
+        if (hour != 19) {
+            return;
+        }
+
+        try {
+            //获取日榜前3
+            List<InfoPixivRankImage> imageList = PixivService.getPixivIllustRank(1, 3);
+            for (InfoPixivRankImage imageInfo : imageList) {
+                //拼接一个发送一个，中间间隔5秒
+                String resultStr = PixivService.parsePixivImgInfoToGroupMsg(imageInfo);
+                RabbitBotService.sendEveryGroupMsg(resultStr, 2L);
+                Thread.sleep(1000L * 2);
+            }
+        } catch (Exception ex) {
+            BotRabbit.bot.getLogger().error(ConstantImage.PIXIV_IMAGE_RANK_JOB_ERROR + ex.toString(), ex);
         }
     }
 }

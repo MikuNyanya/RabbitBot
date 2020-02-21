@@ -88,4 +88,32 @@ public class StringUtil {
 
         return ababa_str.equalsIgnoreCase(str);
     }
+
+    /**
+     * 截取cq码中的图片链接
+     *
+     * @param cqStr CQ码
+     * @return 图片链接
+     */
+    public static String getCQImageUrl(String cqStr) {
+        if (null == cqStr) {
+            return null;
+        }
+        if (!cqStr.contains("[CQ:image")) {
+            return null;
+        }
+
+        String[] strs = cqStr.split(",");
+
+        for (String str : strs) {
+            if (StringUtil.isEmpty(str)) {
+                continue;
+            }
+            if (!str.startsWith("url=")) {
+                continue;
+            }
+            return str.substring("url=".length(), str.indexOf("]"));
+        }
+        return null;
+    }
 }
