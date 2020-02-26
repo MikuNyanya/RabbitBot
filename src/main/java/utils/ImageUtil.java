@@ -4,6 +4,7 @@ import gugugu.constant.ConstantImage;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,13 +51,34 @@ public class ImageUtil {
      * @throws IOException 异常
      */
     public static String downloadImage(HashMap<String, String> header, String imageUrl, String localUrl, String fileName) throws IOException {
+        return downloadImage(header, imageUrl, localUrl, fileName, null);
+    }
+
+    /**
+     * 下载图片到本地
+     *
+     * @param header   http请求header
+     * @param imageUrl 网络图片url
+     * @param localUrl 本地储存地址
+     * @param fileName 文件名称，带后缀的那种，如果为空则取链接最后一段作为文件名
+     * @param proxy    代理
+     * @return 本地图片相对路径
+     * @throws IOException 异常
+     */
+    public static String downloadImage(HashMap<String, String> header, String imageUrl, String localUrl, String fileName, Proxy proxy) throws IOException {
         if (StringUtil.isEmpty(imageUrl)) {
             throw new IOException(ConstantImage.NETWORK_IMAGE_URL_IS_EMPRY);
         }
 
         //创建连接
         URL url = new URL(imageUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        HttpURLConnection conn = null;
+        if (null != proxy) {
+            //代理
+            conn = (HttpURLConnection) url.openConnection(proxy);
+        } else {
+            conn = (HttpURLConnection) url.openConnection();
+        }
         //设置请求方式
         conn.setRequestMethod("GET");
         //设置链接超时时间

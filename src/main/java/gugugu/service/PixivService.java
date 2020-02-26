@@ -8,13 +8,12 @@ import gugugu.constant.ConstantImage;
 import gugugu.entity.InfoPixivRankImage;
 import gugugu.entity.apirequest.imgsearch.pixiv.*;
 import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchInfoResult;
-import utils.DateUtil;
-import utils.FileUtil;
-import utils.ImageUtil;
-import utils.StringUtil;
+import utils.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.Proxy;
 import java.util.*;
 
 /**
@@ -59,7 +58,7 @@ public class PixivService {
         for (ImjadPixivRankWork image : imageList) {
             ImjadPixivRankWorkWork imageDetail = image.getWork();
             //下载图片
-            String imgCQ = getPixivImgCQByPixivImgUrl(imageDetail.getImage_urls().getLarge());
+            String imgCQ = getPixivImgCQByPixivImgUrl(imageDetail.getImage_urls().getLarge(), Long.valueOf(imageDetail.getId()));
 
             //拼接成对象并返回
             InfoPixivRankImage rankImageInfo = new InfoPixivRankImage();
@@ -98,8 +97,36 @@ public class PixivService {
      * @return 拼装好的群消息
      */
     public static String parsePixivImgRequest(SaucenaoSearchInfoResult infoResult) {
+        return searchPixivImgById(infoResult, null);
+    }
+
+    /**
+     * 根据p站图片id查询p站图片
+     *
+     * @param pid p站图片id
+     * @return 拼装好的群消息
+     */
+    public static String searchPixivImgById(Long pid) {
+        return searchPixivImgById(null, pid);
+    }
+
+    /**
+     * 查询p站图片id并返回结果
+     * 参数二选一
+     *
+     * @param infoResult Saucenao搜图结果
+     * @param pid        p站id
+     * @return 拼装好的群消息
+     */
+    private static String searchPixivImgById(SaucenaoSearchInfoResult infoResult, Long pid) {
         //p站图片id
-        int pixivId = infoResult.getData().getPixiv_id();
+        Integer pixivId = null;
+        if (null != infoResult) {
+            pixivId = infoResult.getData().getPixiv_id();
+        } else {
+            pixivId = NumberUtil.toInt(pid.toString());
+        }
+
 
         //根据pid获取图片列表
         ImjadPixivResult pixivResult = null;
@@ -111,7 +138,10 @@ public class PixivService {
             }
 
             //Saucenao搜索结果相似度
-            String similarity = infoResult.getHeader().getSimilarity();
+            String similarity = null;
+            if (null != infoResult) {
+                similarity = infoResult.getHeader().getSimilarity();
+            }
 
             List<ImjadPixivResponse> responses = pixivResult.getResponse();
             ImjadPixivResponse response = responses.get(0);
@@ -125,14 +155,17 @@ public class PixivService {
             String createDate = response.getCreated_time();
 
             //图片cq码
-            String pixivImgCQ = getPixivImgCQByPixivImgUrl(response.getImage_urls().getLarge());
+            String pixivImgCQ = getPixivImgCQByPixivImgUrl(response.getImage_urls().getLarge(), Long.valueOf(pixivId));
 
+            //todo 这块业务应该丢在最上层
             StringBuilder resultStr = new StringBuilder();
             resultStr.append(pixivImgCQ);
             if (null != response.getMetadata()) {
                 resultStr.append("\n该Pid包含多张图片");
             }
-            resultStr.append("\n[相似度] " + similarity + "%");
+            if (StringUtil.isNotEmpty(similarity)) {
+                resultStr.append("\n[相似度] " + similarity + "%");
+            }
             resultStr.append("\n[P站id] " + pixivId);
             resultStr.append("\n[标题] " + title);
             resultStr.append("\n[作者] " + memberName);
@@ -167,18 +200,26 @@ public class PixivService {
      * 带图片后缀的那种，比如
      * https://i.pximg.net/img-original/img/2018/03/31/01/10/08/67994735_p0.png
      *
-     * @param url p站图片链接
+     * @param url     p站图片链接
+     * @param pixivId p站图片id，用于防爬链，必须跟url中的id一致
      * @return 下载后的本地连接
      */
-    private static String getPixivImgByPixivImgUrl(String url) throws IOException {
+    private static String getPixivImgByPixivImgUrl(String url, Long pixivId) throws IOException {
         BotRabbit.bot.getLogger().debug("Pixiv image download:" + url);
         //加入p站防爬链
+        //目前一共遇到的
+        //1.似乎是新连接，最近UI改了 https://i.pximg.net/img-original/img/2020/02/17/22/07/00/79561788_p0.jpg
+        //Referer: https://www.pixiv.net/artworks/79561788
+        //2.没研究出来的链接，还是403，但是把域名替换成正常链接的域名，可以正常获取到数据 https://i-cf.pximg.net/img-original/img/2020/02/17/22/07/00/79561788_p0.jpg
         HashMap<String, String> header = new HashMap<>();
-        header.put("referer", "http://www.pixiv.net/");
+        if (url.contains("i-cf.pximg.net")) {
+            url = url.replace("i-cf.pximg.net", "i.pximg.net");
+        }
+        header.put("referer", "https://www.pixiv.net/artworks/" + pixivId);
         // 创建代理
-//        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1",8080));
+        Proxy proxy = HttpUtil.getProxy();
         //下载图片
-        return ImageUtil.downloadImage(header, url, ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "pixiv", null);
+        return ImageUtil.downloadImage(header, url, ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "pixiv", null, proxy);
     }
 
     /**
@@ -187,7 +228,7 @@ public class PixivService {
      * @param url p站图片链接
      * @return cq码或者错误信息
      */
-    private static String getPixivImgCQByPixivImgUrl(String url) throws IOException {
+    private static String getPixivImgCQByPixivImgUrl(String url, Long pixivId) throws IOException {
         //先检测是否已下载，如果已下载直接返回CQ，以p站图片名称为key
         String pixivImgFileName = url.substring(url.lastIndexOf("/") + 1);
         String localPixivFilePath = ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "pixiv" + File.separator + pixivImgFileName;
@@ -202,12 +243,18 @@ public class PixivService {
         }
 
         String imgCQ = null;
-        String localUrl = getPixivImgByPixivImgUrl(url);
-        if (StringUtil.isNotEmpty(localUrl)) {
-            imgCQ = ImageService.parseCQBuLocalImagePath(localUrl);
-        }
-        if (StringUtil.isEmpty(imgCQ)) {
-            imgCQ = ConstantImage.PIXIV_IMAGE_DOWNLOAD_FAIL;
+        try {
+            String localUrl = getPixivImgByPixivImgUrl(url, pixivId);
+            if (StringUtil.isNotEmpty(localUrl)) {
+                imgCQ = ImageService.parseCQBuLocalImagePath(localUrl);
+            }
+            if (StringUtil.isEmpty(imgCQ)) {
+                imgCQ = ConstantImage.PIXIV_IMAGE_DOWNLOAD_FAIL;
+            }
+        } catch (FileNotFoundException fileNotFoundEx) {
+            //图片被删了
+            BotRabbit.bot.getLogger().error("PixivService getPixivImgCQByPixivImgUrl " + ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString(), fileNotFoundEx);
+            imgCQ = ConstantImage.PIXIV_IMAGE_DELETE;
         }
         return imgCQ;
     }

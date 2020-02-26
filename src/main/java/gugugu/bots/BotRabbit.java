@@ -34,6 +34,10 @@ public class BotRabbit {
     private static final int POST_PORT = 31032;
     //酷Q地址
     private static final String POST_URL = "127.0.0.1";
+    //代理地址
+    public static final String PROXY_ADDRESS = "127.0.0.1";
+    //代理端口
+    public static final int PROXY_PROT = 31051;
 
     //机器人对象，方便别的地方引用
     public static PicqBotX bot;
@@ -105,6 +109,7 @@ public class BotRabbit {
             new CommandConfig(),
             new CommandnCov(),
             new CommandImageSearch(),
+            new CommandPid(),
             new CommandPixivRank(),
             new CommandAnimeSearch()
     };

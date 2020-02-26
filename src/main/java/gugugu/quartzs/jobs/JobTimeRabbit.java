@@ -120,10 +120,9 @@ public class JobTimeRabbit implements Job {
 
     //nCoV疫情兔子
     private void nCoV() {
-        //每天凌晨3点，早上10点，下午2点，下午7点，下午11点推送
-        //大晚上的就不发了
+        //每天9点推送一次，现在疫情数据没那么值得关注了
         int hour = DateUtil.getHour();
-        if (hour != 3 && hour != 10 & hour != 14 & hour != 19 & hour != 23) {
+        if (hour != 21) {
             return;
         }
 
@@ -145,7 +144,7 @@ public class JobTimeRabbit implements Job {
 
         try {
             //获取日榜前3
-            List<InfoPixivRankImage> imageList = PixivService.getPixivIllustRank(1, 3);
+            List<InfoPixivRankImage> imageList = PixivService.getPixivIllustRank(1, ConstantImage.PIXIV_IMAGE_PAGESIZE);
             for (InfoPixivRankImage imageInfo : imageList) {
                 //拼接一个发送一个，中间间隔5秒
                 String resultStr = PixivService.parsePixivImgInfoToGroupMsg(imageInfo);

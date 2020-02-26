@@ -5,6 +5,7 @@ import gugugu.bots.BotRabbit;
 
 import javax.net.ssl.*;
 import java.io.*;
+import java.net.Proxy;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -35,6 +36,10 @@ public class HttpsUtil {
     }
 
     private static HttpsURLConnection getHttpsURLConnection(String uri, String method) throws IOException {
+        return getHttpsURLConnection(uri, method, null);
+    }
+
+    private static HttpsURLConnection getHttpsURLConnection(String uri, String method, Proxy proxy) throws IOException {
         SSLContext ctx = null;
         try {
             ctx = SSLContext.getInstance("TLS");
@@ -47,7 +52,13 @@ public class HttpsUtil {
         SSLSocketFactory ssf = ctx.getSocketFactory();
 
         URL url = new URL(uri);
-        HttpsURLConnection httpsConn = (HttpsURLConnection) url.openConnection();
+
+        HttpsURLConnection httpsConn = null;
+        if (null != proxy) {
+            httpsConn = (HttpsURLConnection) url.openConnection(proxy);
+        } else {
+            httpsConn = (HttpsURLConnection) url.openConnection();
+        }
         httpsConn.setSSLSocketFactory(ssf);
         httpsConn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
 //        httpsConn.setRequestProperty("Authorization", "username");
@@ -96,8 +107,12 @@ public class HttpsUtil {
     }
 
     public static byte[] doGet(String uri) throws IOException {
+        return doGet(uri, null);
+    }
+
+    public static byte[] doGet(String uri, Proxy proxy) throws IOException {
         BotRabbit.bot.getLogger().debug("Http get:" + uri);
-        HttpsURLConnection httpsConn = getHttpsURLConnection(uri, "GET");
+        HttpsURLConnection httpsConn = getHttpsURLConnection(uri, "GET", proxy);
         return getBytesFromStream(httpsConn.getInputStream());
     }
 

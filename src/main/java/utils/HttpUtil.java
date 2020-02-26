@@ -1,5 +1,6 @@
 package utils;
 
+import gugugu.bots.BotRabbit;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,9 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Set;
@@ -128,9 +127,53 @@ public class HttpUtil {
         return "?" + urlEncode.substring(1);
     }
 
+    /**
+     * 检查端口是否可用
+     * 经过测试，好像只要端口被占用了就判定链接成功
+     * ssr不开局域网端口，或者开了以后没开代理，端口也是通的
+     *
+     * @param address 地址
+     * @param prot    端口
+     * @return 是否可用
+     */
+    public static boolean checkProt(String address, int prot) {
+        if (StringUtil.isEmpty(address)) {
+            return false;
+        }
+        Socket socket = new Socket();
+        try {
+            socket.connect(new InetSocketAddress(address, prot));
+            socket.close();
+            return true;
+        } catch (IOException ioEx) {
+            //没那么重要，直接打在控制台里
+            ioEx.printStackTrace();
+        }
+        try {
+            socket.close();
+        } catch (IOException ioEx) {
+            //没那么重要，直接打在控制台里
+            ioEx.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * 获取代理信息
+     */
+    public static Proxy getProxy() {
+        // 创建代理
+        Proxy proxy = null;
+        if (HttpUtil.checkProt(BotRabbit.PROXY_ADDRESS, BotRabbit.PROXY_PROT)) {
+            proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(BotRabbit.PROXY_ADDRESS, BotRabbit.PROXY_PROT));
+        }
+        return proxy;
+    }
+
 
     //简易爬虫 这块代码作为参考
-    public static void stealBug() throws Exception{
+    public static void stealBug() throws Exception {
         //目标页面
         String danbooru = "https://danbooru.donmai.us/posts?page=1&tags=reisen_udongein_inaba";
         //通过请求获取到返回的页面

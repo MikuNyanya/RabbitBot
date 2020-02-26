@@ -43,7 +43,7 @@ public class CommandPixivRank implements GroupCommand {
 
         try {
             //获取日榜前3
-            List<InfoPixivRankImage> imageList = PixivService.getPixivIllustRank(1, 3);
+            List<InfoPixivRankImage> imageList = PixivService.getPixivIllustRank(1, ConstantImage.PIXIV_IMAGE_PAGESIZE);
             for (InfoPixivRankImage imageInfo : imageList) {
                 //拼接一个发送一个，中间间隔5秒
                 String resultStr = PixivService.parsePixivImgInfoToGroupMsg(imageInfo);
