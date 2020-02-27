@@ -24,6 +24,9 @@ import cc.moecraft.utils.HyExpressionResolver;
 import cn.hutool.http.HttpException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import gugugu.filemanage.FileManager;
+import gugugu.filemanage.FileManagerMorseCode;
+import gugugu.quartzs.RabbitBotJob;
 import lombok.Getter;
 
 import java.util.function.Consumer;
@@ -46,8 +49,7 @@ import static cc.moecraft.logger.format.AnsiColor.GREEN;
  * @since 2019-03-23 12:46
  */
 @Getter
-public class PicqBotX
-{
+public class PicqBotX {
     /**
      * Picq配置 | Picq configuration
      */
@@ -108,8 +110,7 @@ public class PicqBotX
      *
      * @param config Picq配置
      */
-    public PicqBotX(PicqConfig config)
-    {
+    public PicqBotX(PicqConfig config) {
         this(config, true);
     }
 
@@ -117,13 +118,11 @@ public class PicqBotX
      * 构造器
      *
      * @param config Picq配置
-     * @param init 是否启动服务器
+     * @param init   是否启动服务器
      */
-    public PicqBotX(PicqConfig config, boolean init)
-    {
+    public PicqBotX(PicqConfig config, boolean init) {
         this.config = config;
-        if (init)
-        {
+        if (init) {
             init();
         }
     }
@@ -133,57 +132,85 @@ public class PicqBotX
      *
      * @param socketPort 接收端口
      */
-    public PicqBotX(int socketPort)
-    {
+    public PicqBotX(int socketPort) {
         this(new PicqConfig(socketPort));
     }
 
     /**
      * 初始化
      */
-    private void init()
-    {
+    private void init() {
         // 设置是否输出 Init 消息
         MiscUtils.disabled = !config.isLogInit();
 
         // 日志管理器
         loggerInstanceManager = new LoggerInstanceManager();
         loggerInstanceManager.addEnvironment(new ConsoleColoredEnv(config.getColorSupportLevel()));
-        if (!config.getLogPath().isEmpty())
-        {
+        if (!config.getLogPath().isEmpty()) {
             loggerInstanceManager.addEnvironment(new FileEnv(config.getLogPath(), config.getLogFileName()));
         }
+
+        int fullProgress = 9;
+        int prgressIndex = 0;
 
         // 日志对象
         logger = loggerInstanceManager.getLoggerInstance("RabbitBot", config.isDebug());
         logger.timing.init();
         logResource(logger, config.getColorSupportLevel() == null ? "splash" : "splash-precolored", "version", VERSION);
-        logInitDone(logger, "日志管理器     ", 0, 6);
+        logInitDone(logger, "日志管理器      ", prgressIndex, fullProgress - prgressIndex);
 
         // 用户和群缓存管理器
         userManager = new UserManager(this);
         groupUserManager = new GroupUserManager(this);
         groupManager = new GroupManager(this);
-        logInitDone(logger, "缓存管理器     ", 1, 5);
+        prgressIndex++;
+        logInitDone(logger, "缓存管理器      ", prgressIndex, fullProgress - prgressIndex);
 
         // Debug设置没啦w
-        logInitDone(logger, "DEBUG设置     ", 2, 4);
+        prgressIndex++;
+        logInitDone(logger, "DEBUG设置        ", prgressIndex, fullProgress - prgressIndex);
 
         // 事件管理器
         eventManager = new EventManager(this);
         eventManager.registerListener(new HyExpressionListener());
-        logInitDone(logger, "事件管理器     ", 3, 3);
+        prgressIndex++;
+        logInitDone(logger, "事件管理器      ", prgressIndex, fullProgress - prgressIndex);
 
         // 账号管理器
         accountManager = new AccountManager();
         eventManager.registerListener(new AccountManagerListener(accountManager));
-        logInitDone(logger, "账号管理器     ", 4, 2);
+        prgressIndex++;
+        logInitDone(logger, "账号管理器      ", prgressIndex, fullProgress - prgressIndex);
 
         // HTTP监听服务器
         httpServer = new PicqHttpServer(config.getSocketPort(), this);
-        logInitDone(logger, "HTTP监听服务器 ", 5, 1);
+        prgressIndex++;
+        logInitDone(logger, "HTTP监听服务器  ", prgressIndex, fullProgress - prgressIndex);
 
+        //加载配置文件 如果以后有系统级的东西加载配置里，这个配置应该优先读取
+        FileManager.loadConfig();
+        prgressIndex++;
+        logInitDone(logger, "外部配置文件     ", prgressIndex, fullProgress - prgressIndex);
 
+        //加载资源
+        FileManager.loadFreeTime();
+        FileManager.loadKeyWordNormal();
+        FileManager.loadKeyWordLike();
+        FileManager.loadAmapAdcode();
+        FileManagerMorseCode.loadFile();
+        prgressIndex++;
+        logInitDone(logger, "外部资源文件     ", prgressIndex, fullProgress - prgressIndex);
+
+        //启动定时任务
+        new RabbitBotJob().jobStart();
+        prgressIndex++;
+        logInitDone(logger, "定时任务       ", prgressIndex, fullProgress - prgressIndex);
+
+        //指令管理器
+        commandManager = new CommandManager(this, ".");
+        eventManager.registerListener(new CommandListener(commandManager));
+        prgressIndex++;
+        logInitDone(logger, "指令管理器      ", prgressIndex, fullProgress - prgressIndex);
 
         logger.timing.clear();
     }
@@ -191,14 +218,13 @@ public class PicqBotX
     /**
      * 添加机器人账号
      *
-     * @param name 名字
-     * @param postUrl 发送URL (Eg. 127.0.0.1)
+     * @param name     名字
+     * @param postUrl  发送URL (Eg. 127.0.0.1)
      * @param postPort 发送端口 (Eg. 31091)
      * @return 是否成功添加
      */
-    public boolean addAccount(String name, String postUrl, int postPort)
-    {
-        return addAccount(name, postUrl, postPort, (ex)->
+    public boolean addAccount(String name, String postUrl, int postPort) {
+        return addAccount(name, postUrl, postPort, (ex) ->
         {
             logger.error("HTTP发送错误: " + ex.getLocalizedMessage());
             logger.error("- 检查一下是不是忘记开酷Q了, 或者写错地址了");
@@ -208,21 +234,17 @@ public class PicqBotX
     /**
      * 添加机器人账号
      *
-     * @param name 名字
-     * @param postUrl 发送URL（Eg. 127.0.0.1）
-     * @param postPort 发送端口（Eg. 31091）
+     * @param name         名字
+     * @param postUrl      发送URL（Eg. 127.0.0.1）
+     * @param postPort     发送端口（Eg. 31091）
      * @param errorHandler 错误处理（HttpException）
      * @return 是否成功添加
      */
-    public boolean addAccount(String name, String postUrl, int postPort, Consumer<HttpException> errorHandler)
-    {
-        try
-        {
+    public boolean addAccount(String name, String postUrl, int postPort, Consumer<HttpException> errorHandler) {
+        try {
             this.accountManager.addAccount(new BotAccount(name, this, postUrl, postPort));
             return true;
-        }
-        catch (HttpException ex)
-        {
+        } catch (HttpException ex) {
             errorHandler.accept(ex);
             return false;
         }
@@ -231,32 +253,15 @@ public class PicqBotX
     /**
      * 启动机器人
      */
-    public void startBot()
-    {
-        if (!verifyHttpPluginVersion())
-        {
+    public void startBot() {
+        if (!verifyHttpPluginVersion()) {
             logger.error("验证失败, 请检查上面的错误信息再重试启动服务器.");
             throw new VerifyFailedException();
         }
 
         logger.log(GREEN + "正在启动...");
         httpServer.start();
-    }
-
-    /**
-     * 初始化指令管理器
-     *
-     * @param prefixes 前缀
-     */
-    public void enableCommandManager(String... prefixes)
-    {
-        logger.timing.init();
-
-        commandManager = new CommandManager(this, prefixes);
-        eventManager.registerListener(new CommandListener(commandManager));
-        logInitDone(logger, "指令管理器     ", 6, 0);
-
-        logger.timing.clear();
+        logger.log(GREEN + "======Rabbit ready======");
     }
 
     /**
@@ -264,57 +269,45 @@ public class PicqBotX
      *
      * @return 是否通过验证
      */
-    public boolean verifyHttpPluginVersion()
-    {
-        if (config.isNoVerify())
-        {
+    public boolean verifyHttpPluginVersion() {
+        if (config.isNoVerify()) {
             logger.warning("已跳过版本验证w");
             return true;
         }
 
-        for (BotAccount botAccount : accountManager.getAccounts())
-        {
+        for (BotAccount botAccount : accountManager.getAccounts()) {
             String prefix = "账号 " + botAccount.getName() + ": ";
 
-            try
-            {
+            try {
                 RVersionInfo versionInfo = botAccount.getHttpApi().getVersionInfo().getData();
 
-                if (!versionInfo.getPluginVersion().matches(HTTP_API_VERSION_DETECTION))
-                {
+                if (!versionInfo.getPluginVersion().matches(HTTP_API_VERSION_DETECTION)) {
                     logger.error(prefix + "HTTP插件版本不正确, 已停止启动");
                     logger.error("- 当前版本: " + versionInfo.getPluginVersion());
                     logger.error("- 兼容的版本: " + HTTP_API_VERSION_DETECTION);
                     return false;
                 }
 
-                if (!versionInfo.getCoolqEdition().equalsIgnoreCase("pro"))
-                {
-                    if(config.isLogInit()){
+                if (!versionInfo.getCoolqEdition().equalsIgnoreCase("pro")) {
+                    if (config.isLogInit()) {
                         logger.warning(prefix + "版本正确, 不过用酷Q Pro的话效果更好哦!");
                     }
                 }
-            }
-            catch (HttpException e)
-            {
-                if (e.getMessage().toLowerCase().contains("connection"))
-                {
+            } catch (HttpException e) {
+                if (e.getMessage().toLowerCase().contains("connection")) {
                     logger.error("HTTP发送地址验证失败, 已停止启动");
                     logger.error("- 请检查酷Q是否已经启动");
                     logger.error("- 请检查酷Q的接收端口是否和Picq的发送端口一样");
                     logger.error("- 请检查你的发送IP是不是写错了");
                     logger.error("- 如果是向外, 请检查这个主机有没有网络连接");
-                }
-                else
-                {
+                } else {
                     logger.error("验证失败, HTTP发送错误: ");
                 }
                 logger.error(e);
                 return false;
             }
 
-            if(config.isLogInit())
-            {
+            if (config.isLogInit()) {
                 logger.log(AnsiColor.YELLOW + prefix + AnsiColor.GREEN + "  版本验证完成!");
             }
         }
@@ -326,19 +319,17 @@ public class PicqBotX
      *
      * @param value 是否替换
      */
-    public void setUniversalHyExpSupport(boolean value)
-    {
+    public void setUniversalHyExpSupport(boolean value) {
         setUniversalHyExpSupport(value, true);
     }
 
     /**
      * 设置是否替换HyExp表达式
      *
-     * @param value 是否替换
+     * @param value    是否替换
      * @param safeMode 是否安全模式 (推荐是)
      */
-    public void setUniversalHyExpSupport(boolean value, boolean safeMode)
-    {
+    public void setUniversalHyExpSupport(boolean value, boolean safeMode) {
         hyExpressionResolver = value ? new HyExpressionResolver(safeMode) : null;
     }
 
@@ -347,8 +338,7 @@ public class PicqBotX
      *
      * @return Debug 信息
      */
-    public String printDebugSupportInfo()
-    {
+    public String printDebugSupportInfo() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         MessageBuilder builder = new MessageBuilder()
