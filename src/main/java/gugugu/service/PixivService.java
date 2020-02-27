@@ -133,8 +133,12 @@ public class PixivService {
         try {
             pixivResult = getImgsByPixivId(pixivId);
 
-            if (null == pixivResult || !"success".equalsIgnoreCase(pixivResult.getStatus())) {
+            if (null == pixivResult) {
                 return ConstantImage.PIXIV_ID_GET_FAIL_GROUP_MESSAGE + "(" + pixivId + ")";
+            }
+            if (null != pixivResult.getHas_error() && pixivResult.getHas_error()) {
+                //接口错误信息
+                return pixivResult.getErrors().getSystem().getMessage() + "(" + pixivId + ")";
             }
 
             //Saucenao搜索结果相似度
@@ -189,9 +193,6 @@ public class PixivService {
         PixivImjadIllustGet request = new PixivImjadIllustGet();
         request.setPixivId(pixivId);
         request.doRequest();
-        if (!request.isSuccess()) {
-            return null;
-        }
         return request.getEntity();
     }
 

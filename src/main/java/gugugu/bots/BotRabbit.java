@@ -111,7 +111,8 @@ public class BotRabbit {
             new CommandImageSearch(),
             new CommandPid(),
             new CommandPixivRank(),
-            new CommandAnimeSearch()
+            new CommandAnimeSearch(),
+            new CommandMorseCode()
     };
 
     /**

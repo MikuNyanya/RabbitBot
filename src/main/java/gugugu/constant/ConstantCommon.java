@@ -37,6 +37,8 @@ public class ConstantCommon {
     public static final String MEMBER = "member";
 
 
+    public static final String ERROR_UNKONW = "未知错误";
+    public static final String API_BODY_EMPTY = "请求结果报文为空";
     public static final String COMMAND_ERROR = "指令[%s]无效";
     public static final String COMMAND_ROLE_ADMIN = "该指令需要管理权限";
     public static final List<String> COMMAND_MASTER_ONLY = Arrays.asList(

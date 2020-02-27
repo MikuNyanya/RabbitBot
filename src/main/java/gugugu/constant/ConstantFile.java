@@ -19,6 +19,8 @@ public class ConstantFile extends ConstantCommon {
     public static final String APPEND_KEYWORD_FILE_LIKE_PATH = "src/main/resources/files/key_word_like.txt";
     //客制化 高德地图城市代码 文件相对路径
     public static final String APPEND_AMAPADCODE_FILE_PATH = "src/main/resources/files/AMap_adcode_citycode.txt";
+    //客制化 摩尔斯电码对照表 文件相对路径
+    public static final String APPEND_MORSECODE_FILE_PATH = "src/main/resources/files/morsecode.txt";
 
     //加载文件 到系统
     public static final String FILE_COMMAND_LOAD = "load";

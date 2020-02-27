@@ -7,7 +7,8 @@ package gugugu.constant;
  * 高德地图相关
  */
 public class ConstantConfig extends ConstantCommon {
-    public static final String ARGS_ERROR = "参数错误\n.config [action] [configName] [configValue]";
+    public static final String ARGS_ERROR = ".config [action] [configName] [configValue]" +
+            "\nsinceId,amapKey,saucenaoKey,weiboToken,weiboNewStatus,pixivImageIgnore";
     public static final String CONFIG_NAME_EMPTY = "参数名称不能为空";
     public static final String CONFIG_VALUE_EMPTY = "参数值不能为空";
     public static final String CONFIG_SET_SUCCESS = "参数设置完成";

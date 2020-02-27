@@ -25,4 +25,8 @@ public class ImjadPixivResult {
     private int count;
     //图片搜索结果，如果是根据图片id获取的，一般只有一个结果
     private List<ImjadPixivResponse> response;
+    //是否有错误，接口正常时不会返回该字段
+    private Boolean has_error;
+    //错误信息，接口请求失败的时候会有
+    private ImjadPixivError errors;
 }

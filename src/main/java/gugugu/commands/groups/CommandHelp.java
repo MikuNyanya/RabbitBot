@@ -49,6 +49,7 @@ public class CommandHelp implements GroupCommand {
         msg.append("[.搜图] 以图搜图，ACG向\n");
         msg.append("[.搜番] 以图搜番，ACG向\n");
         msg.append("[.pid] 根据p站图片id获取图片以及信息\n");
+        msg.append("[.摩尔斯] 摩尔斯电码相关\n");
         msg.append("=============\n");
         return msg.toString();
     }
