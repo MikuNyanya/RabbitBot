@@ -19,10 +19,13 @@ public class ImjadPixivStats {
      * commented_count : 143
      */
 
+    //分数，应该是P站的综合评价
     private int scored_count;
+    //分数，比上面分数后面多了一个0
     private int score;
     //点击数
     private int views_count;
+    //评论数
     private int commented_count;
     //收藏数
     private ImjadPixivFavoritedCount favorited_count;

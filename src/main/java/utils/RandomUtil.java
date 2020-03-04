@@ -1,6 +1,8 @@
 package utils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -67,7 +69,7 @@ public class RandomUtil {
         //获取消息
         String msg = strList.get(RandomUtil.roll(strList.size() - 1));
         //针对换行符做处理
-        return msg.replaceAll("\\\\n","\n");
+        return msg.replaceAll("\\\\n", "\n");
     }
 
     /**
@@ -87,6 +89,37 @@ public class RandomUtil {
         //移除信息
         strList.remove(randomNum);
         //针对换行符做处理
-        return msg.replaceAll("\\\\n","\n");
+        return msg.replaceAll("\\\\n", "\n");
+    }
+
+    /**
+     * 根据权重随机出一个元素
+     *
+     * @param objAdditionMap key为要随机的元素，value为权重 单个元素的权重最小0.01 权重可以总和突破100%，但建议控制在正常综合100%的范围内
+     * @return 根据权重随机出的元素
+     */
+    public static Object rollObjByAddition(Map<Object, Double> objAdditionMap) {
+        if (null == objAdditionMap || objAdditionMap.size() <= 0) {
+            return null;
+        }
+        //对象都是引用传递，放心搞
+        List<Object> objectList = new ArrayList<>();
+        //根据权重铺开list
+        for (Object obj : objAdditionMap.keySet()) {
+            //获取权重
+            Double addition = objAdditionMap.get(obj);
+            //扩大100倍，用以增加精度，并转为整数
+            Integer additionNum = NumberUtil.toInt(addition * 100);
+            for (int i = 1; i <= additionNum; i++) {
+                objectList.add(obj);
+            }
+        }
+
+        //根据list中的元素数量，随机出一个数字
+        int listCount = objectList.size();
+        //防止下标溢出要-1
+        int rollNum = roll(listCount - 1);
+
+        return objectList.get(rollNum);
     }
 }

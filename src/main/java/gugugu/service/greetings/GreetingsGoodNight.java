@@ -1,5 +1,7 @@
 package gugugu.service.greetings;
 
+import utils.DateUtil;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +42,8 @@ public class GreetingsGoodNight extends GreetingsBase {
     protected List<String> afternoon() {
         return Arrays.asList(
                 "晚安。。。？",
-                "现在睡觉是不是太早了点"
+                "现在睡觉是不是太早了点",
+                "这才" + DateUtil.getHour() + "点，睡的这么早嘛"
         );
     }
 

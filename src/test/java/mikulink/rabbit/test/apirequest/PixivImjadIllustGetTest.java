@@ -1,10 +1,7 @@
 package mikulink.rabbit.test.apirequest;
 
 import gugugu.apirequest.imgsearch.PixivImjadIllustGet;
-import gugugu.apirequest.weibo.WeiboHomeTimelineGet;
-import gugugu.constant.ConstantCommon;
 import gugugu.entity.apirequest.imgsearch.pixiv.ImjadPixivResult;
-import gugugu.entity.apirequest.weibo.InfoWeiboHomeTimeline;
 import org.junit.Test;
 
 /**

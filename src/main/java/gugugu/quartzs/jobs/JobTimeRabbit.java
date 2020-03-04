@@ -136,9 +136,9 @@ public class JobTimeRabbit implements Job {
 
     //P站日榜兔子
     private void pixivRankDay() {
-        //每天晚上19点推送日榜信息
+        //每天晚上20点推送日榜信息，不然7点我还没到家，背着兔叽在路上没网络
         int hour = DateUtil.getHour();
-        if (hour != 19) {
+        if (hour != 20) {
             return;
         }
 

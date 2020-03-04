@@ -36,9 +36,23 @@ public class NumberUtil {
      */
     public static Integer toInt(String str) {
         if (StringUtil.isEmpty(str) || !isNumberOnly(str)) {
-            return 0;
+            return null;
         }
         return Integer.valueOf(str);
+    }
+
+    /**
+     * double转化为Integer数字
+     * 重载
+     *
+     * @param doubleNum 输入double
+     * @return 输出数字
+     */
+    public static Integer toInt(Double doubleNum) {
+        if (null == doubleNum) {
+            return 0;
+        }
+        return doubleNum.intValue();
     }
 
     /**
@@ -65,5 +79,64 @@ public class NumberUtil {
             return 0L;
         }
         return Long.valueOf(str);
+    }
+
+
+    /**
+     * double转为int，向上取整
+     * 可用于分页计算什么的
+     *
+     * @param num 小数
+     * @return 向上取整的整数
+     */
+    public static Integer toIntUp(Double num) {
+        if (null == num) {
+            return null;
+        }
+        if (0d == num) {
+            return 0;
+        }
+
+        Integer intNum = null;
+        //取整数部分
+        intNum = num.intValue();
+
+        //存在小数则向上加一
+        if (num < (intNum * 1.0)) {
+            intNum = intNum + 1;
+        }
+
+        return intNum;
+    }
+
+    /**
+     * 保留后面小数位
+     * 该方法为直接截取，不是四舍五入
+     * 小于指定位数的会被java直接忽略（大概
+     *
+     * @param num   数字
+     * @param point 保留几位小数
+     * @return 截取后指定小数位的数字
+     */
+    public static Double keepDecimalPoint(Double num, int point) {
+        if (null == num) {
+            return 0d;
+        }
+        //使用字符串截取的方法，那些数字计算方法都不靠谱
+        String numStr = String.valueOf(num);
+        if (!numStr.contains(".")) {
+            return num;
+        }
+        int pointIndex = numStr.indexOf(".");
+
+        //小于指定位数，直接返回即可
+        if (numStr.substring(pointIndex + 1).length() < point) {
+            return num;
+        }
+
+        //截取小数
+        String resultNumStr = numStr.substring(0, pointIndex + point + 1);
+
+        return toDouble(resultNumStr);
     }
 }

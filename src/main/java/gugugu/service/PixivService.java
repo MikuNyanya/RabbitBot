@@ -2,6 +2,7 @@ package gugugu.service;
 
 import gugugu.apirequest.imgsearch.PixivImjadIllustGet;
 import gugugu.apirequest.imgsearch.PixivImjadIllustRankGet;
+import gugugu.apirequest.imgsearch.PixivImjadIllustSearch;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
@@ -90,6 +91,77 @@ public class PixivService {
     }
 
     /**
+     * 根据标签，搜索出一张图片
+     * 会从所有结果中随机出一张
+     * 根据图片分数会有不同的随机权重
+     *
+     * @param tag 标签 参数在上一层过滤好再进来
+     * @return 拼装好的群消息
+     */
+    public static String getPixivIllustByTag(String tag) throws IOException {
+        if (StringUtil.isEmpty(tag)) {
+            return "";
+        }
+
+        int pageSize = 30;
+
+        //1.查询这个tag下的总结果
+        PixivImjadIllustSearch request = new PixivImjadIllustSearch("tag", tag, 1, 1);
+        request.doRequest();
+        ImjadPixivResult result = request.getEntity();
+        ImjadPixivPagination pagination = result.getPagination();
+        //总结果数量
+        int total = pagination.getTotal();
+
+        //2.随机获取结果中的一条
+        //先按照指定页数算出有多少页，随机其中一页
+        int totalPage = NumberUtil.toIntUp(total / pageSize * 1.0);
+        //随机一个页数
+        int randomPage = RandomUtil.roll(totalPage);
+        if (0 >= randomPage) {
+            randomPage = 1;
+        }
+
+        //获取该页数的数据
+        request = new PixivImjadIllustSearch("tag", tag, randomPage, pageSize);
+        request.doRequest();
+        //这里面至少会有1条有效数据
+        result = request.getEntity();
+
+        //累积得分
+        Integer scoredCount = 0;
+        Map<Long, Integer> scoredMap = new HashMap<>();
+        Map<Object, Double> additionMap = new HashMap<>();
+        Map<Long, ImjadPixivResponse> imgRspMap = new HashMap<>();
+
+        List<ImjadPixivResponse> responses = result.getResponse();
+        for (ImjadPixivResponse response : responses) {
+            Integer scored = response.getStats().getScored_count();
+            scoredCount += scored;
+            scoredMap.put(response.getId(), scored);
+            imgRspMap.put(response.getId(), response);
+        }
+
+        //计算权重
+        for (Long pixivId : scoredMap.keySet()) {
+            Integer score = scoredMap.get(pixivId);
+            //结果肯定介于0-1之间，然后换算成百分比，截取两位小数
+            Double addition = NumberUtil.keepDecimalPoint((score * 1.0) / scoredCount * 100.0, 2);
+            additionMap.put(pixivId, addition);
+        }
+
+        //根据权重随机出一个元素
+        Object obj = RandomUtil.rollObjByAddition(additionMap);
+
+        //3.获取该图片信息
+        Long pixivId = (Long) obj;
+        ImjadPixivResponse respInfo = imgRspMap.get(pixivId);
+
+        //4.返回结果
+        return parsePixivImgInfoByApiInfo(respInfo, null);
+    }
+
+    /**
      * 拼装识图结果_p站
      * 搜索结果只会取一个
      *
@@ -149,33 +221,8 @@ public class PixivService {
 
             List<ImjadPixivResponse> responses = pixivResult.getResponse();
             ImjadPixivResponse response = responses.get(0);
-            //图片标题
-            String title = response.getTitle();
-            //图片简介
-            String caption = response.getCaption();
-            //作者名称
-            String memberName = response.getUser().getName();
-            //图片创建时间
-            String createDate = response.getCreated_time();
 
-            //图片cq码
-            String pixivImgCQ = getPixivImgCQByPixivImgUrl(response.getImage_urls().getLarge(), Long.valueOf(pixivId));
-
-            //todo 这块业务应该丢在最上层
-            StringBuilder resultStr = new StringBuilder();
-            resultStr.append(pixivImgCQ);
-            if (null != response.getMetadata()) {
-                resultStr.append("\n该Pid包含多张图片");
-            }
-            if (StringUtil.isNotEmpty(similarity)) {
-                resultStr.append("\n[相似度] " + similarity + "%");
-            }
-            resultStr.append("\n[P站id] " + pixivId);
-            resultStr.append("\n[标题] " + title);
-            resultStr.append("\n[作者] " + memberName);
-            resultStr.append("\n[上传时间] " + createDate);
-//            resultStr.append("\n[图片简介] " + caption);
-            return resultStr.toString();
+            return parsePixivImgInfoByApiInfo(response, similarity);
         } catch (IOException ioEx) {
             BotRabbit.bot.getLogger().error("PixivService " + ConstantImage.IMJAD_PIXIV_ID_API_ERROR + ioEx.toString(), ioEx);
             return ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE;
@@ -258,6 +305,43 @@ public class PixivService {
             imgCQ = ConstantImage.PIXIV_IMAGE_DELETE;
         }
         return imgCQ;
+    }
+
+    /**
+     * 接口返回的图片信息拼装为群消息
+     *
+     * @param response   接口返回对象
+     * @param similarity 相似度
+     * @return 群消息
+     * @throws IOException api异常
+     */
+    private static String parsePixivImgInfoByApiInfo(ImjadPixivResponse response, String similarity) throws IOException {
+        //图片标题
+        String title = response.getTitle();
+        //图片简介
+        String caption = response.getCaption();
+        //作者名称
+        String memberName = response.getUser().getName();
+        //图片创建时间
+        String createDate = response.getCreated_time();
+
+        //图片cq码
+        String pixivImgCQ = getPixivImgCQByPixivImgUrl(response.getImage_urls().getLarge(), response.getId());
+
+        StringBuilder resultStr = new StringBuilder();
+        resultStr.append(pixivImgCQ);
+        if (null != response.getMetadata()) {
+            resultStr.append("\n该Pid包含多张图片");
+        }
+        if (StringUtil.isNotEmpty(similarity)) {
+            resultStr.append("\n[相似度] " + similarity + "%");
+        }
+        resultStr.append("\n[P站id] " + response.getId());
+        resultStr.append("\n[标题] " + title);
+        resultStr.append("\n[作者] " + memberName);
+        resultStr.append("\n[上传时间] " + createDate);
+//            resultStr.append("\n[图片简介] " + caption);
+        return resultStr.toString();
     }
 
     /**

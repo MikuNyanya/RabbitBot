@@ -47,11 +47,6 @@ public class GreetingsMorning extends GreetingsBase {
                 "早安。。？",
                 "早上好。。。",
                 "早啊早啊，节省了一顿早饭，恭喜恭喜"
-//                "午安",
-//                "午安~",
-//                "中午好",
-//                "中午好~",
-//                "It's High----------- noon"
         );
     }
 

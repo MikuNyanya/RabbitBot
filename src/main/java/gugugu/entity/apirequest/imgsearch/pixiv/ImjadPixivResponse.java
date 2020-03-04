@@ -42,7 +42,7 @@ public class ImjadPixivResponse {
      */
 
     //p站图片id
-    private int id;
+    private long id;
     //图片标题
     private String title;
     //图片简介
