@@ -4,8 +4,10 @@ import gugugu.apirequest.imgsearch.SaucenaoImageSearch;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
+import gugugu.entity.ImageInfo;
 import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchInfoResult;
 import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchResult;
+import net.coobird.thumbnailator.Thumbnails;
 import utils.*;
 
 import java.io.File;
@@ -108,6 +110,27 @@ public class ImageService {
 
         //获取图片名称
         String imageFullName = FileUtil.getFileName(localImagePath);
+
+        //如果图片超出大小，则缩小图片，不然无法通过酷Q发送
+        //判断图片的大小
+        ImageInfo imageInfo = ImageUtil.getImageInfo(localImagePath);
+        boolean overSize = ConstantImage.IMAGE_SCALE_MIN_SIZE * 1024 * 1024 < imageInfo.getSize();
+        if (overSize) {
+            //生成修改后的文件名和路径，后缀为jpg
+            imageFullName = imageFullName.substring(0, imageFullName.lastIndexOf("."));
+            String scaleImgName = ConstantImage.IMAGE_SCALE_PREFIX + imageFullName + ".jpg";
+            String scaleImgPath = ConstantImage.DEFAULT_IMAGE_SCALE_SAVE_PATH + File.separator + scaleImgName;
+            //如果已经存在就不重复处理了
+            if (FileUtil.exists(scaleImgPath)) {
+                //压缩图片尺寸，实际上这个方法的作用是向指定尺寸数值靠拢，比例不会变，取长宽中最接近指定数值的一方为准
+//              Thumbnails.of(localImagePath).size(2500, 2500).toFile(scaleImgPath);
+                //处理出来jpg的dpi是91，文件挺小的 所以基本上太大的文件转为jpg就行了
+                Thumbnails.of(localImagePath).scale(1).toFile(scaleImgPath);
+            }
+            //使用处理后的本地图片路径和文件名
+            imageFullName = scaleImgName;
+            localImagePath = scaleImgPath;
+        }
 
         //检查酷Q目录下image是否存在该图片（同名文件就行，严格点需要做MD5校验确认是否是同一文件，但没必要）
         boolean imageExists = FileUtil.exists(ConstantImage.COOLQ_IMAGE_SAVE_PATH + File.separator + imageFullName);

@@ -9,7 +9,7 @@ import cc.moecraft.icq.user.GroupUser;
 import cc.moecraft.icq.user.User;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import gugugu.entity.InfoGroupUser;
+import gugugu.entity.GroupUserInfo;
 import lombok.*;
 
 /**
@@ -39,7 +39,7 @@ public class EventGroupMessage extends EventGroupOrDiscussMessage
      */
     @SerializedName("sender")
     @Expose
-    public InfoGroupUser groupUserInfo;
+    public GroupUserInfo groupUserInfo;
 
     @SerializedName("sub_type")
     @Expose

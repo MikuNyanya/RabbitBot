@@ -1,13 +1,18 @@
 package utils;
 
 import gugugu.constant.ConstantImage;
+import gugugu.entity.ImageInfo;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -168,5 +173,39 @@ public class ImageUtil {
             return "";
         }
         return String.format(ConstantImage.IMAGE_CQ, imageFullName);
+    }
+
+    /**
+     * 获取本地图片信息
+     *
+     * @param imagePath 图片文件路径
+     * @return 图片信息
+     */
+    public static ImageInfo getImageInfo(String imagePath) throws IOException {
+        //这个方法太慢了
+//        BufferedImage sourceImg = ImageIO.read(new FileInputStream(new File(imagePath)));
+//        sourceImg.getWidth();
+//        sourceImg.getHeight();
+
+
+        //没研究透，复制来的代码，但比上面的快多了
+        //获取图片后缀,不要"."
+        String imgType = FileUtil.getFileSuffix(imagePath).replace(".", "");
+        Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName(imgType.toLowerCase());
+        ImageReader reader = readers.next();
+        ImageInputStream iis = ImageIO.createImageInputStream(new File(imagePath));
+        reader.setInput(iis, true);
+
+        int width = reader.getWidth(0);
+        int height = reader.getHeight(0);
+
+        ImageInfo imageInfo = new ImageInfo();
+        imageInfo.setLocalPath(imagePath);
+        imageInfo.setWidth(width);
+        imageInfo.setHeight(height);
+        imageInfo.setType(imgType);
+        imageInfo.setSize(new File(imagePath).length());
+
+        return imageInfo;
     }
 }

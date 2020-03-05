@@ -13,11 +13,17 @@ import java.util.Map;
 public class ConstantImage extends ConstantCommon {
     //默认的文件储存路径
     public static final String DEFAULT_IMAGE_SAVE_PATH = "src/main/resources/images";
+    //处理后的图片存放目录
+    public static final String DEFAULT_IMAGE_SCALE_SAVE_PATH = "src/main/resources/images/scale";
     //酷Q的图片目录
     public static final String COOLQ_IMAGE_SAVE_PATH = "D:/酷Q Pro/data/image";
 
     //酷Q所需要的图片CQ码 占位符处是文件名（带后缀）
     public static String IMAGE_CQ = "[CQ:image,file=%s]";
+    //经过处理的图片前缀
+    public static String IMAGE_SCALE_PREFIX = "rabbit_scale_";
+    //需要处理的大小阈值(mb)
+    public static double IMAGE_SCALE_MIN_SIZE = 5.5;
 
 
     //鸽子图片的map key

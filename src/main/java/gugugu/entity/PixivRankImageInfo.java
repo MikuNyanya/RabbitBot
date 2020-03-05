@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class InfoPixivRankImage {
+public class PixivRankImageInfo {
     /**
      * 图片P站id
      */

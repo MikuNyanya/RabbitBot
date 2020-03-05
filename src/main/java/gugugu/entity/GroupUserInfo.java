@@ -14,7 +14,7 @@ import utils.StringUtil;
  * 群用户信息对象
  */
 @Getter
-public class InfoGroupUser {
+public class GroupUserInfo {
     /**
      * 年龄
      */

@@ -8,7 +8,7 @@ import cc.moecraft.icq.user.GroupUser;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantWeiboNews;
-import gugugu.entity.InfoGroupUser;
+import gugugu.entity.GroupUserInfo;
 import gugugu.filemanage.FileManager;
 import gugugu.service.WeiboNewsService;
 import utils.NumberUtil;
@@ -37,7 +37,7 @@ public class CommandWeiboNews implements GroupCommand {
     @Override
     public String groupMessage(EventGroupMessage event, GroupUser sender, Group group, String command, ArrayList<String> args) {
         //非管理员禁用该指令
-        InfoGroupUser user = event.getGroupUserInfo();
+        GroupUserInfo user = event.getGroupUserInfo();
         if (!user.isAdmin()) {
             return ConstantWeiboNews.COMMAND_ROLE_ADMIN;
         }

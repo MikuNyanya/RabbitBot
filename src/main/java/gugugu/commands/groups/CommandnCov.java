@@ -6,16 +6,9 @@ import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 import gugugu.bots.BotRabbit;
-import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantConfig;
-import gugugu.constant.ConstantWeiboNews;
-import gugugu.entity.InfoGroupUser;
-import gugugu.filemanage.FileManager;
+import gugugu.entity.GroupUserInfo;
 import gugugu.service.NCoV_2019ReportService;
-import gugugu.service.WeiboNewsService;
-import utils.NumberUtil;
-import utils.RandomUtil;
-import utils.StringUtil;
 
 import java.util.ArrayList;
 
@@ -40,7 +33,7 @@ public class CommandnCov implements GroupCommand {
     @Override
     public String groupMessage(EventGroupMessage event, GroupUser sender, Group group, String command, ArrayList<String> args) {
         //非管理员禁用该指令
-        InfoGroupUser user = event.getGroupUserInfo();
+        GroupUserInfo user = event.getGroupUserInfo();
         //判断权限
         if (!user.isAdmin()) {
             return ConstantConfig.COMMAND_ROLE_ADMIN;

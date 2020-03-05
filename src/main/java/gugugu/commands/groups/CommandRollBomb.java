@@ -6,7 +6,7 @@ import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 import gugugu.constant.ConstantRollBomb;
-import gugugu.entity.InfoGroupUser;
+import gugugu.entity.GroupUserInfo;
 import utils.NumberUtil;
 import utils.RandomUtil;
 import utils.StringUtil;
@@ -29,7 +29,7 @@ public class CommandRollBomb implements GroupCommand {
     //剩余列表
     private List<Integer> list_now = new ArrayList<>();
     private List<Integer> list_bomb = new ArrayList<>();
-    private Map<Integer, InfoGroupUser> map_noob = new HashMap<>();
+    private Map<Integer, GroupUserInfo> map_noob = new HashMap<>();
 
     //状态-游戏未开启
     private final String GAME_OFF = "0";
@@ -301,7 +301,7 @@ public class CommandRollBomb implements GroupCommand {
         StringBuilder msg = new StringBuilder();
         msg.append("===菜鸡列表===");
         for (Integer num : map_noob.keySet()) {
-            InfoGroupUser tempGroupUserInfo = map_noob.get(num);
+            GroupUserInfo tempGroupUserInfo = map_noob.get(num);
             msg.append(String.format("\n[%s]->雷(%s)", tempGroupUserInfo.getGroupUserName(), num));
 
             //边界限制，反正群里没这么多活跃人数

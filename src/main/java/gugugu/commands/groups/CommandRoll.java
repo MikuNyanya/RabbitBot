@@ -5,7 +5,7 @@ import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
-import gugugu.entity.InfoGroupUser;
+import gugugu.entity.GroupUserInfo;
 import utils.RandomUtil;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class CommandRoll implements GroupCommand {
         }
 
         //群员信息
-        InfoGroupUser groupUserInfo = event.getGroupUserInfo();
+        GroupUserInfo groupUserInfo = event.getGroupUserInfo();
         //附加指令
         String commandParam = "";
         if (null != args && args.size() > 0) {

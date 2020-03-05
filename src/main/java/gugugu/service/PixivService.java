@@ -7,7 +7,7 @@ import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantConfig;
 import gugugu.constant.ConstantImage;
-import gugugu.entity.InfoPixivRankImage;
+import gugugu.entity.PixivRankImageInfo;
 import gugugu.entity.apirequest.imgsearch.pixiv.*;
 import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchInfoResult;
 import utils.*;
@@ -33,8 +33,8 @@ public class PixivService {
      * @param pageSize 每页大小
      * @return 日榜图片信息
      */
-    public static List<InfoPixivRankImage> getPixivIllustRank(Integer page, Integer pageSize) throws IOException {
-        List<InfoPixivRankImage> rankImageList = new ArrayList<>();
+    public static List<PixivRankImageInfo> getPixivIllustRank(Integer page, Integer pageSize) throws IOException {
+        List<PixivRankImageInfo> rankImageList = new ArrayList<>();
 
         //请求接口获取日榜信息
         PixivImjadIllustRankGet request = new PixivImjadIllustRankGet();
@@ -63,7 +63,7 @@ public class PixivService {
             String imgCQ = getPixivImgCQByPixivImgUrl(imageDetail.getImage_urls().getLarge(), Long.valueOf(imageDetail.getId()));
 
             //拼接成对象并返回
-            InfoPixivRankImage rankImageInfo = new InfoPixivRankImage();
+            PixivRankImageInfo rankImageInfo = new PixivRankImageInfo();
             //图片cq码
             rankImageInfo.setImgCQ(imgCQ);
             //排行
@@ -372,7 +372,7 @@ public class PixivService {
      * @param infoPixivRankImage p站图片对象
      * @return 群消息
      */
-    public static String parsePixivImgInfoToGroupMsg(InfoPixivRankImage infoPixivRankImage) {
+    public static String parsePixivImgInfoToGroupMsg(PixivRankImageInfo infoPixivRankImage) {
         StringBuilder resultStr = new StringBuilder();
         resultStr.append(infoPixivRankImage.getImgCQ());
         resultStr.append("\n[排名] " + infoPixivRankImage.getRank());

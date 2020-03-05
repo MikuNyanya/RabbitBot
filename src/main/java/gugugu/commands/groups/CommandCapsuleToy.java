@@ -6,7 +6,7 @@ import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 import gugugu.constant.ConstantCapsuleToy;
-import gugugu.entity.InfoGroupUser;
+import gugugu.entity.GroupUserInfo;
 import gugugu.filemanage.FileManager;
 import utils.RandomUtil;
 import utils.StringUtil;
@@ -124,7 +124,7 @@ public class CommandCapsuleToy implements GroupCommand {
      *
      * @return
      */
-    private String timeCheck(InfoGroupUser groupUser) {
+    private String timeCheck(GroupUserInfo groupUser) {
         Long qq = groupUser.getUserId();
         String name = groupUser.getGroupUserName();
 

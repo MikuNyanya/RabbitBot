@@ -112,5 +112,12 @@
             <artifactId>jsoup</artifactId>
             <version>1.9.2</version>
         </dependency>
+
+        <!--google处理图片的工具-->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.9</version>
+        </dependency>
     </dependencies>
 </project>

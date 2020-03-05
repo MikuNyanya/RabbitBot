@@ -141,6 +141,23 @@ public class FileUtil {
     }
 
     /**
+     * 根据文件路径获取目录
+     *
+     * @param fileFullPath 文件路径
+     * @return 文件夹路径
+     */
+    public static String getFilePath(String fileFullPath) {
+        if (StringUtil.isEmpty(fileFullPath)) {
+            return "";
+        }
+        if (!fileFullPath.contains(File.separator)) {
+            return fileFullPath;
+        }
+        //截取最后一个分隔符前面的字段
+        return fileFullPath.substring(0,fileFullPath.lastIndexOf(File.separator));
+    }
+
+    /**
      * 读取指定目录下所有文件，文件夹以及文件夹下的子文件的列表
      *
      * @param path 指定目录

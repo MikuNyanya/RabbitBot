@@ -4,7 +4,7 @@ import gugugu.bots.BotRabbit;
 import gugugu.commands.groups.CommandRP;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
-import gugugu.entity.InfoPixivRankImage;
+import gugugu.entity.PixivRankImageInfo;
 import gugugu.service.NCoV_2019ReportService;
 import gugugu.service.PixivService;
 import gugugu.service.RabbitBotService;
@@ -144,8 +144,8 @@ public class JobTimeRabbit implements Job {
 
         try {
             //获取日榜前3
-            List<InfoPixivRankImage> imageList = PixivService.getPixivIllustRank(1, ConstantImage.PIXIV_IMAGE_PAGESIZE);
-            for (InfoPixivRankImage imageInfo : imageList) {
+            List<PixivRankImageInfo> imageList = PixivService.getPixivIllustRank(1, ConstantImage.PIXIV_IMAGE_PAGESIZE);
+            for (PixivRankImageInfo imageInfo : imageList) {
                 //拼接一个发送一个，中间间隔5秒
                 String resultStr = PixivService.parsePixivImgInfoToGroupMsg(imageInfo);
                 RabbitBotService.sendEveryGroupMsg(resultStr, 2L);

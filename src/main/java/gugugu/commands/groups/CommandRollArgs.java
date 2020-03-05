@@ -5,7 +5,7 @@ import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
-import gugugu.entity.InfoGroupUser;
+import gugugu.entity.GroupUserInfo;
 import utils.RandomUtil;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class CommandRollArgs implements GroupCommand {
         int rollNum = RandomUtil.roll(args.size() - 1);
 
         //群员信息
-        InfoGroupUser groupUserInfo = event.getGroupUserInfo();
+        GroupUserInfo groupUserInfo = event.getGroupUserInfo();
 
         return String.format("为[%s]做出选择：roll=%s", groupUserInfo.getGroupUserName(), args.get(rollNum));
     }

@@ -8,8 +8,8 @@ import cc.moecraft.icq.user.GroupUser;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantImage;
 import gugugu.constant.ConstantWeiboNews;
-import gugugu.entity.InfoGroupUser;
-import gugugu.entity.InfoPixivRankImage;
+import gugugu.entity.GroupUserInfo;
+import gugugu.entity.PixivRankImageInfo;
 import gugugu.service.PixivService;
 
 import java.util.ArrayList;
@@ -36,15 +36,15 @@ public class CommandPixivRank implements GroupCommand {
     @Override
     public String groupMessage(EventGroupMessage event, GroupUser sender, Group group, String command, ArrayList<String> args) {
         //非群主禁用该指令
-        InfoGroupUser user = event.getGroupUserInfo();
+        GroupUserInfo user = event.getGroupUserInfo();
         if (!user.isOwner() && !user.isMaster()) {
             return ConstantWeiboNews.COMMAND_ROLE_ADMIN;
         }
 
         try {
             //获取日榜前3
-            List<InfoPixivRankImage> imageList = PixivService.getPixivIllustRank(1, ConstantImage.PIXIV_IMAGE_PAGESIZE);
-            for (InfoPixivRankImage imageInfo : imageList) {
+            List<PixivRankImageInfo> imageList = PixivService.getPixivIllustRank(1, ConstantImage.PIXIV_IMAGE_PAGESIZE);
+            for (PixivRankImageInfo imageInfo : imageList) {
                 //拼接一个发送一个，中间间隔5秒
                 String resultStr = PixivService.parsePixivImgInfoToGroupMsg(imageInfo);
                 event.getHttpApi().sendGroupMsg(event.getGroupId(), resultStr);
