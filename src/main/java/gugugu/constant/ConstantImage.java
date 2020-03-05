@@ -60,6 +60,8 @@ public class ConstantImage extends ConstantCommon {
     public static final String PIXIV_IMAGE_ID_IS_NUMBER_ONLY = "p站图片id只会是纯数字";
 
     public static final String PIXIV_IMAGE_TAG_IS_EMPTY = "你得给我一个p站图片tag";
+    public static final String PIXIV_IMAGE_TAG_NO_RESULT = "[这个tag没有搜索结果]";
+    public static final String PIXIV_IMAGE_TAG_ALL_R18 = "[这个页全是R18，不予展示]";
     public static final String PIXIV_TAG_GET_ERROR_GROUP_MESSAGE = "根据P站图片tag获取信息异常";
 
     public static final String PIXIV_ID_GET_FAIL_GROUP_MESSAGE = "根据P站图片id获取信息失败";

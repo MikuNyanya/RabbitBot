@@ -5,6 +5,7 @@ import gugugu.apirequest.imgsearch.PixivImjadIllustRankGet;
 import gugugu.apirequest.imgsearch.PixivImjadIllustSearch;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
+import gugugu.constant.ConstantConfig;
 import gugugu.constant.ConstantImage;
 import gugugu.entity.InfoPixivRankImage;
 import gugugu.entity.apirequest.imgsearch.pixiv.*;
@@ -112,10 +113,17 @@ public class PixivService {
         ImjadPixivPagination pagination = result.getPagination();
         //总结果数量
         int total = pagination.getTotal();
+        if (0 >= total) {
+            return ConstantImage.PIXIV_IMAGE_TAG_NO_RESULT;
+        }
 
         //2.随机获取结果中的一条
         //先按照指定页数算出有多少页，随机其中一页
         int totalPage = NumberUtil.toIntUp(total / pageSize * 1.0);
+        //接口限制最多只能获取第1000页，但有时候传递900多也会提示超出1000页，所以限制在800
+        if (totalPage > 800) {
+            totalPage = 800;
+        }
         //随机一个页数
         int randomPage = RandomUtil.roll(totalPage);
         if (0 >= randomPage) {
@@ -127,6 +135,9 @@ public class PixivService {
         request.doRequest();
         //这里面至少会有1条有效数据
         result = request.getEntity();
+        if (null != result.getHas_error() && result.getHas_error()) {
+            return result.getErrors().getSystem().getMessage();
+        }
 
         //累积得分
         Integer scoredCount = 0;
@@ -136,10 +147,21 @@ public class PixivService {
 
         List<ImjadPixivResponse> responses = result.getResponse();
         for (ImjadPixivResponse response : responses) {
+            //r18过滤
+            if ("r18".equalsIgnoreCase(response.getAge_limit())) {
+                String configR18 = ConstantConfig.common_config.get(ConstantConfig.CONFIG_R18);
+                if (StringUtil.isEmpty(configR18) || ConstantCommon.OFF.equalsIgnoreCase(configR18)) {
+                    continue;
+                }
+            }
+
             Integer scored = response.getStats().getScored_count();
             scoredCount += scored;
             scoredMap.put(response.getId(), scored);
             imgRspMap.put(response.getId(), response);
+        }
+        if (0 >= scoredMap.size()) {
+            return ConstantImage.PIXIV_IMAGE_TAG_ALL_R18;
         }
 
         //计算权重
