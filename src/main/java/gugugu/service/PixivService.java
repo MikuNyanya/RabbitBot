@@ -120,9 +120,9 @@ public class PixivService {
         //2.随机获取结果中的一条
         //先按照指定页数算出有多少页，随机其中一页
         int totalPage = NumberUtil.toIntUp(total / pageSize * 1.0);
-        //接口限制最多只能获取第1000页，但有时候传递900多也会提示超出1000页，所以限制在800
-        if (totalPage > 800) {
-            totalPage = 800;
+        //接口限制最多只能获取第1000页，但有时候传递900多也会提示超出1000页，所以限制在800，接口有问题，还是600吧，再多就提示超出1000，迷
+        if (totalPage > 600) {
+            totalPage = 600;
         }
         //随机一个页数
         int randomPage = RandomUtil.roll(totalPage);
@@ -352,7 +352,7 @@ public class PixivService {
 
         StringBuilder resultStr = new StringBuilder();
         resultStr.append(pixivImgCQ);
-        if (null != response.getMetadata()) {
+        if (1 < response.getPage_count()) {
             resultStr.append("\n该Pid包含多张图片");
         }
         if (StringUtil.isNotEmpty(similarity)) {
