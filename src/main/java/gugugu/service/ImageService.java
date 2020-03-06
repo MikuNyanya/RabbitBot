@@ -121,7 +121,7 @@ public class ImageService {
             String scaleImgName = ConstantImage.IMAGE_SCALE_PREFIX + imageFullName + ".jpg";
             String scaleImgPath = ConstantImage.DEFAULT_IMAGE_SCALE_SAVE_PATH + File.separator + scaleImgName;
             //如果已经存在就不重复处理了
-            if (FileUtil.exists(scaleImgPath)) {
+            if (!FileUtil.exists(scaleImgPath)) {
                 //压缩图片尺寸，实际上这个方法的作用是向指定尺寸数值靠拢，比例不会变，取长宽中最接近指定数值的一方为准
 //              Thumbnails.of(localImagePath).size(2500, 2500).toFile(scaleImgPath);
                 //处理出来jpg的dpi是91，文件挺小的 所以基本上太大的文件转为jpg就行了

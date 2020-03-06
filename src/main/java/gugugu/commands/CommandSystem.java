@@ -42,11 +42,11 @@ public class CommandSystem implements EverywhereCommand {
         msg.append("==========\n");
         msg.append("[Name] " + BotRabbit.BOT_NAME + "(RabbitBot)\n");
         msg.append("[Birthday] 2019-12-3\n");
-        msg.append("[Version] V2.0\n");
+        msg.append("[Version] V2.2\n");
         msg.append("[酷Q] " + capitalizeFirstLetterOfEachWord(versionInfo.getCoolqEdition()) + "\n");
         msg.append("[HTTP API] " + versionInfo.getPluginVersion() + "\n");
         msg.append("System Online\n");
-        msg.append("\\兔叽万岁/\n");
+        msg.append("兔叽增员中...\n");
         msg.append("==========");
 
         return msg.toString();
