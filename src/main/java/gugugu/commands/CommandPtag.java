@@ -85,7 +85,9 @@ public class CommandPtag implements EverywhereCommand {
     private String timeCheck(User sender) {
         Long qq = sender.getInfo().getUserId();
         String name = sender.getInfo().getNickname();
-
+        if(BotRabbit.MASTER_QQ.contains(qq)){
+            return null;
+        }
         if (!PIXIV_TAG_SPLIT_MAP.containsKey(qq)) {
             return null;
         }

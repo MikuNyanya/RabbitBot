@@ -38,8 +38,17 @@ public class HttpUtil {
      * @throws IOException 请求异常
      */
     public static String get(String connUrl) throws IOException {
+        return get(connUrl, null);
+    }
+
+    public static String get(String connUrl, Proxy proxy) throws IOException {
         //使用url对象打开一个链接
-        HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(connUrl).openConnection();
+        HttpURLConnection httpURLConnection = null;
+        if (null != proxy) {
+            httpURLConnection = (HttpURLConnection) new URL(connUrl).openConnection(proxy);
+        } else {
+            httpURLConnection = (HttpURLConnection) new URL(connUrl).openConnection();
+        }
         httpURLConnection.setRequestMethod(REQUEST_METHOD_GET);
         //设置链接超时时间
         httpURLConnection.setConnectTimeout(CONNECT_TIME_OUT);

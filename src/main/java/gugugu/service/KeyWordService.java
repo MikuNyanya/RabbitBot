@@ -107,6 +107,11 @@ public class KeyWordService {
             return false;
         }
 
+        //概率复读
+        if (!RandomUtil.rollBoolean(-60)) {
+            return false;
+        }
+
         //概率打断复读，100%对复读打断复读的语句做出反应
         if (ConstantRepeater.REPEATER_KILLER_LIST.contains(groupMsg) || ConstantRepeater.REPEATER_STOP_LIST.contains(groupMsg)) {
             //打断复读的复读

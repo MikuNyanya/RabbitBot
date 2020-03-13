@@ -24,6 +24,10 @@ public class ConstantImage extends ConstantCommon {
     public static String IMAGE_SCALE_PREFIX = "rabbit_scale_";
     //需要处理的大小阈值(mb)
     public static double IMAGE_SCALE_MIN_SIZE = 5.5;
+    //需要处理的宽度尺寸阈值(像素)
+    public static double IMAGE_SCALE_MIN_HEIGHT = 4500;
+    //需要处理的长度尺寸阈值(像素)
+    public static double IMAGE_SCALE_MIN_WIDTH = 4500;
 
 
     //鸽子图片的map key
@@ -55,8 +59,8 @@ public class ConstantImage extends ConstantCommon {
 
     //配置，p站
     public static final int PIXIV_IMAGE_PAGESIZE = 5;
-
-    public static final String PIXIV_IMAGE_IGNORE = "pixivImageIgnore";
+    public static final String PIXIV_CONFIG_USE_API = "usePixivApi";
+    public static final String PIXIV_CONFIG_IMAGE_IGNORE = "pixivImageIgnore";
     public static final String PIXIV_IMAGE_IGNORE_WARNING = "[P站图片已忽略加载]";
     public static final String PIXIV_IMAGE_DOWNLOAD_FAIL = "[P站图片下载失败]";
     public static final String PIXIV_IMAGE_DELETE = "[P站图片已被删除]";

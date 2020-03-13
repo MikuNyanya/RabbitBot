@@ -1,4 +1,4 @@
-package gugugu.entity;
+package gugugu.entity.pixiv;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +34,7 @@ public class PixivRankImageInfo {
     /**
      * 上次排名
      */
-    private Integer previousRank;
+    private String previousRank;
     /**
      * 创建时间
      */
@@ -55,6 +55,4 @@ public class PixivRankImageInfo {
      * 作者名称
      */
     private String userName;
-
-
 }

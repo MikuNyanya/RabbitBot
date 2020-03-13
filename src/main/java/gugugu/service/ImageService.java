@@ -115,7 +115,9 @@ public class ImageService {
         //判断图片的大小
         ImageInfo imageInfo = ImageUtil.getImageInfo(localImagePath);
         boolean overSize = ConstantImage.IMAGE_SCALE_MIN_SIZE * 1024 * 1024 < imageInfo.getSize();
-        if (overSize) {
+        boolean overHeight = ConstantImage.IMAGE_SCALE_MIN_HEIGHT < imageInfo.getHeight();
+        boolean overWidth = ConstantImage.IMAGE_SCALE_MIN_WIDTH < imageInfo.getWidth();
+        if (overSize || overHeight || overWidth) {
             //生成修改后的文件名和路径，后缀为jpg
             imageFullName = imageFullName.substring(0, imageFullName.lastIndexOf("."));
             String scaleImgName = ConstantImage.IMAGE_SCALE_PREFIX + imageFullName + ".jpg";
@@ -201,13 +203,24 @@ public class ImageService {
             return ConstantImage.SAUCENAO_SEARCH_FAIL_PARAM;
         }
 
-        //获取信息，并返回结果
-        if (5 == searchResult.getHeader().getIndex_id()) {
-            //pixiv
-            return PixivService.parsePixivImgRequest(searchResult);
-        } else {
-            //Danbooru
-            return DanbooruService.parseDanbooruImgRequest(searchResult);
+        try {
+            //获取信息，并返回结果
+            if (5 == searchResult.getHeader().getIndex_id()) {
+                //pixiv
+                //是否走爬虫
+                String pixiv_config_use_api = ConstantCommon.common_config.get(ConstantImage.PIXIV_CONFIG_USE_API);
+                if (ConstantImage.OFF.equalsIgnoreCase(pixiv_config_use_api)) {
+                    return PixivBugService.parsePixivImgRequest(searchResult);
+                } else {
+                    return PixivService.parsePixivImgRequest(searchResult);
+                }
+            } else {
+                //Danbooru
+                return DanbooruService.parseDanbooruImgRequest(searchResult);
+            }
+        } catch (Exception ex) {
+            BotRabbit.bot.getLogger().error(ConstantImage.IMJAD_PIXIV_ID_API_ERROR + ex.toString(), ex);
+            return ConstantImage.IMJAD_PIXIV_ID_API_ERROR;
         }
     }
 }

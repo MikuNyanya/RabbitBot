@@ -29,7 +29,7 @@ public class PixivImjadIllustGet extends BaseRequest {
     /**
      * p站图片id
      */
-    private int pixivId;
+    private Long pixivId;
 
     //执行接口请求
     public void doRequest() throws IOException {

@@ -5,7 +5,9 @@ import cc.moecraft.icq.command.interfaces.EverywhereCommand;
 import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.User;
 import gugugu.bots.BotRabbit;
+import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
+import gugugu.service.PixivBugService;
 import gugugu.service.PixivService;
 import utils.NumberUtil;
 import utils.StringUtil;
@@ -45,7 +47,13 @@ public class CommandPid implements EverywhereCommand {
 
         String result = "";
         try {
-            result = PixivService.searchPixivImgById(NumberUtil.toLong(pid));
+            //是否走爬虫
+            String pixiv_config_use_api = ConstantCommon.common_config.get(ConstantImage.PIXIV_CONFIG_USE_API);
+            if (ConstantImage.OFF.equalsIgnoreCase(pixiv_config_use_api)) {
+                result = PixivBugService.searchPixivImgById(NumberUtil.toLong(pid));
+            } else {
+                result = PixivService.searchPixivImgById(NumberUtil.toLong(pid));
+            }
         } catch (Exception ex) {
             BotRabbit.bot.getLogger().error(ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE + ex.toString(), ex);
             result = ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE;

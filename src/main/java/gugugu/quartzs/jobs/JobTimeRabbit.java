@@ -4,11 +4,8 @@ import gugugu.bots.BotRabbit;
 import gugugu.commands.groups.CommandRP;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
-import gugugu.entity.PixivRankImageInfo;
-import gugugu.service.NCoV_2019ReportService;
-import gugugu.service.PixivService;
-import gugugu.service.RabbitBotService;
-import gugugu.service.WeatherService;
+import gugugu.entity.pixiv.PixivRankImageInfo;
+import gugugu.service.*;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import utils.DateUtil;
@@ -36,7 +33,7 @@ public class JobTimeRabbit implements Job {
         clearRPMap();
 
         //疫情总览信息推送
-        nCoV();
+//        nCoV();
 
         //pixiv日榜，最好放在最后执行，要下载图片
         //也可以另起一个线程，但我懒
@@ -143,8 +140,15 @@ public class JobTimeRabbit implements Job {
         }
 
         try {
-            //获取日榜前3
-            List<PixivRankImageInfo> imageList = PixivService.getPixivIllustRank(1, ConstantImage.PIXIV_IMAGE_PAGESIZE);
+            //获取日榜
+            List<PixivRankImageInfo> imageList = null;
+            //是否走爬虫
+            String pixiv_config_use_api = ConstantCommon.common_config.get(ConstantImage.PIXIV_CONFIG_USE_API);
+            if (ConstantImage.OFF.equalsIgnoreCase(pixiv_config_use_api)) {
+                imageList = PixivBugService.getPixivIllustRank(ConstantImage.PIXIV_IMAGE_PAGESIZE);
+            } else {
+                imageList = PixivService.getPixivIllustRank(1, ConstantImage.PIXIV_IMAGE_PAGESIZE);
+            }
             for (PixivRankImageInfo imageInfo : imageList) {
                 //拼接一个发送一个，中间间隔5秒
                 String resultStr = PixivService.parsePixivImgInfoToGroupMsg(imageInfo);
