@@ -11,6 +11,7 @@ import net.coobird.thumbnailator.Thumbnails;
 import utils.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -218,9 +219,12 @@ public class ImageService {
                 //Danbooru
                 return DanbooruService.parseDanbooruImgRequest(searchResult);
             }
+        } catch (FileNotFoundException fileNotFoundEx) {
+            BotRabbit.bot.getLogger().warning(ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString());
+            return ConstantImage.PIXIV_IMAGE_DELETE;
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(ConstantImage.IMJAD_PIXIV_ID_API_ERROR + ex.toString(), ex);
-            return ConstantImage.IMJAD_PIXIV_ID_API_ERROR;
+            BotRabbit.bot.getLogger().error(ConstantImage.IMAGE_GET_ERROR + ex.toString(), ex);
+            return ConstantImage.IMAGE_GET_ERROR;
         }
     }
 }

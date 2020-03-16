@@ -12,6 +12,7 @@ import gugugu.service.PixivService;
 import utils.NumberUtil;
 import utils.StringUtil;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 /**
@@ -54,7 +55,10 @@ public class CommandPid implements EverywhereCommand {
             } else {
                 result = PixivService.searchPixivImgById(NumberUtil.toLong(pid));
             }
-        } catch (Exception ex) {
+        } catch (FileNotFoundException fileNotFoundEx) {
+            BotRabbit.bot.getLogger().warning(ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString());
+            return ConstantImage.PIXIV_IMAGE_DELETE;
+        }  catch (Exception ex) {
             BotRabbit.bot.getLogger().error(ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE + ex.toString(), ex);
             result = ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE;
         }

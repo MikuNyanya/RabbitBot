@@ -45,6 +45,7 @@ public class ConstantImage extends ConstantCommon {
     //搜图相关
     public static final String IMAGE_SEARCH_NO_IMAGE_INPUT = "你得给我一张图";
     public static final String IMAGE_SEARCH_IMAGE_URL_PARSE_FAIL = "图片解析失败......啊咧？";
+    public static final String IMAGE_GET_ERROR = "图片获取异常";
 
     public static final String SAUCENAO_API_KEY = "saucenaoKey";
     public static final String SAUCENAO_API_KEY_EMPTY = "Saucenao Api Key为空";
