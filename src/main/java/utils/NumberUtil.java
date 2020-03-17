@@ -29,58 +29,49 @@ public class NumberUtil {
     }
 
     /**
-     * 字符串转化为Integer数字
+     * 转化为Integer数字
      *
-     * @param str 输入字符串
+     * @param obj 任意参数
      * @return 输出数字
      */
-    public static Integer toInt(String str) {
-        if (StringUtil.isEmpty(str) || !isNumberOnly(str)) {
+    public static Integer toInt(Object obj) {
+        if (null == obj) {
             return null;
         }
-        return Integer.valueOf(str);
+        Double toDouble = toDouble(obj);
+        if (null == toDouble) {
+            return null;
+        }
+        return toDouble.intValue();
     }
 
     /**
-     * double转化为Integer数字
-     * 重载
+     * 转化为Double数字
      *
-     * @param doubleNum 输入double
+     * @param obj 任意参数
      * @return 输出数字
      */
-    public static Integer toInt(Double doubleNum) {
-        if (null == doubleNum) {
-            return 0;
+    public static Double toDouble(Object obj) {
+        String s = String.valueOf(obj);
+        if (StringUtil.isEmpty(s)) {
+            return null;
         }
-        return doubleNum.intValue();
+        return Double.valueOf(s);
     }
 
     /**
-     * 字符串转化为Double数字
+     * 转化为Long数字
      *
-     * @param str 输入字符串
+     * @param obj 任意参数
      * @return 输出数字
      */
-    public static Double toDouble(String str) {
-        if (StringUtil.isEmpty(str)) {
-            return 0.0;
+    public static Long toLong(Object obj) {
+        Double toDouble = toDouble(obj);
+        if (null == toDouble) {
+            return null;
         }
-        return Double.valueOf(str);
+        return toDouble.longValue();
     }
-
-    /**
-     * 字符串转化为Long数字
-     *
-     * @param str 输入字符串
-     * @return 输出数字
-     */
-    public static Long toLong(String str) {
-        if (StringUtil.isEmpty(str) || !isNumberOnly(str)) {
-            return 0L;
-        }
-        return Long.valueOf(str);
-    }
-
 
     /**
      * double转为int，向上取整

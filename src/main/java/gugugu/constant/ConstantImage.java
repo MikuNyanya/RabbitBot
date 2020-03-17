@@ -23,11 +23,11 @@ public class ConstantImage extends ConstantCommon {
     //经过处理的图片前缀
     public static String IMAGE_SCALE_PREFIX = "rabbit_scale_";
     //需要处理的大小阈值(mb)
-    public static double IMAGE_SCALE_MIN_SIZE = 5.5;
+    public static double IMAGE_SCALE_MIN_SIZE = 4.5;
     //需要处理的宽度尺寸阈值(像素)
-    public static double IMAGE_SCALE_MIN_HEIGHT = 4500;
+    public static double IMAGE_SCALE_MIN_HEIGHT = 3500;
     //需要处理的长度尺寸阈值(像素)
-    public static double IMAGE_SCALE_MIN_WIDTH = 4500;
+    public static double IMAGE_SCALE_MIN_WIDTH = 3500;
 
 
     //鸽子图片的map key

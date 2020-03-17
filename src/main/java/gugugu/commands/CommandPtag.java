@@ -7,6 +7,7 @@ import cc.moecraft.icq.user.User;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantImage;
 import gugugu.service.PixivService;
+import gugugu.service.RabbitBotService;
 import utils.StringUtil;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class CommandPtag implements EverywhereCommand {
     @Override
     public String run(EventMessage event, User sender, String command, ArrayList<String> args) {
         //操作间隔判断
-        String timeCheck = timeCheck(sender);
+        String timeCheck = RabbitBotService.commandTimeSplitCheck(PIXIV_TAG_SPLIT_MAP, sender.getInfo().getUserId(), sender.getInfo().getNickname(), PIXIV_TAG_SPLIT_TIME, PIXIV_TAG_SPLIT_ERROR);
         if (StringUtil.isNotEmpty(timeCheck)) {
             return timeCheck;
         }
@@ -75,33 +76,5 @@ public class CommandPtag implements EverywhereCommand {
     @Override
     public CommandProperties properties() {
         return new CommandProperties("PixivImageTag", "ptag");
-    }
-
-    /**
-     * 操作间隔控制
-     *
-     * @return
-     */
-    private String timeCheck(User sender) {
-        Long qq = sender.getInfo().getUserId();
-        String name = sender.getInfo().getNickname();
-        if(BotRabbit.MASTER_QQ.contains(qq)){
-            return null;
-        }
-        if (!PIXIV_TAG_SPLIT_MAP.containsKey(qq)) {
-            return null;
-        }
-        Long lastTime = PIXIV_TAG_SPLIT_MAP.get(qq);
-        if (null == lastTime) {
-            return null;
-        }
-        Long nowTime = System.currentTimeMillis();
-        Long splitTime = nowTime - lastTime;
-        //判断是否允许操作
-        if (splitTime <= PIXIV_TAG_SPLIT_TIME) {
-            return String.format(PIXIV_TAG_SPLIT_ERROR, name, (PIXIV_TAG_SPLIT_TIME - splitTime) / 1000);
-        }
-        //其他情况允许操作
-        return null;
     }
 }
