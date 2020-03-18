@@ -47,7 +47,7 @@ public class CommandCapsuleToy implements GroupCommand {
                 return ConstantCapsuleToy.CAPSULE_TOY_HAS_NOTHING;
             }
             //如果扭到了扭蛋，就不用拦截操作了，可以直接再扭一次
-            if(!"扭蛋".equalsIgnoreCase(capsuleToy)) {
+            if (!"扭蛋".equalsIgnoreCase(capsuleToy)) {
                 //刷新操作间隔
                 ConstantCapsuleToy.CAPSULE_TOY_SPLIT_MAP.put(event.getGroupUserInfo().getUserId(), System.currentTimeMillis());
             }
@@ -66,12 +66,20 @@ public class CommandCapsuleToy implements GroupCommand {
         if (args.size() < 2) {
             return ConstantCapsuleToy.EXPLAIN_ADD;
         }
-        //todo 兼容空格，后面的信息都作为扭蛋存下来
-        String capsuleToy = args.get(1);
+        //兼容空格，后面的信息都作为扭蛋存下来\
+        boolean isFirst = true;
+        StringBuilder sb = new StringBuilder();
+        for (String capsuleToyStr : args) {
+            //过滤掉二级指令
+            if (isFirst) {
+                isFirst = false;
+                continue;
+            }
+            sb.append(" " + capsuleToyStr);
+        }
 
         //添加扭蛋
-        String addResult = capsuleToyAdd(capsuleToy);
-        return addResult;
+        return capsuleToyAdd(StringUtil.trim(sb.toString()));
     }
 
     @Override
