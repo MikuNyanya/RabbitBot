@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import gugugu.filemanage.FileManager;
 import gugugu.filemanage.FileManagerMorseCode;
+import gugugu.filemanage.FileManagerPixivTags;
 import gugugu.quartzs.RabbitBotJob;
 import lombok.Getter;
 
@@ -198,6 +199,7 @@ public class PicqBotX {
         FileManager.loadKeyWordLike();
         FileManager.loadAmapAdcode();
         FileManagerMorseCode.loadFile();
+        FileManagerPixivTags.loadFile();
         prgressIndex++;
         logInitDone(logger, "外部资源文件     ", prgressIndex, fullProgress - prgressIndex);
 

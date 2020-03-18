@@ -108,7 +108,8 @@ public class BotRabbit {
             new CommandPixivRank(),
             new CommandPtag(),
             new CommandAnimeSearch(),
-            new CommandMorseCode()
+            new CommandMorseCode(),
+            new CommandPtags()
     };
 
     /**

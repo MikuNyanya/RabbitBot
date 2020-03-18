@@ -1,9 +1,6 @@
 package gugugu.constant;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * create by MikuLink on 2020/1/10 15:19
@@ -78,6 +75,14 @@ public class ConstantImage extends ConstantCommon {
     public static final String PIXIV_ID_GET_FAIL_GROUP_MESSAGE = "根据P站图片id获取信息失败";
     public static final String PIXIV_ID_GET_ERROR_GROUP_MESSAGE = "根据P站图片id获取信息异常";
 
+    //p站tag相关
+    public static ArrayList<String> PIXIV_TAG_LIST = new ArrayList<>();
+    public static final String PIXIV_TAG_SAVE_ERROR = "P站图片tag保存异常";
+    public static final String PIXIV_TAG_IS_EMPTY = "P站tag资料库里空空如也";
+
+
+
+    ///Danbooru
     public static final String DANBOORU_ID_GET_NOT_FOUND = "根据Danbooru图片id没有找到图片";
     public static final String DANBOORU_IMAGE_DOWNLOAD_FAIL = "Danbooru图片下载失败";
     public static final String DANBOORU_ID_GET_FAIL_GROUP_MESSAGE = "根据Danbooru图片id获取信息失败";

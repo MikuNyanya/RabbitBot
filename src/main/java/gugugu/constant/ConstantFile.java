@@ -11,6 +11,8 @@ public class ConstantFile extends ConstantCommon {
     public static final String CONFIG_FILE_PATH = "src/main/resources/files/config";
     //扭蛋 文件相对路径
     public static final String CAPSULE_TOY_FILE_PATH = "src/main/resources/files/capsule_toy.txt";
+    //pixiv图片tag列表 文件相对路径
+    public static final String PIXIV_TAG_FILE_PATH = "src/main/resources/files/pixiv_tag.txt";
     //客制化 常规语句 文件相对路径
     public static final String APPEND_FREE_TIME_FILE_PATH = "src/main/resources/files/free_time.txt";
     //客制化 关键词响应语句 文件相对路径

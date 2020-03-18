@@ -11,6 +11,7 @@ import gugugu.entity.apirequest.imgsearch.pixiv.*;
 import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchInfoResult;
 import gugugu.entity.pixiv.PixivRankImageInfo;
 import gugugu.exceptions.RabbitException;
+import gugugu.filemanage.FileManagerPixivTags;
 import utils.*;
 
 import java.io.File;
@@ -87,6 +88,9 @@ public class PixivService {
             rankImageInfo.setUserName(imageDetail.getUser().getName());
 
             rankImageList.add(rankImageInfo);
+
+            //保存一份tag
+            saveTags(image.getWork().getTags());
         }
 
         return rankImageList;
@@ -344,6 +348,10 @@ public class PixivService {
         resultStr.append("\n[作者] " + memberName);
         resultStr.append("\n[上传时间] " + createDate);
 //            resultStr.append("\n[图片简介] " + caption);
+
+        //保存一份tag
+        saveTags(response.getTags());
+
         return resultStr.toString();
     }
 
@@ -363,5 +371,30 @@ public class PixivService {
         resultStr.append("\n[作者] " + infoPixivRankImage.getUserName());
         resultStr.append("\n[创建时间] " + infoPixivRankImage.getCreatedTime());
         return resultStr.toString();
+    }
+
+    public static void saveTags(List<String> tags) {
+        if (null == tags) {
+            return;
+        }
+        try {
+            List<String> tagsTamp = new ArrayList<>();
+            //移除已存在的tag，不需要重复保存
+            for (String tag : tags) {
+                if (StringUtil.isEmpty(tag)) {
+                    continue;
+                }
+                if (ConstantImage.PIXIV_TAG_LIST.contains(tag)) {
+                    continue;
+                }
+
+                tagsTamp.add(tag);
+            }
+            //保存文件，并刷新内存
+            FileManagerPixivTags.addTags(tagsTamp);
+        } catch (Exception ex) {
+            //异常不上抛，不是主要业务
+            BotRabbit.bot.getLogger().error(ConstantImage.PIXIV_TAG_SAVE_ERROR + " " + ex.toString(), ex);
+        }
     }
 }

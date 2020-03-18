@@ -46,8 +46,11 @@ public class CommandCapsuleToy implements GroupCommand {
             if (StringUtil.isEmpty(capsuleToy)) {
                 return ConstantCapsuleToy.CAPSULE_TOY_HAS_NOTHING;
             }
-            //刷新操作间隔
-            ConstantCapsuleToy.CAPSULE_TOY_SPLIT_MAP.put(event.getGroupUserInfo().getUserId(), System.currentTimeMillis());
+            //如果扭到了扭蛋，就不用拦截操作了，可以直接再扭一次
+            if(!"扭蛋".equalsIgnoreCase(capsuleToy)) {
+                //刷新操作间隔
+                ConstantCapsuleToy.CAPSULE_TOY_SPLIT_MAP.put(event.getGroupUserInfo().getUserId(), System.currentTimeMillis());
+            }
             //群名片
             String groupUserName = event.getGroupUserInfo().getGroupUserName();
             return String.format(ConstantCapsuleToy.MSG_CAPSULE_TOY_RESULT, groupUserName, capsuleToy);
@@ -63,6 +66,7 @@ public class CommandCapsuleToy implements GroupCommand {
         if (args.size() < 2) {
             return ConstantCapsuleToy.EXPLAIN_ADD;
         }
+        //todo 兼容空格，后面的信息都作为扭蛋存下来
         String capsuleToy = args.get(1);
 
         //添加扭蛋

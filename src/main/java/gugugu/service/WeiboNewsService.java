@@ -120,13 +120,16 @@ public class WeiboNewsService {
      * @throws IOException 处理异常
      */
     private static String parseWeiboBody(InfoStatuses info) throws IOException {
-        //解析推主头像
-        String userImgCQ = getWeiboImageCQ(info.getUser().getProfile_image_url());
-
         //格式
         StringBuilder msgBuilder = new StringBuilder();
         //头像
-        msgBuilder.append(userImgCQ + "\n");
+        if (true) {
+            //解析推主头像
+            String userImgCQ = getWeiboImageCQ(info.getUser().getProfile_image_url());
+            msgBuilder.append(userImgCQ + "\n");
+        } else {
+            msgBuilder.append(ConstantWeiboNews.WHAT_ASSHOLE + "\n");
+        }
         //推主名
         msgBuilder.append("[" + info.getUser().getName() + "]\n");
         //微博id

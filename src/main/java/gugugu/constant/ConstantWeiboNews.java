@@ -23,4 +23,5 @@ public class ConstantWeiboNews extends ConstantCommon {
     public static final String NO_ACCESSTOKEN = "没有授权码";
     public static final String OFF_SUCCESS = "微博消息推送已关闭";
     public static final String EXEC_ERROR = "微博消息推送，它挂了";
+    public static final String WHAT_ASSHOLE = "[头像太丑已被屏蔽]";
 }
