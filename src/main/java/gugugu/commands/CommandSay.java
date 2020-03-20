@@ -4,8 +4,9 @@ import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.EverywhereCommand;
 import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.User;
+import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantFreeTime;
-import gugugu.filemanage.FileManager;
+import gugugu.filemanage.FileManagerFreeTime;
 import utils.RandomUtil;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class CommandSay implements EverywhereCommand {
         String msg = RandomUtil.rollAndDelStrFromList(ConstantFreeTime.MSG_TYPE_FREE_TIME);
         //删到五分之一时重新加载集合
         if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() < ConstantFreeTime.MSG_TYPE_FREE_TIME_MAX_SIZE / 5) {
-            FileManager.loadFreeTime();
+            FileManagerFreeTime.doCommand(ConstantFile.FILE_COMMAND_LOAD);
         }
         return msg;
     }

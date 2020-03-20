@@ -40,12 +40,12 @@ public class SaucenaoSearchInfoResultData {
      */
 
     //danbooru图片id
-    private int danbooru_id;
+    private Long danbooru_id;
     //danbooru图片标签
     private String characters;
 
     //其他来源，没用过
-    private int sankaku_id;
+    private Long sankaku_id;
     private String creator;
     private String material;
     private String source;

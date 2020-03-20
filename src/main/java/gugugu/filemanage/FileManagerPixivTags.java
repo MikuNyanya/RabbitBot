@@ -15,7 +15,10 @@ import java.util.List;
  * pxiv tag列表文件
  */
 public class FileManagerPixivTags {
+    //tag文件，包含所有收集到的tag
     private static File pixivTagFile = null;
+    //整理后的tag
+    private static File pixivTagRabbitFile = null;
 
     /**
      * 文件初始化
@@ -29,6 +32,43 @@ public class FileManagerPixivTags {
             return;
         }
         pixivTagFile = FileUtil.fileCheck(ConstantFile.PIXIV_TAG_FILE_PATH);
+    }
+
+    /**
+     * 文件初始化
+     * 以及加载文件到系统
+     *
+     * @throws IOException 读写异常
+     */
+    private static void fileRabbitInit() throws IOException {
+        //先载入文件
+        if (null != pixivTagRabbitFile) {
+            return;
+        }
+        pixivTagRabbitFile = FileUtil.fileCheck(ConstantFile.PIXIV_TAG_RABBIT_FILE_PATH);
+    }
+
+    /**
+     * 加载已整理的tag文件内容
+     */
+    public static void loadRabbitFile() {
+        try {
+            fileRabbitInit();
+
+            //创建读取器
+            BufferedReader reader = new BufferedReader(new FileReader(pixivTagRabbitFile));
+            //逐行读取
+            String tag = null;
+            while ((tag = reader.readLine()) != null) {
+                //过滤掉空行
+                if (tag.length() <= 0) continue;
+                ConstantImage.PIXIV_TAG_RABBIT_LIST.add(tag);
+            }
+            //关闭读取器
+            reader.close();
+        } catch (IOException ioEx) {
+            BotRabbit.bot.getLogger().error("pixiv_tag_rabbit文件读写异常:" + ioEx.toString(), ioEx);
+        }
     }
 
     /**

@@ -5,8 +5,9 @@ import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
+import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantKeyWord;
-import gugugu.filemanage.FileManager;
+import gugugu.filemanage.FileManagerKeyWordLike;
 import gugugu.filemanage.FileManagerKeyWordNormal;
 import gugugu.service.KeyWordService;
 import utils.StringUtil;
@@ -76,7 +77,7 @@ public class CommandAddKeyWordLike implements GroupCommand {
         String[] tempStr = new String[args.size()];
         args.toArray(tempStr);
         //写入文件并添加到list
-        FileManager.addKeyWordLike(tempStr);
+        FileManagerKeyWordLike.doCommand(ConstantFile.FILE_COMMAND_WRITE, tempStr);
 
         return ConstantKeyWord.KEY_WORD_LIKE_SAVE_SUCCESS;
     }

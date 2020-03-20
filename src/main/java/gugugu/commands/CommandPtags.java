@@ -6,6 +6,7 @@ import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.User;
 import gugugu.constant.ConstantImage;
 import utils.RandomUtil;
+import utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class CommandPtags implements EverywhereCommand {
         //随机返回一定数量的tag，直接随机
         StringBuilder tagStr = new StringBuilder();
         tagStr.append("=====Pixiv tag=====");
-        if (0 == ConstantImage.PIXIV_TAG_LIST.size()) {
+        if (0 == ConstantImage.PIXIV_TAG_RABBIT_LIST.size()) {
             tagStr.append(ConstantImage.PIXIV_TAG_IS_EMPTY);
             tagStr.append("===================");
             return tagStr.toString();
@@ -44,8 +45,8 @@ public class CommandPtags implements EverywhereCommand {
         int i = 0;
         List<String> tempTagList = new ArrayList<>();
         do {
-            if (ConstantImage.PIXIV_TAG_LIST.size() < SHOW_TAG_QTY) {
-                tempTagList.addAll(ConstantImage.PIXIV_TAG_LIST);
+            if (ConstantImage.PIXIV_TAG_RABBIT_LIST.size() < SHOW_TAG_QTY) {
+                tempTagList.addAll(ConstantImage.PIXIV_TAG_RABBIT_LIST);
                 break;
             }
             //防止死循环
@@ -54,7 +55,7 @@ public class CommandPtags implements EverywhereCommand {
             }
 
             //从内存里随机出一个tag
-            String tag = RandomUtil.rollStrFromList(ConstantImage.PIXIV_TAG_LIST);
+            String tag = RandomUtil.rollStrFromList(ConstantImage.PIXIV_TAG_RABBIT_LIST);
             //随机到重复的则再随机一次
             if (tempTagList.contains(tag)) {
                 continue;
@@ -65,7 +66,16 @@ public class CommandPtags implements EverywhereCommand {
         } while (SHOW_TAG_QTY > i);
 
         for (String tagTemp : tempTagList) {
-            tagStr.append("\n[" + tagTemp + "]");
+            if (StringUtil.isEmpty(tagTemp)) {
+                continue;
+            }
+            //整理后的tag以逗号分隔，前面是p站tag，后面是注释，并不是每个tag都需要注释
+            String[] tagSplit = tagTemp.split(",");
+            tagStr.append("\n[" + tagSplit[0] + "]");
+            if (tagSplit.length >= 2) {
+                tagStr.append("------");
+                tagStr.append(tagSplit[1]);
+            }
         }
 
         tagStr.append("\n===================");

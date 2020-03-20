@@ -15,7 +15,9 @@ import java.util.ArrayList;
  * <p>
  * 日常语句文件专用管理器
  */
-public class FileManagerFreeTime extends FileManager {
+public class FileManagerFreeTime{
+    //常规语句 文件
+    private static File freeTimeFile = null;
 
     /**
      * 文件初始化

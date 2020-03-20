@@ -182,13 +182,15 @@ public class ImageService {
             for (SaucenaoSearchInfoResult infoResult : infoResultList) {
                 //暂时只识别pixiv和Danbooru的
                 int indexId = infoResult.getHeader().getIndex_id();
-                if (5 != indexId && 9 != indexId) {
+                boolean isPixiv = 5 == indexId;
+                boolean isDanbooru = (9 == indexId || null != infoResult.getData().getDanbooru_id());
+                if (!isPixiv && !isDanbooru) {
                     continue;
                 }
 
                 //过滤掉相似度50一下的 todo 写为可外部调整的配置
                 String similarity = infoResult.getHeader().getSimilarity();
-                if (50.0 > NumberUtil.toDouble(similarity)) {
+                if (StringUtil.isEmpty(similarity) || 50.0 > NumberUtil.toDouble(similarity)) {
                     continue;
                 }
                 searchResult = infoResult;

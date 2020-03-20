@@ -24,9 +24,8 @@ import cc.moecraft.utils.HyExpressionResolver;
 import cn.hutool.http.HttpException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import gugugu.filemanage.FileManager;
-import gugugu.filemanage.FileManagerMorseCode;
-import gugugu.filemanage.FileManagerPixivTags;
+import gugugu.constant.ConstantFile;
+import gugugu.filemanage.*;
 import gugugu.quartzs.RabbitBotJob;
 import lombok.Getter;
 
@@ -189,17 +188,26 @@ public class PicqBotX {
         logInitDone(logger, "HTTP监听服务器  ", prgressIndex, fullProgress - prgressIndex);
 
         //加载配置文件 如果以后有系统级的东西加载配置里，这个配置应该优先读取
-        FileManager.loadConfig();
+        FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_LOAD);
         prgressIndex++;
         logInitDone(logger, "外部配置文件     ", prgressIndex, fullProgress - prgressIndex);
 
         //加载资源
-        FileManager.loadFreeTime();
-        FileManager.loadKeyWordNormal();
-        FileManager.loadKeyWordLike();
-        FileManager.loadAmapAdcode();
+        //日常语句
+        FileManagerFreeTime.doCommand(ConstantFile.FILE_COMMAND_LOAD);
+        //关键词匹配-全匹配
+        FileManagerKeyWordNormal.doCommand(ConstantFile.FILE_COMMAND_LOAD);
+        //关键词匹配-模糊匹配
+        FileManagerKeyWordLike.doCommand(ConstantFile.FILE_COMMAND_LOAD);
+        //高德地图接口区域代码信息
+        FileManagerAmapAdcode.doCommand(ConstantFile.FILE_COMMAND_LOAD);
+        //摩尔斯电码
         FileManagerMorseCode.loadFile();
+        //pixiv图片所有tag
         FileManagerPixivTags.loadFile();
+        //pixiv图片已整理的tag
+        FileManagerPixivTags.loadRabbitFile();
+
         prgressIndex++;
         logInitDone(logger, "外部资源文件     ", prgressIndex, fullProgress - prgressIndex);
 

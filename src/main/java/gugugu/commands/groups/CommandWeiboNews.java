@@ -7,9 +7,10 @@ import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
+import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantWeiboNews;
 import gugugu.entity.GroupUserInfo;
-import gugugu.filemanage.FileManager;
+import gugugu.filemanage.FileManagerConfig;
 import gugugu.service.WeiboNewsService;
 import utils.NumberUtil;
 import utils.StringUtil;
@@ -58,14 +59,14 @@ public class CommandWeiboNews implements GroupCommand {
                 //修改配置
                 ConstantCommon.common_config.put("weiboNewStatus", "1");
                 //更新配置文件
-                FileManager.overwriteConfig();
+                FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_WRITE);
                 return ConstantWeiboNews.OPEN_SUCCESS;
             case ConstantWeiboNews.OFF:
                 //关闭微博消息推送
                 //修改配置
                 ConstantCommon.common_config.put("weiboNewStatus", "0");
                 //更新配置文件
-                FileManager.overwriteConfig();
+                FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_WRITE);
                 return ConstantWeiboNews.OFF_SUCCESS;
             case ConstantWeiboNews.ACCESS_TOKEN:
                 //从外部接受接口授权码
@@ -75,7 +76,7 @@ public class CommandWeiboNews implements GroupCommand {
                 //加入配置文件
                 ConstantCommon.common_config.put("weiboToken", args.get(1));
                 //更新配置文件
-                FileManager.overwriteConfig();
+                FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_WRITE);
                 return ConstantWeiboNews.ACCESS_TOKEN_OVERRIDE_SUCCESS;
             case ConstantWeiboNews.SINCEID:
                 //从外部接受sinceId
@@ -89,7 +90,7 @@ public class CommandWeiboNews implements GroupCommand {
                 //覆写SINCEID配置
                 ConstantCommon.common_config.put("sinceId", sinceIdStr);
                 //更新配置文件
-                FileManager.overwriteConfig();
+                FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_WRITE);
                 return ConstantWeiboNews.SINCEID_OVERRIDE_SUCCESS;
             case ConstantWeiboNews.EXEC:
                 //立刻执行一次推送

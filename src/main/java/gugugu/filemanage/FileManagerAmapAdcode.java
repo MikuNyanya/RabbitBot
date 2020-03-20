@@ -6,6 +6,7 @@ import gugugu.constant.ConstantFile;
 import utils.FileUtil;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -15,7 +16,9 @@ import java.io.IOException;
  * <p>
  * 高德地图的城市代码
  */
-public class FileManagerAmapAdcode extends FileManager {
+public class FileManagerAmapAdcode {
+    //高德地图城市代码 文件
+    private static File amapAdcodeFile = null;
 
     /**
      * 文件初始化

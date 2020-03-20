@@ -34,7 +34,7 @@ public class DanbooruService {
         //根据id获取图片列表
         try {
             //Danbooru图片id
-            int danbooruId = infoResult.getData().getDanbooru_id();
+            Long danbooruId = infoResult.getData().getDanbooru_id();
             //标签
             String tag = infoResult.getData().getCharacters();
             //来源信息

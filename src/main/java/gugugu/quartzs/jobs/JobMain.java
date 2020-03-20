@@ -2,9 +2,10 @@ package gugugu.quartzs.jobs;
 
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
+import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantFreeTime;
 import gugugu.constant.ConstantWeiboNews;
-import gugugu.filemanage.FileManager;
+import gugugu.filemanage.FileManagerFreeTime;
 import gugugu.service.RabbitBotService;
 import gugugu.service.WeiboNewsService;
 import org.quartz.Job;
@@ -56,7 +57,7 @@ public class JobMain implements Job {
 
         //删到六分之一时重新加载集合
         if (ConstantFreeTime.MSG_TYPE_FREE_TIME.size() < ConstantFreeTime.MSG_TYPE_FREE_TIME_MAX_SIZE / 6) {
-            FileManager.loadFreeTime();
+            FileManagerFreeTime.doCommand(ConstantFile.FILE_COMMAND_LOAD);
         }
 
         //给每个群发送消息

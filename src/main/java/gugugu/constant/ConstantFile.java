@@ -13,6 +13,8 @@ public class ConstantFile extends ConstantCommon {
     public static final String CAPSULE_TOY_FILE_PATH = "src/main/resources/files/capsule_toy.txt";
     //pixiv图片tag列表 文件相对路径
     public static final String PIXIV_TAG_FILE_PATH = "src/main/resources/files/pixiv_tag.txt";
+    //pixiv图片tag整理后的列表 文件相对路径
+    public static final String PIXIV_TAG_RABBIT_FILE_PATH = "src/main/resources/files/pixiv_tag_rabbit.txt";
     //客制化 常规语句 文件相对路径
     public static final String APPEND_FREE_TIME_FILE_PATH = "src/main/resources/files/free_time.txt";
     //客制化 关键词响应语句 文件相对路径

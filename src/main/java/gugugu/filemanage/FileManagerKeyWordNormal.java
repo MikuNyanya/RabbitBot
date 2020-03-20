@@ -18,7 +18,9 @@ import java.util.List;
  * <p>
  * 全匹配关键词检索文件专用管理器
  */
-public class FileManagerKeyWordNormal extends FileManager {
+public class FileManagerKeyWordNormal {
+    //关键词响应 文件
+    private static File keyWordNormalFile = null;
 
     /**
      * 文件初始化

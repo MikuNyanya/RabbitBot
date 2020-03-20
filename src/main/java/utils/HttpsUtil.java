@@ -20,6 +20,9 @@ import java.security.cert.X509Certificate;
  * https://blog.csdn.net/lufeiRversing/article/details/85683417
  */
 public class HttpsUtil {
+    private static final int CONNECT_TIME_OUT = 10000;
+    private static final int READ_TIME_OUT = 15000;
+
     private static final class DefaultTrustManager implements X509TrustManager {
         @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -78,6 +81,10 @@ public class HttpsUtil {
         httpsConn.setRequestMethod(method);
         httpsConn.setDoInput(true);
         httpsConn.setDoOutput(true);
+        //链接超时时间
+        httpsConn.setConnectTimeout(CONNECT_TIME_OUT);
+        //读取资源超时时间
+        httpsConn.setReadTimeout(READ_TIME_OUT);
         return httpsConn;
     }
 

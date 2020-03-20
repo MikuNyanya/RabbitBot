@@ -76,10 +76,12 @@ public class ConstantImage extends ConstantCommon {
     public static final String PIXIV_ID_GET_ERROR_GROUP_MESSAGE = "根据P站图片id获取信息异常";
 
     //p站tag相关
+    //所有已收集tag
     public static ArrayList<String> PIXIV_TAG_LIST = new ArrayList<>();
+    //已经经过整理的tag，数据格式和上面不同
+    public static ArrayList<String> PIXIV_TAG_RABBIT_LIST = new ArrayList<>();
     public static final String PIXIV_TAG_SAVE_ERROR = "P站图片tag保存异常";
     public static final String PIXIV_TAG_IS_EMPTY = "P站tag资料库里空空如也";
-
 
 
     ///Danbooru

@@ -5,8 +5,9 @@ import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
+import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantFreeTime;
-import gugugu.filemanage.FileManager;
+import gugugu.filemanage.FileManagerFreeTime;
 import utils.StringUtil;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class CommandAddFreeTime implements GroupCommand {
             }
         }
         //写入文件并添加到list
-        FileManager.addFreeTimes(nichijouStr.substring(1));
+        FileManagerFreeTime.doCommand(ConstantFile.FILE_COMMAND_WRITE, nichijouStr.substring(1));
 
         return ConstantFreeTime.MSG_ADD_SUCCESS;
     }

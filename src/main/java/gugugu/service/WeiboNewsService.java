@@ -4,13 +4,14 @@ import cc.moecraft.icq.accounts.BotAccount;
 import gugugu.apirequest.weibo.WeiboHomeTimelineGet;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
+import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantImage;
 import gugugu.constant.ConstantWeiboNews;
 import gugugu.entity.apirequest.weibo.InfoPicUrl;
 import gugugu.entity.apirequest.weibo.InfoStatuses;
 import gugugu.entity.apirequest.weibo.InfoWeiboHomeTimeline;
 import gugugu.exceptions.RabbitException;
-import gugugu.filemanage.FileManager;
+import gugugu.filemanage.FileManagerConfig;
 import utils.FileUtil;
 import utils.ImageUtil;
 import utils.NumberUtil;
@@ -107,7 +108,7 @@ public class WeiboNewsService {
             //刷新sinceId配置
             ConstantCommon.common_config.put("sinceId", String.valueOf(sinceId));
             //更新配置文件
-            FileManager.overwriteConfig();
+            FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_WRITE);
         }
         sendWeiboNewsToEveryGroup(weiboNews.getStatuses());
     }
@@ -123,7 +124,7 @@ public class WeiboNewsService {
         //格式
         StringBuilder msgBuilder = new StringBuilder();
         //头像
-        if (true) {
+        if (1312997677 != info.getUser().getId()) {
             //解析推主头像
             String userImgCQ = getWeiboImageCQ(info.getUser().getProfile_image_url());
             msgBuilder.append(userImgCQ + "\n");

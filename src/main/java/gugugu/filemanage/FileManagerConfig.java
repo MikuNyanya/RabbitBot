@@ -16,7 +16,9 @@ import java.util.HashMap;
  * <p>
  * 配置文件文件专用管理器
  */
-public class FileManagerConfig extends FileManager {
+public class FileManagerConfig {
+    //配置文件
+    private static File configFile = null;
 
     /**
      * 文件初始化

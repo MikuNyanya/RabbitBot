@@ -6,7 +6,8 @@ import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.User;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantConfig;
-import gugugu.filemanage.FileManager;
+import gugugu.constant.ConstantFile;
+import gugugu.filemanage.FileManagerConfig;
 import utils.RandomUtil;
 import utils.StringUtil;
 
@@ -88,7 +89,7 @@ public class CommandConfig implements EverywhereCommand {
         //设置配置文件
         ConstantConfig.common_config.put(configName, configValue);
         //更新配置文件
-        FileManager.overwriteConfig();
+        FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_WRITE);
         return ConstantConfig.CONFIG_SET_SUCCESS;
     }
 
@@ -108,7 +109,7 @@ public class CommandConfig implements EverywhereCommand {
         //删除配置文件
         ConstantConfig.common_config.remove(configName);
         //更新配置文件
-        FileManager.overwriteConfig();
+        FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_WRITE);
         return ConstantConfig.CONFIG_SET_SUCCESS;
     }
 }

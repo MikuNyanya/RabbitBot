@@ -6,7 +6,8 @@ import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 import gugugu.constant.ConstantCapsuleToy;
-import gugugu.filemanage.FileManager;
+import gugugu.constant.ConstantFile;
+import gugugu.filemanage.FileManagerCapsuleToy;
 import gugugu.service.RabbitBotService;
 import utils.RandomUtil;
 import utils.StringUtil;
@@ -66,7 +67,7 @@ public class CommandCapsuleToy implements GroupCommand {
         if (args.size() < 2) {
             return ConstantCapsuleToy.EXPLAIN_ADD;
         }
-        //兼容空格，后面的信息都作为扭蛋存下来\
+        //兼容空格，后面的信息都作为扭蛋存下来
         boolean isFirst = true;
         StringBuilder sb = new StringBuilder();
         for (String capsuleToyStr : args) {
@@ -95,7 +96,7 @@ public class CommandCapsuleToy implements GroupCommand {
     private String capsuleToySelect() {
         //集合为空时，重新加载一次扭蛋文件
         if (ConstantCapsuleToy.MSG_CAPSULE_TOY.size() == 0) {
-            FileManager.loadCapsuleToy();
+            FileManagerCapsuleToy.doCommand(ConstantFile.FILE_COMMAND_LOAD, null);
         }
         //扭个蛋
         String capsuleToy = RandomUtil.rollStrFromList(ConstantCapsuleToy.MSG_CAPSULE_TOY);
@@ -103,7 +104,7 @@ public class CommandCapsuleToy implements GroupCommand {
         ConstantCapsuleToy.MSG_CAPSULE_TOY.remove(capsuleToy);
         //元素少于1/6的时候，重新加载
         if (ConstantCapsuleToy.MSG_CAPSULE_TOY.size() < ConstantCapsuleToy.CAPSULE_TOY_SPLIT_MAX_SIZE / 6) {
-            FileManager.loadCapsuleToy();
+            FileManagerCapsuleToy.doCommand(ConstantFile.FILE_COMMAND_LOAD, null);
         }
         return capsuleToy;
     }
@@ -122,14 +123,14 @@ public class CommandCapsuleToy implements GroupCommand {
 
         //判重
         if (ConstantCapsuleToy.MSG_CAPSULE_TOY.size() == 0) {
-            FileManager.loadCapsuleToy();
+            FileManagerCapsuleToy.doCommand(ConstantFile.FILE_COMMAND_LOAD, null);
         }
         if (ConstantCapsuleToy.MSG_CAPSULE_TOY.contains(capsuleToy)) {
             return String.format(ConstantCapsuleToy.CAPSULE_TOY_ADD_RE, capsuleToy);
         }
 
         //添加扭蛋
-        FileManager.addCapsuleToy(capsuleToy);
+        FileManagerCapsuleToy.doCommand(ConstantFile.FILE_COMMAND_WRITE, capsuleToy);
         return String.format(ConstantCapsuleToy.MSG_CAPSULE_TOY_ADD_SUCCESS, capsuleToy);
     }
 }

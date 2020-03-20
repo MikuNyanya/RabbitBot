@@ -15,7 +15,9 @@ import java.util.ArrayList;
  * <p>
  * 扭蛋的文件专用管理器
  */
-public class FileManagerCapsuleToy extends FileManager {
+public class FileManagerCapsuleToy {
+    //扭蛋 文件
+    private static File capsuleToyFile = null;
 
     /**
      * 文件初始化

@@ -338,7 +338,7 @@ public class PixivService {
         StringBuilder resultStr = new StringBuilder();
         resultStr.append(pixivImgCQ);
         if (1 < response.getPage_count()) {
-            resultStr.append("\n该Pid包含多张图片");
+            resultStr.append("\n该Pid包含" + response.getPage_count() + "张图片");
         }
         if (StringUtil.isNotEmpty(similarity)) {
             resultStr.append("\n[相似度] " + similarity + "%");

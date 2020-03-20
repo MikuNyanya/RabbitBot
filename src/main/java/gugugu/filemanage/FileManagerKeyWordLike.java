@@ -17,7 +17,9 @@ import java.util.List;
  * <p>
  * 模糊匹配关键词检索文件专用管理器
  */
-public class FileManagerKeyWordLike extends FileManager {
+public class FileManagerKeyWordLike  {
+    //模糊关键词 文件
+    private static File keyWordLikeFile = null;
 
     /**
      * 文件初始化

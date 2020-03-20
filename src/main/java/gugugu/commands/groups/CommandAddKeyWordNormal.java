@@ -5,9 +5,8 @@ import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
+import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantKeyWord;
-import gugugu.filemanage.FileManager;
-import gugugu.filemanage.FileManagerKeyWordLike;
 import gugugu.filemanage.FileManagerKeyWordNormal;
 import gugugu.service.KeyWordService;
 import utils.StringUtil;
@@ -57,7 +56,7 @@ public class CommandAddKeyWordNormal implements GroupCommand {
                         return ConstantKeyWord.KEY_WORD_OVER;
                     }
                     //判断关键词是否已存在 需要判断全匹配和模糊匹配两种
-                    if (StringUtil.isNotEmpty(KeyWordService.keyWordLikeRegex(ConstantKeyWord.key_wrod_like_list,oneKey))
+                    if (StringUtil.isNotEmpty(KeyWordService.keyWordLikeRegex(ConstantKeyWord.key_wrod_like_list, oneKey))
                             || StringUtil.isNotEmpty(FileManagerKeyWordNormal.keyWordNormalRegex(oneKey))) {
                         return String.format(ConstantKeyWord.KEY_WORD_EXISTS, oneKey);
                     }
@@ -74,7 +73,7 @@ public class CommandAddKeyWordNormal implements GroupCommand {
         String[] tempStr = new String[args.size()];
         args.toArray(tempStr);
         //写入文件并添加到list
-        FileManager.addKeyWordNormal(tempStr);
+        FileManagerKeyWordNormal.doCommand(ConstantFile.FILE_COMMAND_WRITE, tempStr);
 
         return ConstantKeyWord.KEY_WORD_SAVE_SUCCESS;
     }

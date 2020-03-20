@@ -36,7 +36,7 @@ public class PixivImjadIllustGet extends BaseRequest {
         //拼装参数
         addParam();
         //请求
-        byte[] resultBytes = HttpsUtil.doGet(URL + HttpUtil.parseUrlEncode(param), HttpUtil.getProxy());
+        byte[] resultBytes = HttpsUtil.doGet(URL + HttpUtil.parseUrlEncode(param), null);
         body = new String(resultBytes);
 
         //记录接口请求与返回日志
