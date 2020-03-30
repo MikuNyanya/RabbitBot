@@ -39,13 +39,14 @@ public class CommandnCov implements GroupCommand {
             return ConstantConfig.COMMAND_ROLE_ADMIN;
         }
 
+        String groupMsg = "";
         try {
-            NCoV_2019ReportService.reportInfoNow();
+            groupMsg = NCoV_2019ReportService.reportInfoNowWorld();
         } catch (Exception ex) {
             BotRabbit.bot.getLogger().error("nCoV疫情实时消息推送执行异常:" + ex.toString(), ex);
-            return "nCoV疫情实时消息推送，它挂了";
+            groupMsg = "nCoV疫情信息系统，它挂了";
         }
-        return "";
+        return groupMsg;
     }
 
     @Override

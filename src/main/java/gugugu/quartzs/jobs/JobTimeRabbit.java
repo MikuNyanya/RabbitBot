@@ -33,7 +33,7 @@ public class JobTimeRabbit implements Job {
         clearRPMap();
 
         //疫情总览信息推送
-//        nCoV();
+        nCoV();
 
         //pixiv日榜，最好放在最后执行，要下载图片
         //也可以另起一个线程，但我懒
@@ -117,15 +117,16 @@ public class JobTimeRabbit implements Job {
 
     //nCoV疫情兔子
     private void nCoV() {
-        //每天9点推送一次，现在疫情数据没那么值得关注了
+        //每天下午5点推送一次，中国境内还好，外国就看戏吧
         int hour = DateUtil.getHour();
-        if (hour != 21) {
+        if (hour != 17) {
             return;
         }
 
         try {
             //执行一次疫情消息推送
-            NCoV_2019ReportService.reportInfoNow();
+            String groupMsg = NCoV_2019ReportService.reportInfoNowWorld();
+            RabbitBotService.sendEveryGroupMsg(groupMsg);
         } catch (Exception ex) {
             BotRabbit.bot.getLogger().error("nCoV疫情消息推送执行异常:" + ex.toString(), ex);
         }
