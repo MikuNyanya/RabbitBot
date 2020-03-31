@@ -1,14 +1,14 @@
 package gugugu.service;
 
-import gugugu.apirequest.imgsearch.PixivImjadIllustGet;
-import gugugu.apirequest.imgsearch.PixivImjadIllustRankGet;
-import gugugu.apirequest.imgsearch.PixivImjadIllustSearch;
+import gugugu.apirequest.imjad.PixivImjadIllustGet;
+import gugugu.apirequest.imjad.PixivImjadIllustRankGet;
+import gugugu.apirequest.imjad.PixivImjadIllustSearch;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantConfig;
 import gugugu.constant.ConstantImage;
-import gugugu.entity.apirequest.imgsearch.pixiv.*;
-import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchInfoResult;
+import gugugu.entity.apirequest.imjad.*;
+import gugugu.entity.apirequest.saucenao.SaucenaoSearchInfoResult;
 import gugugu.entity.pixiv.PixivRankImageInfo;
 import gugugu.exceptions.RabbitException;
 import gugugu.filemanage.FileManagerPixivTags;
@@ -288,7 +288,7 @@ public class PixivService {
         String pixivImgFileName = url.substring(url.lastIndexOf("/") + 1);
         String localPixivFilePath = ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "pixiv" + File.separator + pixivImgFileName;
         if (FileUtil.exists(localPixivFilePath)) {
-            return ImageService.parseCQBuLocalImagePath(localPixivFilePath);
+            return ImageService.parseCQByLocalImagePath(localPixivFilePath);
         }
 
         //是否不加载p站图片，由于从p站本体拉数据，还没代理，很慢
@@ -301,7 +301,7 @@ public class PixivService {
         try {
             String localUrl = getPixivImgByPixivImgUrl(url, pixivId);
             if (StringUtil.isNotEmpty(localUrl)) {
-                imgCQ = ImageService.parseCQBuLocalImagePath(localUrl);
+                imgCQ = ImageService.parseCQByLocalImagePath(localUrl);
             }
             if (StringUtil.isEmpty(imgCQ)) {
                 imgCQ = ConstantImage.PIXIV_IMAGE_DOWNLOAD_FAIL;

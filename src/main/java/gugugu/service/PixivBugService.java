@@ -1,14 +1,7 @@
 package gugugu.service;
 
 import com.alibaba.fastjson.JSONObject;
-import gugugu.apirequest.imgsearch.PixivImjadIllustSearch;
-import gugugu.constant.ConstantCommon;
-import gugugu.constant.ConstantConfig;
-import gugugu.constant.ConstantImage;
-import gugugu.entity.apirequest.imgsearch.pixiv.ImjadPixivPagination;
-import gugugu.entity.apirequest.imgsearch.pixiv.ImjadPixivResponse;
-import gugugu.entity.apirequest.imgsearch.pixiv.ImjadPixivResult;
-import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchInfoResult;
+import gugugu.entity.apirequest.saucenao.SaucenaoSearchInfoResult;
 import gugugu.entity.pixiv.PixivImageInfo;
 import gugugu.entity.pixiv.PixivRankImageInfo;
 import org.jsoup.Jsoup;
@@ -18,15 +11,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import utils.HttpUtil;
 import utils.NumberUtil;
-import utils.RandomUtil;
 import utils.StringUtil;
 
 import java.io.IOException;
 import java.net.Proxy;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author MikuLink

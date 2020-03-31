@@ -1,12 +1,12 @@
 package gugugu.service;
 
-import gugugu.apirequest.imgsearch.SaucenaoImageSearch;
+import gugugu.apirequest.saucenao.SaucenaoImageSearch;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
 import gugugu.entity.ImageInfo;
-import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchInfoResult;
-import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchResult;
+import gugugu.entity.apirequest.saucenao.SaucenaoSearchInfoResult;
+import gugugu.entity.apirequest.saucenao.SaucenaoSearchResult;
 import net.coobird.thumbnailator.Thumbnails;
 import utils.*;
 
@@ -55,7 +55,7 @@ public class ImageService {
         //列表中有图片，随机一个，使用伪随机
         String guguguImageFullName = RandomUtil.rollAndDelStrFromList(imageGuguguList);
         //生成CQ码并返回
-        return parseCQBuLocalImagePath(guguguPath + File.separator + guguguImageFullName);
+        return parseCQByLocalImagePath(guguguPath + File.separator + guguguImageFullName);
     }
 
     /**
@@ -86,7 +86,7 @@ public class ImageService {
             String qlogoLocalPath = ImageUtil.downloadImage(url, ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "qlogo", qlogoImgName);
 
             //返回cq
-            return parseCQBuLocalImagePath(qlogoLocalPath);
+            return parseCQByLocalImagePath(qlogoLocalPath);
         } catch (Exception ex) {
             BotRabbit.bot.getLogger().error("qq[" + qq + "]获取头像异常:" + ex.toString(), ex);
             return null;
@@ -100,7 +100,7 @@ public class ImageService {
      * @param localImagePath 本地文件路径，带文件和后缀的那种
      * @return 生成的CQ码
      */
-    public static String parseCQBuLocalImagePath(String localImagePath) throws IOException {
+    public static String parseCQByLocalImagePath(String localImagePath) throws IOException {
         if (StringUtil.isEmpty(localImagePath)) {
             return "";
         }

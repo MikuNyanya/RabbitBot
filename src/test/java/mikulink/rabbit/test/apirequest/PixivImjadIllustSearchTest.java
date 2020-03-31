@@ -1,7 +1,7 @@
 package mikulink.rabbit.test.apirequest;
 
-import gugugu.apirequest.imgsearch.PixivImjadIllustSearch;
-import gugugu.entity.apirequest.imgsearch.pixiv.ImjadPixivResult;
+import gugugu.apirequest.imjad.PixivImjadIllustSearch;
+import gugugu.entity.apirequest.imjad.ImjadPixivResult;
 import org.junit.Test;
 
 /**

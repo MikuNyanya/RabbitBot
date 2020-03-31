@@ -109,7 +109,8 @@ public class BotRabbit {
             new CommandPtag(),
             new CommandAnimeSearch(),
             new CommandMorseCode(),
-            new CommandPtags()
+            new CommandPtags(),
+            new CommandQRCode()
     };
 
     /**

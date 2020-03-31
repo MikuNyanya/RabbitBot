@@ -1,10 +1,10 @@
 package gugugu.service;
 
-import gugugu.apirequest.animesearch.WhatAnimeApi;
+import gugugu.apirequest.tracemoe.WhatAnimeApi;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantAnime;
-import gugugu.entity.apirequest.animesearch.WhatAnimeDoc;
-import gugugu.entity.apirequest.animesearch.WhatAnimeResult;
+import gugugu.entity.apirequest.tracemoe.WhatAnimeDoc;
+import gugugu.entity.apirequest.tracemoe.WhatAnimeResult;
 
 import java.io.IOException;
 import java.util.List;

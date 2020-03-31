@@ -74,7 +74,7 @@ public class NCoV_2019ReportService {
         StringBuilder worldInfoStr = new StringBuilder();
         //主要国家趋势图
         String localPath = ImageUtil.downloadImage(nCovWorldInfo.getImportantForeignTrendChart().get(0).getImgUrl(), ConstantImage.DEFAULT_IMAGE_SAVE_PATH + "/ncov", null);
-        worldInfoStr.append(ImageService.parseCQBuLocalImagePath(localPath));
+        worldInfoStr.append(ImageService.parseCQByLocalImagePath(localPath));
         worldInfoStr.append("外国疫情总览");
         worldInfoStr.append(String.format("\n当前确诊：%s(%s%s)", foreignStatisticsBean.getCurrentConfirmedCount(), foreignStatisticsBean.getCurrentConfirmedIncr() < 0 ? "" : "+", foreignStatisticsBean.getCurrentConfirmedIncr()));
         worldInfoStr.append(String.format("\n总计确诊：%s(%s%s)", foreignStatisticsBean.getConfirmedCount(), foreignStatisticsBean.getConfirmedIncr() < 0 ? "" : "+", foreignStatisticsBean.getConfirmedIncr()));

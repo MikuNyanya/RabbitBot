@@ -2,7 +2,7 @@ package gugugu.service;
 
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantImage;
-import gugugu.entity.apirequest.imgsearch.saucenao.SaucenaoSearchInfoResult;
+import gugugu.entity.apirequest.saucenao.SaucenaoSearchInfoResult;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -90,13 +90,13 @@ public class DanbooruService {
             String imgFileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
             String localDanbooruFilePath = ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "danbooru" + File.separator + imgFileName;
             if (FileUtil.exists(localDanbooruFilePath)) {
-                return ImageService.parseCQBuLocalImagePath(localDanbooruFilePath);
+                return ImageService.parseCQByLocalImagePath(localDanbooruFilePath);
             }
 
             //下载图片
             String localUrl = ImageUtil.downloadImage(imageUrl, ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "danbooru", null);
             if (StringUtil.isNotEmpty(localUrl)) {
-                imgCQ = ImageService.parseCQBuLocalImagePath(localDanbooruFilePath);
+                imgCQ = ImageService.parseCQByLocalImagePath(localDanbooruFilePath);
             }
             if (StringUtil.isEmpty(imgCQ)) {
                 imgCQ = ConstantImage.DANBOORU_IMAGE_DOWNLOAD_FAIL;
