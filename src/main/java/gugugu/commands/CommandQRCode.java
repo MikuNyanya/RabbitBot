@@ -35,6 +35,11 @@ public class CommandQRCode implements EverywhereCommand {
         }
         //二维码内容
         String text = args.get(0);
+        //图片内容处理
+        if (text.contains("[CQ:image")) {
+            //此时内容是网络图片链接
+            text = StringUtil.getCQImageUrl(text);
+        }
         String bgColor = null;
         String fgColor = null;
         //由于需要网络图片链接，目前没有可用的图床，只好直接用酷Q的，无法对图片进行修正
