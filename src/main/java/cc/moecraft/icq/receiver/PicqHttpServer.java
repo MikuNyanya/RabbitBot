@@ -4,12 +4,12 @@ import cc.moecraft.icq.PicqBotX;
 import cc.moecraft.icq.event.events.local.EventLocalHttpFail;
 import cc.moecraft.icq.event.events.local.EventLocalHttpFail.Reason;
 import cc.moecraft.icq.exceptions.HttpServerException;
-import cc.moecraft.icq.utils.SHA1Utils;
-import cc.moecraft.logger.HyLogger;
+import utils.SHA1Utils;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import gugugu.bots.LoggerRabbit;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.net.InetSocketAddress;
 
 import static cc.moecraft.icq.PicqConstants.HTTP_API_VERSION_DETECTION;
 import static cc.moecraft.icq.event.events.local.EventLocalHttpFail.Reason.*;
-import static cc.moecraft.icq.utils.NetUtils.read;
+import static utils.NetUtils.read;
 
 /**
  * The class {@code PicqHttpServer} is a http server to receive and
@@ -45,11 +45,6 @@ public class PicqHttpServer
     private final PicqBotX bot;
 
     /**
-     * 日志对象
-     */
-    protected final HyLogger logger;
-
-    /**
      * HttpServer 对象
      */
     protected HttpServer server;
@@ -64,8 +59,6 @@ public class PicqHttpServer
     {
         this.port = port;
         this.bot = bot;
-
-        logger = bot.getLogger();
     }
 
     /**
@@ -86,7 +79,7 @@ public class PicqHttpServer
         }
         catch (IOException e)
         {
-            throw new HttpServerException(logger, e);
+            throw new HttpServerException(LoggerRabbit.logger(), e);
         }
     }
 
@@ -221,7 +214,7 @@ public class PicqHttpServer
     private boolean failed(Reason reason, String text)
     {
         getBot().getEventManager().call(new EventLocalHttpFail(reason));
-        logger.debug("Http Failed: {}: {}", reason, text);
+        LoggerRabbit.logger().debug("Http Failed: {}: {}", reason, text);
         return false;
     }
 
@@ -232,10 +225,10 @@ public class PicqHttpServer
      */
     private void reportIncorrectVersion(String currentVersion)
     {
-        logger.error("HTTP API请求版本不正确, 设置的兼容版本为: " + HTTP_API_VERSION_DETECTION);
-        logger.error("当前版本为: " + currentVersion);
-        logger.error("推荐更新这个类库或者HTTP API的版本");
-        logger.error("如果要无视版本检查, 请修改 HTTP_API_VERSION_DETECTION");
+        LoggerRabbit.logger().error("HTTP API请求版本不正确, 设置的兼容版本为: " + HTTP_API_VERSION_DETECTION);
+        LoggerRabbit.logger().error("当前版本为: " + currentVersion);
+        LoggerRabbit.logger().error("推荐更新这个类库或者HTTP API的版本");
+        LoggerRabbit.logger().error("如果要无视版本检查, 请修改 HTTP_API_VERSION_DETECTION");
     }
 
     /**
@@ -266,7 +259,7 @@ public class PicqHttpServer
     {
         if (!bot.getConfig().isDebug()) return;
 
-        logger.debug("收到新请求: {}", exchange.getRequestHeaders().getFirst("user-agent"));
-        logger.debug("- 数据: {}", data);
+        LoggerRabbit.logger().debug("收到新请求: {}", exchange.getRequestHeaders().getFirst("user-agent"));
+        LoggerRabbit.logger().debug("- 数据: {}", data);
     }
 }

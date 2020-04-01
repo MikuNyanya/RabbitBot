@@ -7,6 +7,7 @@ import cc.moecraft.icq.sender.returndata.ReturnListData;
 import cc.moecraft.icq.sender.returndata.returnpojo.get.RGroupMemberInfo;
 import cc.moecraft.icq.user.User;
 import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.service.ImageService;
 
 /**
@@ -48,7 +49,7 @@ public class GroupMemberIncreaseListener extends IcqListener {
             //发送群消息
             event.getHttpApi().sendGroupMsg(groupId, resultMsg.toString());
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("新兔子入群提示功能发生错误", ex);
+            LoggerRabbit.logger().error("新兔子入群提示功能发生错误", ex);
         }
     }
 }

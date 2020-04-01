@@ -2,7 +2,7 @@ package gugugu.apirequest.imjad;
 
 import com.alibaba.fastjson.JSONObject;
 import gugugu.apirequest.BaseRequest;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.entity.apirequest.imjad.ImjadPixivRankResult;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,11 +55,11 @@ public class PixivImjadIllustRankGet extends BaseRequest {
         //拼装参数
         addParam();
         //请求
-        byte[] resultBytes = HttpsUtil.doGet(URL + HttpUtil.parseUrlEncode(param),null);
+        byte[] resultBytes = HttpsUtil.doGet(URL + HttpUtil.parseUrlEncode(param), null);
         body = new String(resultBytes);
 
         //记录接口请求与返回日志
-        BotRabbit.bot.getLogger().debug(String.format("Api Request PixivImjadIllustRankGet,param:%s,resultBody:%s", JSONObject.toJSONString(param), body));
+        LoggerRabbit.logger().debug(String.format("Api Request PixivImjadIllustRankGet,param:%s,resultBody:%s", JSONObject.toJSONString(param), body));
     }
 
     //拼装参数
@@ -70,7 +70,7 @@ public class PixivImjadIllustRankGet extends BaseRequest {
         param.put("per_page", pageSize);
         param.put("mode", mode);
         param.put("content", content);
-        param.put("date",date);
+        param.put("date", date);
     }
 
     //获取解析后的结果对象

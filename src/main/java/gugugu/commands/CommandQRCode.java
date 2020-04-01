@@ -4,7 +4,7 @@ import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.EverywhereCommand;
 import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.User;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantQRCode;
 import gugugu.service.QRCodeService;
 import utils.StringUtil;
@@ -65,7 +65,7 @@ public class CommandQRCode implements EverywhereCommand {
         try {
             result = QRCodeService.doQRCodeRequest(text, bgColor, fgColor, logo);
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(ConstantQRCode.QRCODE_ERROR + ex.toString(), ex);
+            LoggerRabbit.logger().error(ConstantQRCode.QRCODE_ERROR + ex.toString(), ex);
             result = ConstantQRCode.QRCODE_ERROR;
         }
         return result;

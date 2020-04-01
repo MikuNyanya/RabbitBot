@@ -1,7 +1,7 @@
 package gugugu.service;
 
 import gugugu.apirequest.saucenao.SaucenaoImageSearch;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
 import gugugu.entity.ImageInfo;
@@ -88,7 +88,7 @@ public class ImageService {
             //返回cq
             return parseCQByLocalImagePath(qlogoLocalPath);
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("qq[" + qq + "]获取头像异常:" + ex.toString(), ex);
+            LoggerRabbit.logger().error("qq[" + qq + "]获取头像异常:" + ex.toString(), ex);
             return null;
         }
     }
@@ -157,7 +157,7 @@ public class ImageService {
     public static String searchImgFromSaucenao(String imgUrl) {
         String apiKey = ConstantCommon.common_config.get(ConstantImage.SAUCENAO_API_KEY);
         if (StringUtil.isEmpty(apiKey)) {
-            BotRabbit.bot.getLogger().warning(ConstantImage.SAUCENAO_API_KEY_EMPTY);
+            LoggerRabbit.logger().warning(ConstantImage.SAUCENAO_API_KEY_EMPTY);
             return ConstantImage.SAUCENAO_API_KEY_EMPTY;
         }
         SaucenaoSearchInfoResult searchResult = null;
@@ -197,7 +197,7 @@ public class ImageService {
                 break;
             }
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(ConstantImage.SAUCENAO_API_REQUEST_ERROR + ex.toString(), ex);
+            LoggerRabbit.logger().error(ConstantImage.SAUCENAO_API_REQUEST_ERROR + ex.toString(), ex);
             return ConstantImage.SAUCENAO_API_REQUEST_ERROR;
         }
 
@@ -222,10 +222,10 @@ public class ImageService {
                 return DanbooruService.parseDanbooruImgRequest(searchResult);
             }
         } catch (FileNotFoundException fileNotFoundEx) {
-            BotRabbit.bot.getLogger().warning(ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString());
+            LoggerRabbit.logger().warning(ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString());
             return ConstantImage.PIXIV_IMAGE_DELETE;
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(ConstantImage.IMAGE_GET_ERROR + ex.toString(), ex);
+            LoggerRabbit.logger().error(ConstantImage.IMAGE_GET_ERROR + ex.toString(), ex);
             return ConstantImage.IMAGE_GET_ERROR;
         }
     }

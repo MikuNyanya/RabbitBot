@@ -4,7 +4,7 @@ import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.EverywhereCommand;
 import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.User;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantImage;
 import gugugu.service.PixivService;
 import gugugu.service.RabbitBotService;
@@ -65,7 +65,7 @@ public class CommandPtag implements EverywhereCommand {
         try {
             result = PixivService.getPixivIllustByTag(tag);
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(ConstantImage.PIXIV_TAG_GET_ERROR_GROUP_MESSAGE + ex.toString(), ex);
+            LoggerRabbit.logger().error(ConstantImage.PIXIV_TAG_GET_ERROR_GROUP_MESSAGE + ex.toString(), ex);
             result = ConstantImage.PIXIV_TAG_GET_ERROR_GROUP_MESSAGE;
             //异常后清除间隔允许再次操作
             PIXIV_TAG_SPLIT_MAP.remove(sender.getId());

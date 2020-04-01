@@ -1,7 +1,7 @@
 package utils;
 
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -118,13 +118,13 @@ public class HttpsUtil {
     }
 
     public static byte[] doGet(String uri, Proxy proxy) throws IOException {
-        BotRabbit.bot.getLogger().debug("Http get:" + uri);
+        LoggerRabbit.logger().debug("Http get:" + uri);
         HttpsURLConnection httpsConn = getHttpsURLConnection(uri, "GET", proxy);
         return getBytesFromStream(httpsConn.getInputStream());
     }
 
     public static byte[] doPost(String uri, String data) throws IOException {
-        BotRabbit.bot.getLogger().debug("Http post:[" + uri + "]，data:" + data);
+        LoggerRabbit.logger().debug("Http post:[" + uri + "]，data:" + data);
         HttpsURLConnection httpsConn = getHttpsURLConnection(uri, "POST");
         setBytesToStream(httpsConn.getOutputStream(), data.getBytes());
         return getBytesFromStream(httpsConn.getInputStream());

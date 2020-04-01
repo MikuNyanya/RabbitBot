@@ -2,7 +2,7 @@ package gugugu.filemanage;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantFile;
 import utils.FileUtil;
@@ -52,9 +52,9 @@ public class FileManagerConfig {
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("配置文件读写异常:" + ioEx.toString(), ioEx);
+            LoggerRabbit.logger().error("配置文件读写异常:" + ioEx.toString(), ioEx);
         } catch (JSONException jsonEx) {
-            BotRabbit.bot.getLogger().error("配置文件json转化异常:" + jsonEx.toString(), jsonEx);
+            LoggerRabbit.logger().error("配置文件json转化异常:" + jsonEx.toString(), jsonEx);
         }
     }
 

@@ -5,7 +5,7 @@ import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
 import gugugu.constant.ConstantWeiboNews;
@@ -60,7 +60,7 @@ public class CommandPixivRank implements GroupCommand {
                 Thread.sleep(1000L * 5);
             }
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(ConstantImage.PIXIV_IMAGE_RANK_ERROR + ex.toString(), ex);
+            LoggerRabbit.logger().error(ConstantImage.PIXIV_IMAGE_RANK_ERROR + ex.toString(), ex);
             return ConstantImage.PIXIV_IMAGE_RANK_ERROR;
         }
         return "";

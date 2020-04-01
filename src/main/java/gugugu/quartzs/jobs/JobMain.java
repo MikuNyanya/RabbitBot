@@ -1,6 +1,6 @@
 package gugugu.quartzs.jobs;
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantFreeTime;
@@ -64,7 +64,7 @@ public class JobMain implements Job {
         try {
             RabbitBotService.sendEveryGroupMsg(msg);
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("日常语句推送执行异常:" + ex.toString(), ex);
+            LoggerRabbit.logger().error("日常语句推送执行异常:" + ex.toString(), ex);
         }
 
         //刷新最后发送时间
@@ -88,7 +88,7 @@ public class JobMain implements Job {
             //执行一次微博消息推送
             WeiboNewsService.doPushWeiboNews();
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("微博消息推送执行异常:" + ex.toString(), ex);
+            LoggerRabbit.logger().error("微博消息推送执行异常:" + ex.toString(), ex);
         }
 
         //刷新最后发送时间

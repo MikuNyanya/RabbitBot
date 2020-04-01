@@ -2,7 +2,7 @@ package gugugu.apirequest.weibo;
 
 import com.alibaba.fastjson.JSONObject;
 import gugugu.apirequest.BaseRequest;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.entity.apirequest.weibo.InfoWeiboHomeTimeline;
 import lombok.Getter;
 import lombok.Setter;
@@ -66,7 +66,7 @@ public class WeiboHomeTimelineGet extends BaseRequest {
         body = HttpUtil.get(URL + HttpUtil.parseUrlEncode(param));
 
         //记录接口请求与返回日志
-        BotRabbit.bot.getLogger().debug(String.format("Api Request WeiboHomeTimelineGet,param:%s,resultBody:%s", JSONObject.toJSONString(param), body));
+        LoggerRabbit.logger().debug(String.format("Api Request WeiboHomeTimelineGet,param:%s,resultBody:%s", JSONObject.toJSONString(param), body));
     }
 
     //拼装参数

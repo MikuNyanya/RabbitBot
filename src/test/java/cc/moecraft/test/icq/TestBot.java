@@ -15,6 +15,7 @@ import cc.moecraft.test.icq.features.codec.CommandEncode;
 import cc.moecraft.test.icq.features.say.CommandSay;
 import cc.moecraft.test.icq.features.say.CommandSayRaw;
 import cc.moecraft.test.icq.listeners.*;
+import gugugu.bots.LoggerRabbit;
 
 /**
  * 功能测试机器人!
@@ -97,7 +98,7 @@ public class TestBot {
         bot.getCommandManager().registerCommands(commands);
 
         // Debug输出所有已注册的指令
-        bot.getLogger().debug(bot.getCommandManager().getCommands().toString());
+        LoggerRabbit.logger().debug(bot.getCommandManager().getCommands().toString());
 
         // 启动机器人, 不会占用主线程
         bot.startBot();

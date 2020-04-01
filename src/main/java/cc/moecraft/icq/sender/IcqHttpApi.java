@@ -25,7 +25,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 import static cc.moecraft.icq.sender.HttpApiNode.*;
-import static cc.moecraft.icq.utils.NetUtils.url;
+import static utils.NetUtils.url;
 
 /**
  * 酷Q HTTP插件的API客户端w

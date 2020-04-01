@@ -10,6 +10,7 @@ import gugugu.listeners.GroupListener;
 import gugugu.listeners.GroupMemberDecreaseListener;
 import gugugu.listeners.GroupMemberIncreaseListener;
 import gugugu.listeners.SimpleTextLoggingListener;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,12 +24,14 @@ import java.util.List;
 public class BotRabbit {
     //机器人名称
     public static final String BOT_NAME = "兔叽";
+    //机器人名称
+    public static final String BOT_NAME_EN = "RabbitBot";
     //qq号
     public static final Long BOT_QQ = 1020992834L;
     //主(人)账号
     public static final List<Long> MASTER_QQ = Arrays.asList(455806936L);
     //picq端口
-    private static final int SOCKET_PORT = 31033;
+    public static final int SOCKET_PORT = 31033;
     //酷Q端口
     private static final int POST_PORT = 31032;
     //酷Q地址
@@ -75,7 +78,7 @@ public class BotRabbit {
         bot.getCommandManager().registerCommands(commands);
 
         // Debug输出所有已注册的指令
-        bot.getLogger().debug("已注册指令：" + bot.getCommandManager().getCommands().toString());
+        LoggerRabbit.logger().debug("已注册指令：" + bot.getCommandManager().getCommands().toString());
 
         // 启动机器人, 不会占用主线程
         bot.startBot();

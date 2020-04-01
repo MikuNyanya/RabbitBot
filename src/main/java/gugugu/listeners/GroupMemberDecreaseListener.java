@@ -3,11 +3,7 @@ package gugugu.listeners;
 import cc.moecraft.icq.event.EventHandler;
 import cc.moecraft.icq.event.IcqListener;
 import cc.moecraft.icq.event.events.notice.groupmember.decrease.EventNoticeGroupMemberDecrease;
-import cc.moecraft.icq.event.events.notice.groupmember.increase.EventNoticeGroupMemberIncrease;
-import cc.moecraft.icq.sender.returndata.ReturnListData;
-import cc.moecraft.icq.sender.returndata.returnpojo.get.RGroupMemberInfo;
-import cc.moecraft.icq.user.User;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.service.ImageService;
 
 /**
@@ -39,7 +35,7 @@ public class GroupMemberDecreaseListener extends IcqListener {
             //发送群消息
             event.getHttpApi().sendGroupMsg(event.getGroupId(), resultMsg.toString());
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("兔子退群提示功能发生错误", ex);
+            LoggerRabbit.logger().error("兔子退群提示功能发生错误", ex);
         }
     }
 }

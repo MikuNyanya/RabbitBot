@@ -1,6 +1,6 @@
 package gugugu.filemanage;
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantAmap;
 import gugugu.constant.ConstantFile;
 import utils.FileUtil;
@@ -49,7 +49,7 @@ public class FileManagerAmapAdcode {
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("高德地图acode文件读写异常:" + ioEx.toString(), ioEx);
+            LoggerRabbit.logger().error("高德地图acode文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 

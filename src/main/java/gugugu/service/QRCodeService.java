@@ -1,7 +1,7 @@
 package gugugu.service;
 
 import gugugu.apirequest.imjad.PixivImjadQRCode;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantImage;
 import gugugu.constant.ConstantQRCode;
 import gugugu.entity.apirequest.imjad.ImjadQRCode;
@@ -48,7 +48,7 @@ public class QRCodeService {
         ImjadQRCode imjadQRCode = request.getEntity();
         if (null == imjadQRCode || imjadQRCode.getCode() == null || imjadQRCode.getCode() != 0) {
             //记录api失败日志
-            BotRabbit.bot.getLogger().log("二维码请求失败，body:" + request.getBody());
+            LoggerRabbit.logger().log("二维码请求失败，body:" + request.getBody());
             return ConstantQRCode.QRCODE_API_FAIL;
         }
         String localUrl = ImageUtil.downloadImage(imjadQRCode.getUrl(), ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "qrcode", null);

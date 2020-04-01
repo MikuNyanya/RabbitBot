@@ -1,6 +1,6 @@
 package gugugu.filemanage;
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantMorseCode;
 import utils.FileUtil;
@@ -59,7 +59,7 @@ public class FileManagerMorseCode {
             //关闭读取器
             reader.close();
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("摩尔斯电码文件读写异常:" + ioEx.toString(), ioEx);
+            LoggerRabbit.logger().error("摩尔斯电码文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 }

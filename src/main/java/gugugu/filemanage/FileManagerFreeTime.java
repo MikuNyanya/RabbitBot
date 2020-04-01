@@ -1,6 +1,6 @@
 package gugugu.filemanage;
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantFreeTime;
 import utils.FileUtil;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * <p>
  * 日常语句文件专用管理器
  */
-public class FileManagerFreeTime{
+public class FileManagerFreeTime {
     //常规语句 文件
     private static File freeTimeFile = null;
 
@@ -51,7 +51,7 @@ public class FileManagerFreeTime{
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("日常语句文件读写异常:" + ioEx.toString(), ioEx);
+            LoggerRabbit.logger().error("日常语句文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 

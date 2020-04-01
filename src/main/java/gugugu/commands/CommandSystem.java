@@ -2,14 +2,8 @@ package gugugu.commands;
 
 import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.EverywhereCommand;
-import cc.moecraft.icq.command.interfaces.GroupCommand;
-import cc.moecraft.icq.event.events.message.EventDiscussMessage;
-import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.event.events.message.EventMessage;
-import cc.moecraft.icq.event.events.message.EventPrivateMessage;
 import cc.moecraft.icq.sender.returndata.returnpojo.get.RVersionInfo;
-import cc.moecraft.icq.user.Group;
-import cc.moecraft.icq.user.GroupUser;
 import cc.moecraft.icq.user.User;
 import gugugu.bots.BotRabbit;
 
@@ -40,7 +34,7 @@ public class CommandSystem implements EverywhereCommand {
 
         StringBuilder msg = new StringBuilder();
         msg.append("==========\n");
-        msg.append("[Name] " + BotRabbit.BOT_NAME + "(RabbitBot)\n");
+        msg.append(String.format("[Name] %s(%s)\n", BotRabbit.BOT_NAME, BotRabbit.BOT_NAME_EN));
         msg.append("[Birthday] 2019-12-3\n");
         msg.append("[Version] V2.3\n");
         msg.append("[酷Q] " + capitalizeFirstLetterOfEachWord(versionInfo.getCoolqEdition()) + "\n");

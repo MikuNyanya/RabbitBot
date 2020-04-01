@@ -1,6 +1,6 @@
 package gugugu.service;
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantImage;
 import gugugu.entity.apirequest.saucenao.SaucenaoSearchInfoResult;
 import org.jsoup.Jsoup;
@@ -53,7 +53,7 @@ public class DanbooruService {
             resultStr.append("\n[来源] " + source);
             return resultStr.toString();
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("DanbooruService " + ConstantImage.DANBOORU_ID_GET_ERROR_GROUP_MESSAGE + ex.toString(), ex);
+            LoggerRabbit.logger().error("DanbooruService " + ConstantImage.DANBOORU_ID_GET_ERROR_GROUP_MESSAGE + ex.toString(), ex);
             return ConstantImage.DANBOORU_ID_GET_ERROR_GROUP_MESSAGE;
         }
     }
@@ -103,10 +103,10 @@ public class DanbooruService {
             }
             return imgCQ;
         } catch (FileNotFoundException fileNotFoundEx) {
-            BotRabbit.bot.getLogger().warning("DanbooruService " + ConstantImage.DANBOORU_ID_GET_NOT_FOUND + "(" + danbooruId + ")");
+            LoggerRabbit.logger().warning("DanbooruService " + ConstantImage.DANBOORU_ID_GET_NOT_FOUND + "(" + danbooruId + ")");
             return ConstantImage.DANBOORU_ID_GET_NOT_FOUND;
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("DanbooruService " + ConstantImage.DANBOORU_ID_GET_FAIL_GROUP_MESSAGE + "(" + danbooruId + ")", ioEx);
+            LoggerRabbit.logger().error("DanbooruService " + ConstantImage.DANBOORU_ID_GET_FAIL_GROUP_MESSAGE + "(" + danbooruId + ")", ioEx);
             return ConstantImage.DANBOORU_ID_GET_FAIL_GROUP_MESSAGE;
         }
     }

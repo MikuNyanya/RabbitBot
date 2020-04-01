@@ -3,6 +3,7 @@ package gugugu.service;
 import cc.moecraft.icq.accounts.BotAccount;
 import gugugu.apirequest.weibo.WeiboHomeTimelineGet;
 import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantImage;
@@ -84,7 +85,7 @@ public class WeiboNewsService {
                     RabbitBotService.sendGroupMsg(groupId, msg);
                 } catch (Exception ex) {
                     if ("Read timed out".equalsIgnoreCase(ex.getMessage())) {
-                        BotRabbit.bot.getLogger().error("groupId[" + groupId + "]微博消息推送执行异常:" + ex.toString(), ex);
+                        LoggerRabbit.logger().error("groupId[" + groupId + "]微博消息推送执行异常:" + ex.toString(), ex);
                         RabbitBotService.sendGroupMsg(groupId, "微博消息推送超时，即将重试");
                         Thread.sleep(1000L * 3);
                         RabbitBotService.sendGroupMsg(groupId, msg);
@@ -104,7 +105,7 @@ public class WeiboNewsService {
         Long sinceId = weiboNews.getSince_id();
         //刷新最后推文标识，但如果一次请求中没有获取到新数据，since_id会为0
         if (0 != sinceId) {
-            BotRabbit.bot.getLogger().log(String.format("微博sinceId刷新：[%s]->[%s]", ConstantCommon.common_config.get("sinceId"), sinceId));
+            LoggerRabbit.logger().log(String.format("微博sinceId刷新：[%s]->[%s]", ConstantCommon.common_config.get("sinceId"), sinceId));
             //刷新sinceId配置
             ConstantCommon.common_config.put("sinceId", String.valueOf(sinceId));
             //更新配置文件

@@ -22,7 +22,7 @@ import cc.moecraft.icq.event.events.request.EventFriendRequest;
 import cc.moecraft.icq.event.events.request.EventGroupAddRequest;
 import cc.moecraft.icq.event.events.request.EventGroupInviteRequest;
 import cc.moecraft.icq.event.events.request.EventRequest;
-import cc.moecraft.icq.utils.CQUtils;
+import utils.CQUtils;
 import lombok.Getter;
 
 import java.lang.reflect.InvocationTargetException;

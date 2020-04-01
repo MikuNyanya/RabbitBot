@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 
-import static cc.moecraft.icq.utils.CQUtils.removeCqCode;
+import static utils.CQUtils.removeCqCode;
 
 /**
  * 消息事件

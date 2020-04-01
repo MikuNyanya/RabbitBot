@@ -1,7 +1,7 @@
 package gugugu.service;
 
 import gugugu.apirequest.amap.WeatherRequest;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantAmap;
 import gugugu.constant.ConstantCommon;
 import gugugu.entity.apirequest.amap.InfoWeather;
@@ -67,7 +67,7 @@ public class WeatherService {
                 break;
             }
             cityListStr.append("\n");
-            cityListStr.append(String.format("[%s]",cityName));
+            cityListStr.append(String.format("[%s]", cityName));
         }
         if (StringUtil.isEmpty(cityKey)) {
             return String.format(ConstantAmap.CITY_MATCH_FAIL, inputCityName, cityListStr.toString());
@@ -98,7 +98,7 @@ public class WeatherService {
     public static InfoWeather doWeatherRequest(String adcode) throws IOException {
         String appKey = ConstantCommon.common_config.get(ConstantAmap.APP_KEY_KEY);
         if (StringUtil.isEmpty(appKey)) {
-            BotRabbit.bot.getLogger().warning("高德appkey为空！");
+            LoggerRabbit.logger().warning("高德appkey为空！");
             return null;
         }
         WeatherRequest request = new WeatherRequest();
@@ -109,7 +109,7 @@ public class WeatherService {
         InfoWeather weather = request.getWeather();
         if (null == weather) {
             //记录api失败日志
-            BotRabbit.bot.getLogger().warning("获取高德天气失败，body:" + request.getBody());
+            LoggerRabbit.logger().warning("获取高德天气失败，body:" + request.getBody());
         }
         return weather;
     }

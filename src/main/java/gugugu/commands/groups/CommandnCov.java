@@ -5,7 +5,7 @@ import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantConfig;
 import gugugu.entity.GroupUserInfo;
 import gugugu.service.NCoV_2019ReportService;
@@ -43,7 +43,7 @@ public class CommandnCov implements GroupCommand {
         try {
             groupMsg = NCoV_2019ReportService.reportInfoNowWorld();
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("nCoV疫情实时消息推送执行异常:" + ex.toString(), ex);
+            LoggerRabbit.logger().error("nCoV疫情实时消息推送执行异常:" + ex.toString(), ex);
             groupMsg = "nCoV疫情信息系统，它挂了";
         }
         return groupMsg;

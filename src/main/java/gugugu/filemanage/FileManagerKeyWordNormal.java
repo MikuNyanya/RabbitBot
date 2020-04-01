@@ -1,6 +1,6 @@
 package gugugu.filemanage;
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantKeyWord;
 import utils.FileUtil;
@@ -54,7 +54,7 @@ public class FileManagerKeyWordNormal {
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("关键词文件读写异常:" + ioEx.toString(), ioEx);
+            LoggerRabbit.logger().error("关键词文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 

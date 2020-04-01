@@ -1,7 +1,7 @@
 package gugugu.service;
 
 import gugugu.apirequest.tracemoe.WhatAnimeApi;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantAnime;
 import gugugu.entity.apirequest.tracemoe.WhatAnimeDoc;
 import gugugu.entity.apirequest.tracemoe.WhatAnimeResult;
@@ -49,7 +49,7 @@ public class WhatAnimeService {
 
             return resultStr.toString();
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error(ConstantAnime.TRACE_MOE_API_REQUEST_ERROR, ioEx);
+            LoggerRabbit.logger().error(ConstantAnime.TRACE_MOE_API_REQUEST_ERROR, ioEx);
             return ConstantAnime.TRACE_MOE_SEARCH_ERROR;
         }
     }

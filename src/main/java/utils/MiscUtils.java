@@ -1,4 +1,4 @@
-package cc.moecraft.icq.utils;
+package utils;
 
 import cc.moecraft.logger.HyLogger;
 import cc.moecraft.utils.cli.ResourceUtils;

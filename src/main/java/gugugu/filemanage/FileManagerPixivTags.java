@@ -1,6 +1,6 @@
 package gugugu.filemanage;
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantImage;
 import utils.FileUtil;
@@ -67,7 +67,7 @@ public class FileManagerPixivTags {
             //关闭读取器
             reader.close();
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("pixiv_tag_rabbit文件读写异常:" + ioEx.toString(), ioEx);
+            LoggerRabbit.logger().error("pixiv_tag_rabbit文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 
@@ -90,7 +90,7 @@ public class FileManagerPixivTags {
             //关闭读取器
             reader.close();
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("pixiv_tag文件读写异常:" + ioEx.toString(), ioEx);
+            LoggerRabbit.logger().error("pixiv_tag文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 

@@ -4,7 +4,7 @@ import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.EverywhereCommand;
 import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.User;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantHitokoto;
 import gugugu.service.HitokotoService;
 import gugugu.service.RabbitBotService;
@@ -49,7 +49,7 @@ public class CommandHitokoto implements EverywhereCommand {
         try {
             return HitokotoService.getHitokoto();
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(ConstantHitokoto.HITOKOTO_ERROR + ex.toString(), ex);
+            LoggerRabbit.logger().error(ConstantHitokoto.HITOKOTO_ERROR + ex.toString(), ex);
             return ConstantHitokoto.HITOKOTO_ERROR;
         }
     }

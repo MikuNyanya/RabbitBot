@@ -4,7 +4,7 @@ import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.EverywhereCommand;
 import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.User;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantAmap;
 import gugugu.service.WeatherService;
 
@@ -37,7 +37,7 @@ public class CommandWeather implements EverywhereCommand {
         try {
             result = WeatherService.getWeatherByCityName(inputCity);
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("获取天气信息异常:" + ex.toString(), ex);
+            LoggerRabbit.logger().error("获取天气信息异常:" + ex.toString(), ex);
             result = ConstantAmap.WEATHER_API_FAIL;
         }
         return result;

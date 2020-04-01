@@ -1,6 +1,6 @@
 package gugugu.quartzs;
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.quartzs.jobs.JobMain;
 import gugugu.quartzs.jobs.JobTimeRabbit;
 import org.quartz.*;
@@ -30,7 +30,7 @@ public class RabbitBotJob {
             //一分钟跑一次的
             job_1min();
         } catch (SchedulerException sEx) {
-            BotRabbit.bot.getLogger().error("定时器任务启动异常:" + sEx.toString(), sEx);
+            LoggerRabbit.logger().error("定时器任务启动异常:" + sEx.toString(), sEx);
         }
     }
 

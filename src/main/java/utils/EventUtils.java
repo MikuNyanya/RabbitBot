@@ -1,4 +1,4 @@
-package cc.moecraft.icq.utils;
+package utils;
 
 import cc.moecraft.icq.event.Event;
 import cc.moecraft.icq.user.Group;

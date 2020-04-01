@@ -1,7 +1,7 @@
 package gugugu.service;
 
 import com.alibaba.fastjson.JSONObject;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantImage;
 import gugugu.entity.apirequest.dxynCoV.InfoAllnCoV;
 import gugugu.entity.apirequest.dxynCoV.NCoVWorldDetailInfo;
@@ -56,7 +56,7 @@ public class NCoV_2019ReportService {
         try {
             RabbitBotService.sendEveryGroupMsg(resultStr.toString());
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("nCoV疫情消息发送异常" + ex.toString(), ex);
+            LoggerRabbit.logger().error("nCoV疫情消息发送异常" + ex.toString(), ex);
         }
     }
 

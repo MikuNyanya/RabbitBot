@@ -1,6 +1,6 @@
 package gugugu.filemanage;
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantCapsuleToy;
 import gugugu.constant.ConstantFile;
 import utils.FileUtil;
@@ -51,7 +51,7 @@ public class FileManagerCapsuleToy {
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("扭蛋文件读写异常:" + ioEx.toString(), ioEx);
+            LoggerRabbit.logger().error("扭蛋文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 

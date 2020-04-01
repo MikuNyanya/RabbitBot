@@ -3,7 +3,7 @@ package gugugu.listeners;
 import cc.moecraft.icq.event.EventHandler;
 import cc.moecraft.icq.event.IcqListener;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantBlackList;
 import gugugu.constant.ConstantCommon;
 import gugugu.service.KeyWordService;
@@ -39,7 +39,7 @@ public class GroupListener extends IcqListener {
             //所有关键词匹配业务
             KeyWordService.getService().keyWordMatchGroup(event);
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(String.format("群消息业务处理异常，groupId:%s,msg:%s，%s", event.getGroupId(), event.getMessage(), ex.toString()), ex);
+            LoggerRabbit.logger().error(String.format("群消息业务处理异常，groupId:%s,msg:%s，%s", event.getGroupId(), event.getMessage(), ex.toString()), ex);
         }
     }
 }

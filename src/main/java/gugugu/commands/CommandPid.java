@@ -4,7 +4,7 @@ import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.EverywhereCommand;
 import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.User;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
 import gugugu.service.PixivBugService;
@@ -56,10 +56,10 @@ public class CommandPid implements EverywhereCommand {
                 result = PixivService.searchPixivImgById(NumberUtil.toLong(pid));
             }
         } catch (FileNotFoundException fileNotFoundEx) {
-            BotRabbit.bot.getLogger().warning(ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString());
+            LoggerRabbit.logger().warning(ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString());
             return ConstantImage.PIXIV_IMAGE_DELETE;
-        }  catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE + ex.toString(), ex);
+        } catch (Exception ex) {
+            LoggerRabbit.logger().error(ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE + ex.toString(), ex);
             result = ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE;
         }
         return result;

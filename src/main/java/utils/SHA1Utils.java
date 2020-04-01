@@ -1,4 +1,4 @@
-package cc.moecraft.icq.utils;
+package utils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

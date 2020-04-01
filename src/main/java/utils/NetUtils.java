@@ -1,4 +1,4 @@
-package cc.moecraft.icq.utils;
+package utils;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;

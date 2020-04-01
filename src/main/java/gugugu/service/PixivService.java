@@ -3,7 +3,7 @@ package gugugu.service;
 import gugugu.apirequest.imjad.PixivImjadIllustGet;
 import gugugu.apirequest.imjad.PixivImjadIllustRankGet;
 import gugugu.apirequest.imjad.PixivImjadIllustSearch;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantConfig;
 import gugugu.constant.ConstantImage;
@@ -260,7 +260,7 @@ public class PixivService {
      * @return 下载后的本地连接
      */
     private static String getPixivImgByPixivImgUrl(String url, Long pixivId) throws IOException {
-        BotRabbit.bot.getLogger().debug("Pixiv image download:" + url);
+        LoggerRabbit.logger().debug("Pixiv image download:" + url);
         //加入p站防爬链
         //目前一共遇到的
         //1.似乎是新连接，最近UI改了 https://i.pximg.net/img-original/img/2020/02/17/22/07/00/79561788_p0.jpg
@@ -308,7 +308,7 @@ public class PixivService {
             }
         } catch (FileNotFoundException fileNotFoundEx) {
             //图片被删了
-            BotRabbit.bot.getLogger().error("PixivService getPixivImgCQByPixivImgUrl " + ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString(), fileNotFoundEx);
+            LoggerRabbit.logger().error("PixivService getPixivImgCQByPixivImgUrl " + ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString(), fileNotFoundEx);
             imgCQ = ConstantImage.PIXIV_IMAGE_DELETE;
         }
         return imgCQ;
@@ -394,7 +394,7 @@ public class PixivService {
             FileManagerPixivTags.addTags(tagsTamp);
         } catch (Exception ex) {
             //异常不上抛，不是主要业务
-            BotRabbit.bot.getLogger().error(ConstantImage.PIXIV_TAG_SAVE_ERROR + " " + ex.toString(), ex);
+            LoggerRabbit.logger().error(ConstantImage.PIXIV_TAG_SAVE_ERROR + " " + ex.toString(), ex);
         }
     }
 }

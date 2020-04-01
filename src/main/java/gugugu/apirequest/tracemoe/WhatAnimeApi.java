@@ -2,7 +2,7 @@ package gugugu.apirequest.tracemoe;
 
 import com.alibaba.fastjson.JSONObject;
 import gugugu.apirequest.BaseRequest;
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.entity.apirequest.tracemoe.WhatAnimeResult;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +38,7 @@ public class WhatAnimeApi extends BaseRequest {
         body = new String(resultBytes);
 
         //记录接口请求与返回日志
-        BotRabbit.bot.getLogger().debug(String.format("Api Request WhatAnimeApi,param:%s,resultBody:%s", JSONObject.toJSONString(param), body));
+        LoggerRabbit.logger().debug(String.format("Api Request WhatAnimeApi,param:%s,resultBody:%s", JSONObject.toJSONString(param), body));
     }
 
     //拼装参数

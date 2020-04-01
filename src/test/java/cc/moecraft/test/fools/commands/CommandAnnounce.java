@@ -9,6 +9,7 @@ import cc.moecraft.icq.sender.returndata.returnpojo.get.RGroup;
 import cc.moecraft.icq.sender.returndata.returnpojo.send.RMessageReturnData;
 import cc.moecraft.icq.user.User;
 import cc.moecraft.utils.ArrayUtils;
+import gugugu.bots.LoggerRabbit;
 
 import java.util.ArrayList;
 
@@ -20,22 +21,17 @@ import java.util.ArrayList;
  *
  * @author Hykilpikonna
  */
-public class CommandAnnounce implements EverywhereCommand
-{
+public class CommandAnnounce implements EverywhereCommand {
     @Override
-    public String run(EventMessage event, User user, String command, ArrayList<String> args)
-    {
+    public String run(EventMessage event, User user, String command, ArrayList<String> args) {
         if (args.size() < 2) return "广播给所有群: /announce [延迟(ms)] [消息...]";
         // TODO: 权限模块
         if (user.getId() != 871674895) return null;
 
         int delay;
-        try
-        {
+        try {
             delay = Integer.parseInt(args.get(0));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return "请指定延迟, 单位为毫秒";
         }
 
@@ -48,40 +44,34 @@ public class CommandAnnounce implements EverywhereCommand
             int asyncCount = 0;
 
             outer:
-            for (RGroup group : groups.getData())
-            {
+            for (RGroup group : groups.getData()) {
                 // TODO: Remove this
                 Long[] list = new Long[]{175473823L, 62847742L, 139289187L, 68368719L, 138014904L, 201865589L, 204228752L, 211957490L, 213894622L};
-                for (Long aLong : list)
-                {
+                for (Long aLong : list) {
                     if (group.getGroupId().equals(aLong)) continue outer;
                 }
 
                 ReturnData<RMessageReturnData> returnData = event.getHttpApi().sendGroupMsg(group.getGroupId(), message);
-                event.getBot().getLogger().error("发送了: " + group.getGroupId() + " " + group.getGroupName());
-                switch (returnData.getStatus())
-                {
+                LoggerRabbit.logger().error("发送了: " + group.getGroupId() + " " + group.getGroupName());
+                switch (returnData.getStatus()) {
                     case ok:
-                        successCount ++;
+                        successCount++;
                         break;
                     case async:
-                        asyncCount ++;
+                        asyncCount++;
                         break;
                     case failed:
-                        failCount ++;
+                        failCount++;
                         break;
                 }
-                try
-                {
+                try {
                     Thread.sleep(delay);
-                }
-                catch (InterruptedException e)
-                {
+                } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
 
-            event.getBot().getLogger().error("Done!");
+            LoggerRabbit.logger().error("Done!");
 
         }).start();
 
@@ -90,8 +80,7 @@ public class CommandAnnounce implements EverywhereCommand
     }
 
     @Override
-    public CommandProperties properties()
-    {
+    public CommandProperties properties() {
         return new CommandProperties("announce");
     }
 }

@@ -1,6 +1,6 @@
 package gugugu.filemanage;
 
-import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantFile;
 import gugugu.constant.ConstantKeyWord;
 import utils.FileUtil;
@@ -17,7 +17,7 @@ import java.util.List;
  * <p>
  * 模糊匹配关键词检索文件专用管理器
  */
-public class FileManagerKeyWordLike  {
+public class FileManagerKeyWordLike {
     //模糊关键词 文件
     private static File keyWordLikeFile = null;
 
@@ -53,7 +53,7 @@ public class FileManagerKeyWordLike  {
                     break;
             }
         } catch (IOException ioEx) {
-            BotRabbit.bot.getLogger().error("模糊关键词文件读写异常:" + ioEx.toString(), ioEx);
+            LoggerRabbit.logger().error("模糊关键词文件读写异常:" + ioEx.toString(), ioEx);
         }
     }
 

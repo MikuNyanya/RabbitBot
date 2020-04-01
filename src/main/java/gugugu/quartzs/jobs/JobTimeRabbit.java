@@ -1,6 +1,7 @@
 package gugugu.quartzs.jobs;
 
 import gugugu.bots.BotRabbit;
+import gugugu.bots.LoggerRabbit;
 import gugugu.commands.groups.CommandRP;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantImage;
@@ -51,7 +52,7 @@ public class JobTimeRabbit implements Job {
             //给每个群发送报时
             RabbitBotService.sendEveryGroupMsg(msg);
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("报时兔子 消息发送异常" + ex.toString(), ex);
+            LoggerRabbit.logger().error("报时兔子 消息发送异常" + ex.toString(), ex);
         }
     }
 
@@ -93,7 +94,7 @@ public class JobTimeRabbit implements Job {
         }
 
         CommandRP.MAP_RP.clear();
-        BotRabbit.bot.getLogger().debug("每日人品缓存已清除");
+        LoggerRabbit.logger().debug("每日人品缓存已清除");
     }
 
     //天气兔子
@@ -111,7 +112,7 @@ public class JobTimeRabbit implements Job {
             //给每个群发送报时
             RabbitBotService.sendEveryGroupMsg(msg);
         } catch (Exception ioEx) {
-            BotRabbit.bot.getLogger().error("天气兔子发生异常:" + ioEx.toString(), ioEx);
+            LoggerRabbit.logger().error("天气兔子发生异常:" + ioEx.toString(), ioEx);
         }
     }
 
@@ -128,7 +129,7 @@ public class JobTimeRabbit implements Job {
             String groupMsg = NCoV_2019ReportService.reportInfoNowWorld();
             RabbitBotService.sendEveryGroupMsg(groupMsg);
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error("nCoV疫情消息推送执行异常:" + ex.toString(), ex);
+            LoggerRabbit.logger().error("nCoV疫情消息推送执行异常:" + ex.toString(), ex);
         }
     }
 
@@ -157,7 +158,7 @@ public class JobTimeRabbit implements Job {
                 Thread.sleep(1000L * 2);
             }
         } catch (Exception ex) {
-            BotRabbit.bot.getLogger().error(ConstantImage.PIXIV_IMAGE_RANK_JOB_ERROR + ex.toString(), ex);
+            LoggerRabbit.logger().error(ConstantImage.PIXIV_IMAGE_RANK_JOB_ERROR + ex.toString(), ex);
         }
     }
 }

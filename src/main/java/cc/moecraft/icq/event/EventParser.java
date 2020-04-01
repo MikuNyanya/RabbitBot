@@ -20,6 +20,7 @@ import cc.moecraft.icq.event.events.request.EventGroupAddRequest;
 import cc.moecraft.icq.event.events.request.EventGroupInviteRequest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import gugugu.bots.LoggerRabbit;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -40,8 +41,7 @@ import static cc.moecraft.icq.PicqConstants.*;
  * @since 2019-03-21 19:13
  */
 @RequiredArgsConstructor
-public class EventParser
-{
+public class EventParser {
     private final EventManager manager;
 
     private final Map<Class<? extends Event>, Map<String, ArrayList<ContentComparable>>> cache = new HashMap<>();
@@ -50,44 +50,37 @@ public class EventParser
      * 判断一个事件是不是新的
      * 是新的代表这个事件在其他账号上有没有判定为是新的过.
      *
-     * @param event 事件
+     * @param event      事件
      * @param identifier 标记 (比如群消息的标记就是群号)
-     * @param <T> 实现了内容比较方法的事件类
+     * @param <T>        实现了内容比较方法的事件类
      * @return 是不是新的
      */
     @SuppressWarnings("unchecked")
-    private <T extends Event & ContentComparable> boolean isNew(T event, String identifier)
-    {
-        if (!manager.getBot().getConfig().isMultiAccountOptimizations(manager.getBot()))
-        {
+    private <T extends Event & ContentComparable> boolean isNew(T event, String identifier) {
+        if (!manager.getBot().getConfig().isMultiAccountOptimizations(manager.getBot())) {
             return true;
         }
         Class<? extends Event> eventClass = event.getClass();
 
-        if (!cache.containsKey(eventClass))
-        {
+        if (!cache.containsKey(eventClass)) {
             cache.put(eventClass, new HashMap<>());
         }
         Map<String, ArrayList<ContentComparable>> cachedEventMap = cache.get(eventClass);
 
-        if (!cachedEventMap.containsKey(identifier))
-        {
+        if (!cachedEventMap.containsKey(identifier)) {
             cachedEventMap.put(identifier, new ArrayList<>());
         }
         ArrayList<ContentComparable> cachedEvents = cachedEventMap.get(identifier);
 
-        for (ContentComparable comparable : cachedEvents)
-        {
-            if (comparable.contentEquals(event))
-            {
+        for (ContentComparable comparable : cachedEvents) {
+            if (comparable.contentEquals(event)) {
                 return false;
             }
         }
 
         cachedEvents.add(event);
 
-        if (cachedEvents.size() > 10)
-        {
+        if (cachedEvents.size() > 10) {
             cachedEvents.remove(0);
         }
         return true;
@@ -98,8 +91,7 @@ public class EventParser
      *
      * @param event 事件对象
      */
-    private void call(Event event)
-    {
+    private void call(Event event) {
         manager.call(event);
     }
 
@@ -108,18 +100,15 @@ public class EventParser
      *
      * @param inputJsonString ICQ发来的Json字符串
      */
-    public void call(String inputJsonString)
-    {
-        if (manager.getBot().getConfig().isEventPaused())
-        {
+    public void call(String inputJsonString) {
+        if (manager.getBot().getConfig().isEventPaused()) {
             return; // 判断暂停
         }
 
         JsonObject json = new JsonParser().parse(inputJsonString).getAsJsonObject();
         String postType = json.get(EVENT_KEY_POST_TYPE).getAsString();
 
-        switch (postType)
-        {
+        switch (postType) {
             case EVENT_KEY_POST_TYPE_MESSAGE: // 消息事件
             {
                 callMessage(json);
@@ -153,12 +142,10 @@ public class EventParser
      *
      * @param json JSON输入
      */
-    private void callMessage(JsonObject json)
-    {
+    private void callMessage(JsonObject json) {
         // 获取消息类型
         String messageType = json.get(EVENT_KEY_MESSAGE_TYPE).getAsString();
-        switch (messageType)
-        {
+        switch (messageType) {
             case EVENT_KEY_MESSAGE_TYPE_PRIVATE: // 私聊消息
             {
                 call(gsonRead.fromJson(json, EventPrivateMessage.class));
@@ -169,8 +156,7 @@ public class EventParser
                 EventGroupMessage event = gsonRead.fromJson(json, EventGroupMessage.class);
 
                 // 判断事件是不是新的
-                if (isNew(event, event.getGroupId().toString()))
-                {
+                if (isNew(event, event.getGroupId().toString())) {
                     call(event);
                 }
                 break;
@@ -178,8 +164,7 @@ public class EventParser
             case EVENT_KEY_MESSAGE_TYPE_DISCUSS: // 讨论组消息
             {
                 EventDiscussMessage event = gsonRead.fromJson(json, EventDiscussMessage.class);
-                if (isNew(event, event.getDiscussId().toString()))
-                {
+                if (isNew(event, event.getDiscussId().toString())) {
                     call(event);
                 }
                 break;
@@ -197,11 +182,9 @@ public class EventParser
      *
      * @param json JSON输入
      */
-    private void callRequest(JsonObject json)
-    {
+    private void callRequest(JsonObject json) {
         String requestType = json.get(EVENT_KEY_REQUEST_TYPE).getAsString();
-        switch (requestType)
-        {
+        switch (requestType) {
             case EVENT_KEY_REQUEST_TYPE_FRIEND: // 好友请求
             {
                 call(gsonRead.fromJson(json, EventFriendRequest.class));
@@ -210,13 +193,11 @@ public class EventParser
             case EVENT_KEY_REQUEST_TYPE_GROUP: // 群请求
             {
                 String subtype = json.get(EVENT_KEY_SUBTYPE).getAsString();
-                switch (subtype)
-                {
+                switch (subtype) {
                     case EVENT_KEY_REQUEST_TYPE_GROUP_ADD: // 加群
                     {
                         EventGroupAddRequest event = gsonRead.fromJson(json, EventGroupAddRequest.class);
-                        if (isNew(event, event.getGroupId().toString()))
-                        {
+                        if (isNew(event, event.getGroupId().toString())) {
                             call(event);
                         }
                         break;
@@ -247,49 +228,38 @@ public class EventParser
      *
      * @param json JSON输入
      */
-    private void callNotice(JsonObject json)
-    {
+    private void callNotice(JsonObject json) {
         String noticeType = json.get(EVENT_KEY_NOTICE_TYPE).getAsString();
-        switch (noticeType)
-        {
+        switch (noticeType) {
             // 传群文件
-            case EVENT_KEY_NOTICE_TYPE_GROUP_UPLOAD:
-            {
+            case EVENT_KEY_NOTICE_TYPE_GROUP_UPLOAD: {
                 EventNoticeGroupUpload event = gsonRead.fromJson(json, EventNoticeGroupUpload.class);
-                if (isNew(event, event.getGroupId().toString()))
-                {
+                if (isNew(event, event.getGroupId().toString())) {
                     call(event);
                 }
                 break;
             }
             // 加好友
-            case EVENT_KEY_NOTICE_TYPE_FRIEND_ADD:
-            {
+            case EVENT_KEY_NOTICE_TYPE_FRIEND_ADD: {
                 call(gsonRead.fromJson(json, EventNoticeFriendAdd.class));
                 break;
             }
             // 群管理
-            case EVENT_KEY_NOTICE_TYPE_GROUP_ADMIN:
-            {
+            case EVENT_KEY_NOTICE_TYPE_GROUP_ADMIN: {
                 String subtype = json.get(EVENT_KEY_SUBTYPE).getAsString();
-                switch (subtype)
-                {
+                switch (subtype) {
                     // 设置管理
-                    case EVENT_KEY_NOTICE_TYPE_GROUP_ADMIN_SET:
-                    {
+                    case EVENT_KEY_NOTICE_TYPE_GROUP_ADMIN_SET: {
                         EventNoticeGroupAdminSet event = gsonRead.fromJson(json, EventNoticeGroupAdminSet.class);
-                        if (isNew(event, event.getGroupId().toString()))
-                        {
+                        if (isNew(event, event.getGroupId().toString())) {
                             call(event);
                         }
                         break;
                     }
                     // 取消管理
-                    case EVENT_KEY_NOTICE_TYPE_GROUP_ADMIN_UNSET:
-                    {
+                    case EVENT_KEY_NOTICE_TYPE_GROUP_ADMIN_UNSET: {
                         EventNoticeGroupAdminRemove event = gsonRead.fromJson(json, EventNoticeGroupAdminRemove.class);
-                        if (isNew(event, event.getGroupId().toString()))
-                        {
+                        if (isNew(event, event.getGroupId().toString())) {
                             call(event);
                         }
                         break;
@@ -303,34 +273,27 @@ public class EventParser
                 break;
             }
             // 群成员减少
-            case EVENT_KEY_NOTICE_TYPE_GROUP_DECREASE:
-            {
+            case EVENT_KEY_NOTICE_TYPE_GROUP_DECREASE: {
                 String subtype = json.get(EVENT_KEY_SUBTYPE).getAsString();
-                switch (subtype)
-                {
+                switch (subtype) {
                     // 退群
-                    case EVENT_KEY_NOTICE_TYPE_GROUP_DECREASE_LEAVE:
-                    {
+                    case EVENT_KEY_NOTICE_TYPE_GROUP_DECREASE_LEAVE: {
                         EventNoticeGroupMemberLeave event = gsonRead.fromJson(json, EventNoticeGroupMemberLeave.class);
-                        if (isNew(event, event.getGroupId().toString()))
-                        {
+                        if (isNew(event, event.getGroupId().toString())) {
                             call(event);
                         }
                         break;
                     }
                     // 踢出
-                    case EVENT_KEY_NOTICE_TYPE_GROUP_DECREASE_KICK:
-                    {
+                    case EVENT_KEY_NOTICE_TYPE_GROUP_DECREASE_KICK: {
                         EventNoticeGroupMemberKick event = gsonRead.fromJson(json, EventNoticeGroupMemberKick.class);
-                        if (isNew(event, event.getGroupId().toString()))
-                        {
+                        if (isNew(event, event.getGroupId().toString())) {
                             call(event);
                         }
                         break;
                     }
                     // 自己被踢出
-                    case EVENT_KEY_NOTICE_TYPE_GROUP_DECREASE_KICK_ME:
-                    {
+                    case EVENT_KEY_NOTICE_TYPE_GROUP_DECREASE_KICK_ME: {
                         call(gsonRead.fromJson(json, EventNoticeGroupMemberKickBot.class));
                         break;
                     }
@@ -343,27 +306,21 @@ public class EventParser
                 break;
             }
             // 群成员增加
-            case EVENT_KEY_NOTICE_TYPE_GROUP_INCREASE:
-            {
+            case EVENT_KEY_NOTICE_TYPE_GROUP_INCREASE: {
                 String subtype = json.get(EVENT_KEY_SUBTYPE).getAsString();
-                switch (subtype)
-                {
+                switch (subtype) {
                     // 同意
-                    case EVENT_KEY_NOTICE_TYPE_GROUP_INCREASE_APPROVE:
-                    {
+                    case EVENT_KEY_NOTICE_TYPE_GROUP_INCREASE_APPROVE: {
                         EventNoticeGroupMemberApprove event = gsonRead.fromJson(json, EventNoticeGroupMemberApprove.class);
-                        if (isNew(event, event.getGroupId().toString()))
-                        {
+                        if (isNew(event, event.getGroupId().toString())) {
                             call(event);
                         }
                         break;
                     }
                     // 邀请
-                    case EVENT_KEY_NOTICE_TYPE_GROUP_INCREASE_INVITE:
-                    {
+                    case EVENT_KEY_NOTICE_TYPE_GROUP_INCREASE_INVITE: {
                         EventNoticeGroupMemberInvite event = gsonRead.fromJson(json, EventNoticeGroupMemberInvite.class);
-                        if (isNew(event, event.getGroupId().toString()))
-                        {
+                        if (isNew(event, event.getGroupId().toString())) {
                             call(event);
                         }
                         break;
@@ -377,11 +334,9 @@ public class EventParser
                 break;
             }
             // 群禁言
-            case EVENT_KEY_NOTICE_TYPE_GROUP_BAN:
-            {
+            case EVENT_KEY_NOTICE_TYPE_GROUP_BAN: {
                 EventNoticeGroupBan event = gsonRead.fromJson(json, EventNoticeGroupBan.class);
-                if (isNew(event, event.getGroupId().toString()))
-                {
+                if (isNew(event, event.getGroupId().toString())) {
                     call(event);
                 }
                 break;
@@ -399,26 +354,21 @@ public class EventParser
      *
      * @param json JSON输入
      */
-    private void callMeta(JsonObject json)
-    {
+    private void callMeta(JsonObject json) {
         String metaType = json.get(EVENT_KEY_META_TYPE).getAsString();
-        switch (metaType)
-        {
+        switch (metaType) {
             // 生命周期
-            case EVENT_KEY_META_TYPE_LIFECYCLE:
-            {
+            case EVENT_KEY_META_TYPE_LIFECYCLE: {
                 call(gsonRead.fromJson(json, EventMetaLifecycle.class));
                 break;
             }
             // 心跳
-            case EVENT_KEY_META_TYPE_HEARTBEAT:
-            {
+            case EVENT_KEY_META_TYPE_HEARTBEAT: {
                 call(gsonRead.fromJson(json, EventMetaHeartbeat.class));
                 break;
             }
             // 未识别
-            default:
-            {
+            default: {
                 reportUnrecognized(EVENT_KEY_NOTICE_TYPE, metaType, json);
                 break;
             }
@@ -431,9 +381,8 @@ public class EventParser
      * @param key 字段
      * @param val 获取的值
      */
-    private void reportUnrecognized(String key, String val, Object json)
-    {
-        manager.getBot().getLogger().error("Unrecognized Key (未识别的字段): {}={}", key, val);
-        manager.getBot().getLogger().error("- {}", json);
+    private void reportUnrecognized(String key, String val, Object json) {
+        LoggerRabbit.logger().error("Unrecognized Key (未识别的字段): {}={}", key, val);
+        LoggerRabbit.logger().error("- {}", json);
     }
 }

@@ -1,4 +1,4 @@
-package cc.moecraft.icq.utils;
+package utils;
 
 /**
  * 此类由 Hykilpikonna 在 2018/06/13 创建!

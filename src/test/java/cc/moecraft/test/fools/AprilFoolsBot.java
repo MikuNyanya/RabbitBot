@@ -7,6 +7,7 @@ import cc.moecraft.icq.event.IcqListener;
 import cc.moecraft.test.fools.commands.*;
 import cc.moecraft.test.icq.features.say.CommandSay;
 import cc.moecraft.test.icq.listeners.SimpleTextLoggingListener;
+import gugugu.bots.LoggerRabbit;
 
 /**
  * TODO: No description yet...
@@ -18,8 +19,7 @@ import cc.moecraft.test.icq.listeners.SimpleTextLoggingListener;
  * @author Vanilla (https://github.com/VergeDX)
  * @since 2019-03-31 22:24
  */
-public class AprilFoolsBot
-{
+public class AprilFoolsBot {
     /**
      * 要注册的指令
      */
@@ -41,8 +41,7 @@ public class AprilFoolsBot
 
     };
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         // 创建机器人对象 ( 传入配置 )
         PicqBotX bot = new PicqBotX(new PicqConfig(31092)
                 .setDebug(false)
@@ -72,7 +71,7 @@ public class AprilFoolsBot
         bot.getCommandManager().registerCommands(commands);
 
         // Debug输出所有已注册的指令
-        bot.getLogger().debug(bot.getCommandManager().getCommands().toString());
+        LoggerRabbit.logger().debug(bot.getCommandManager().getCommands().toString());
 
         // 启动机器人, 不会占用主线程
         bot.startBot();

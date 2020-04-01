@@ -3,7 +3,6 @@ package gugugu.service;
 import gugugu.apirequest.hitokoto.HitokotoGet;
 import gugugu.constant.ConstantHitokoto;
 import gugugu.entity.hitokoto.HitokotoInfo;
-import utils.StringUtil;
 
 import java.io.IOException;
 
