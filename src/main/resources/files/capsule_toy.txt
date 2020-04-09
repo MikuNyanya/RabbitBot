@@ -414,3 +414,6 @@ world.execute(me);
 出来！面对我！
 Do you guys not have phone?
 波兰饺子发射器
+帝国进行曲
+I'm your father
+AT-AT

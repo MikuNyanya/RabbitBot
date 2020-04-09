@@ -1,4 +1,4 @@
-package mikulink.rabbit.test.util;
+package mikulink.rabbit.test.service;
 
 import gugugu.service.NCoV_2019ReportService;
 import org.junit.Test;

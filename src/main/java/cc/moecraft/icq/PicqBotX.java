@@ -14,7 +14,6 @@ import cc.moecraft.icq.sender.returndata.returnpojo.get.RVersionInfo;
 import cc.moecraft.icq.user.GroupManager;
 import cc.moecraft.icq.user.GroupUserManager;
 import cc.moecraft.icq.user.UserManager;
-import utils.MiscUtils;
 import cc.moecraft.logger.format.AnsiColor;
 import cc.moecraft.utils.HyExpressionResolver;
 import cn.hutool.http.HttpException;
@@ -25,14 +24,15 @@ import gugugu.constant.ConstantFile;
 import gugugu.filemanage.*;
 import gugugu.quartzs.RabbitBotJob;
 import lombok.Getter;
+import utils.MiscUtils;
 
 import java.util.function.Consumer;
 
 import static cc.moecraft.icq.PicqConstants.HTTP_API_VERSION_DETECTION;
 import static cc.moecraft.icq.PicqConstants.VERSION;
+import static cc.moecraft.logger.format.AnsiColor.GREEN;
 import static utils.MiscUtils.logInitDone;
 import static utils.MiscUtils.logResource;
-import static cc.moecraft.logger.format.AnsiColor.GREEN;
 
 /**
  * The class {@code PicqBotX} is the main controller class of all the
@@ -132,7 +132,7 @@ public class PicqBotX {
 
         //日志初始化
         LoggerRabbit.init(config);
-        int fullProgress = 9;
+        int fullProgress = 8;
         int prgressIndex = 0;
         LoggerRabbit.logger().timing.init();
         logResource(LoggerRabbit.logger(), config.getColorSupportLevel() == null ? "splash" : "splash-precolored", "version", VERSION);
@@ -144,10 +144,6 @@ public class PicqBotX {
         groupManager = new GroupManager(this);
         prgressIndex++;
         logInitDone(LoggerRabbit.logger(), "缓存管理器      ", prgressIndex, fullProgress - prgressIndex);
-
-        // Debug设置没啦w
-        prgressIndex++;
-        logInitDone(LoggerRabbit.logger(), "DEBUG设置        ", prgressIndex, fullProgress - prgressIndex);
 
         // 事件管理器
         eventManager = new EventManager(this);
@@ -171,7 +167,7 @@ public class PicqBotX {
         prgressIndex++;
         logInitDone(LoggerRabbit.logger(), "外部配置文件     ", prgressIndex, fullProgress - prgressIndex);
 
-        //加载资源
+        //加载资源，再多一点的话，需要专门写一个加载项封装起来了
         //日常语句
         FileManagerFreeTime.doCommand(ConstantFile.FILE_COMMAND_LOAD);
         //关键词匹配-全匹配
