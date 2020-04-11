@@ -9,9 +9,9 @@ import java.util.*;
  */
 public class ConstantImage extends ConstantCommon {
     //默认的文件储存路径
-    public static final String DEFAULT_IMAGE_SAVE_PATH = "src/main/resources/images";
+    public static final String DEFAULT_IMAGE_SAVE_PATH = "data/images";
     //处理后的图片存放目录
-    public static final String DEFAULT_IMAGE_SCALE_SAVE_PATH = "src/main/resources/images/scale";
+    public static final String DEFAULT_IMAGE_SCALE_SAVE_PATH = "data/images/scale";
     //酷Q的图片目录
     public static final String COOLQ_IMAGE_SAVE_PATH = "D:/酷Q Pro/data/image";
 

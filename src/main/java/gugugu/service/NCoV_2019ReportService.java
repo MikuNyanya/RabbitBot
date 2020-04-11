@@ -72,9 +72,9 @@ public class NCoV_2019ReportService {
         NCovWorldInfo.ForeignStatisticsBean foreignStatisticsBean = nCovWorldInfo.getForeignStatistics();
         //拼接字符串
         StringBuilder worldInfoStr = new StringBuilder();
-        //主要国家趋势图
-        String localPath = ImageUtil.downloadImage(nCovWorldInfo.getImportantForeignTrendChart().get(0).getImgUrl(), ConstantImage.DEFAULT_IMAGE_SAVE_PATH + "/ncov", null);
-        worldInfoStr.append(ImageService.parseCQByLocalImagePath(localPath));
+        //主要国家趋势图，图片是前端用数据渲染，不是后端返回图片了
+//        String localPath = ImageUtil.downloadImage(nCovWorldInfo.getImportantForeignTrendChart().get(0).getImgUrl(), ConstantImage.DEFAULT_IMAGE_SAVE_PATH + "/ncov", null);
+//        worldInfoStr.append(ImageService.parseCQByLocalImagePath(localPath));
         worldInfoStr.append("外国疫情总览");
         worldInfoStr.append(String.format("\n当前确诊：%s(%s%s)", foreignStatisticsBean.getCurrentConfirmedCount(), foreignStatisticsBean.getCurrentConfirmedIncr() < 0 ? "" : "+", foreignStatisticsBean.getCurrentConfirmedIncr()));
         worldInfoStr.append(String.format("\n总计确诊：%s(%s%s)", foreignStatisticsBean.getConfirmedCount(), foreignStatisticsBean.getConfirmedIncr() < 0 ? "" : "+", foreignStatisticsBean.getConfirmedIncr()));
@@ -82,7 +82,7 @@ public class NCoV_2019ReportService {
         worldInfoStr.append(String.format("\n总计死亡：%s(%s%s)", foreignStatisticsBean.getDeadCount(), foreignStatisticsBean.getDeadIncr() < 0 ? "" : "+", foreignStatisticsBean.getDeadIncr()));
 
         //区域详情
-        int maxDetail = 5;
+        int maxDetail = 10;
         worldInfoStr.append("\n\n外国重疫区Top" + maxDetail);
         String rootStr = htmlStr.substring(htmlStr.indexOf("window.getListByCountryTypeService2true =") + "window.getListByCountryTypeService2true =".length());
         rootStr = rootStr.substring(0, rootStr.indexOf("}catch")).trim();

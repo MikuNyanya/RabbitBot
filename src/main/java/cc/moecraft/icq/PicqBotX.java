@@ -168,6 +168,8 @@ public class PicqBotX {
         logInitDone(LoggerRabbit.logger(), "外部配置文件     ", prgressIndex, fullProgress - prgressIndex);
 
         //加载资源，再多一点的话，需要专门写一个加载项封装起来了
+        //设置https协议，已解决SSL peer shut down incorrectly的异常
+        System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2,SSLv3");
         //日常语句
         FileManagerFreeTime.doCommand(ConstantFile.FILE_COMMAND_LOAD);
         //关键词匹配-全匹配
