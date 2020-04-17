@@ -32,7 +32,7 @@ public class RabbitBotService {
         //获取链接，参数是机器人的qq号
         IcqHttpApi icqHttpApi = BotRabbit.bot.getAccountManager().getIdIndex().get(BotRabbit.BOT_QQ).getHttpApi();
 
-        //给每个群发送消息
+        //给每个群发送消息 todo 改为多线程执行
         Map<Long, Map<BotAccount, Long>> groupList = BotRabbit.bot.getAccountManager().getGroupAccountIndex();
         for (Long groupId : groupList.keySet()) {
             icqHttpApi.sendGroupMsg(groupId, msg);

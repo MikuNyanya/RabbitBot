@@ -1,6 +1,7 @@
 package gugugu.service;
 
 import cc.moecraft.icq.accounts.BotAccount;
+import cn.hutool.http.HttpException;
 import gugugu.apirequest.weibo.WeiboHomeTimelineGet;
 import gugugu.bots.BotRabbit;
 import gugugu.bots.LoggerRabbit;
@@ -83,7 +84,7 @@ public class WeiboNewsService {
                 //如果超时，重试一次
                 try {
                     RabbitBotService.sendGroupMsg(groupId, msg);
-                } catch (Exception ex) {
+                } catch (HttpException ex) {
                     if ("Read timed out".equalsIgnoreCase(ex.getMessage())) {
                         LoggerRabbit.logger().error("groupId[" + groupId + "]微博消息推送执行异常:" + ex.toString(), ex);
                         RabbitBotService.sendGroupMsg(groupId, "微博消息推送超时，即将重试");
