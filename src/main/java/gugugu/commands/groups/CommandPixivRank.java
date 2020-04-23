@@ -14,6 +14,7 @@ import gugugu.entity.pixiv.PixivRankImageInfo;
 import gugugu.service.PixivBugService;
 import gugugu.service.PixivService;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,9 @@ public class CommandPixivRank implements GroupCommand {
                 event.getHttpApi().sendGroupMsg(event.getGroupId(), resultStr);
                 Thread.sleep(1000L * 5);
             }
+        } catch (SocketTimeoutException stockTimeoutEx) {
+            LoggerRabbit.logger().warning(ConstantImage.PIXIV_IMAGE_TIMEOUT + stockTimeoutEx.toString());
+            return ConstantImage.PIXIV_IMAGE_TIMEOUT;
         } catch (Exception ex) {
             LoggerRabbit.logger().error(ConstantImage.PIXIV_IMAGE_RANK_ERROR + ex.toString(), ex);
             return ConstantImage.PIXIV_IMAGE_RANK_ERROR;

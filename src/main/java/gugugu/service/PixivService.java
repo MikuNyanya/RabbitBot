@@ -17,6 +17,7 @@ import utils.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Proxy;
 import java.util.*;
 
@@ -283,7 +284,7 @@ public class PixivService {
      * @param url p站图片链接
      * @return cq码或者错误信息
      */
-    public static String getPixivImgCQByPixivImgUrl(String url, Long pixivId) throws IOException {
+    public static String getPixivImgCQByPixivImgUrl(String url, Long pixivId) throws IOException, ConnectException {
         //先检测是否已下载，如果已下载直接返回CQ，以p站图片名称为key
         String pixivImgFileName = url.substring(url.lastIndexOf("/") + 1);
         String localPixivFilePath = ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "pixiv" + File.separator + pixivImgFileName;
@@ -323,6 +324,7 @@ public class PixivService {
      * @throws IOException api异常
      */
     private static String parsePixivImgInfoByApiInfo(ImjadPixivResponse response, String similarity) throws IOException {
+
         //图片标题
         String title = response.getTitle();
         //图片简介
@@ -333,7 +335,17 @@ public class PixivService {
         String createDate = response.getCreated_time();
 
         //图片cq码
-        String pixivImgCQ = getPixivImgCQByPixivImgUrl(response.getImage_urls().getLarge(), response.getId());
+        String pixivImgCQ = null;
+        //r18过滤
+//        if ("r18".equalsIgnoreCase(response.getAge_limit())) {
+//            String configR18 = ConstantConfig.common_config.get(ConstantConfig.CONFIG_R18);
+//            if (StringUtil.isEmpty(configR18) || ConstantCommon.OFF.equalsIgnoreCase(configR18)) {
+//                pixivImgCQ = ConstantImage.PIXIV_IMAGE_R18;
+//            }
+//        }
+//        if (null == pixivImgCQ) {
+            pixivImgCQ = getPixivImgCQByPixivImgUrl(response.getImage_urls().getLarge(), response.getId());
+//        }
 
         StringBuilder resultStr = new StringBuilder();
         resultStr.append(pixivImgCQ);

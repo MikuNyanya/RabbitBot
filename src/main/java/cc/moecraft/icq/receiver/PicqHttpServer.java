@@ -4,13 +4,13 @@ import cc.moecraft.icq.PicqBotX;
 import cc.moecraft.icq.event.events.local.EventLocalHttpFail;
 import cc.moecraft.icq.event.events.local.EventLocalHttpFail.Reason;
 import cc.moecraft.icq.exceptions.HttpServerException;
-import utils.SHA1Utils;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import gugugu.bots.LoggerRabbit;
 import lombok.Getter;
+import utils.SHA1Utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,8 +32,7 @@ import static utils.NetUtils.read;
  * @since 2019-03-23 12:55
  */
 @Getter
-public class PicqHttpServer
-{
+public class PicqHttpServer {
     /**
      * 端口号 (0~65535)
      */
@@ -53,10 +52,9 @@ public class PicqHttpServer
      * 构造一个Http服务器
      *
      * @param port 端口
-     * @param bot 机器人
+     * @param bot  机器人
      */
-    public PicqHttpServer(int port, PicqBotX bot)
-    {
+    public PicqHttpServer(int port, PicqBotX bot) {
         this.port = port;
         this.bot = bot;
     }
@@ -64,10 +62,8 @@ public class PicqHttpServer
     /**
      * 启动 Http 服务器
      */
-    public void start()
-    {
-        try
-        {
+    public void start() {
+        try {
             // 使用 Java SE 6 内置的 HttpServer
             server = HttpServer.create(new InetSocketAddress(port), 0);
 
@@ -76,9 +72,7 @@ public class PicqHttpServer
 
             // 启动
             server.start();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new HttpServerException(LoggerRabbit.logger(), e);
         }
     }
@@ -86,22 +80,18 @@ public class PicqHttpServer
     /**
      * Http 监听器
      */
-    private class PicqHttpHandler implements HttpHandler
-    {
+    private class PicqHttpHandler implements HttpHandler {
         @Override
-        public void handle(HttpExchange exchange) throws IOException
-        {
+        public void handle(HttpExchange exchange) throws IOException {
             // 是否暂停
-            if (bot.getConfig().isHttpPaused())
-            {
+            if (bot.getConfig().isHttpPaused()) {
                 respondAndClose(exchange, 503, "");
                 return;
             }
 
             // 验证 HTTP头
-            if (!validateHeader(exchange))
-            {
-                respondAndClose(exchange, 200, "Oh hi there! How are you?");
+            if (!validateHeader(exchange)) {
+                respondAndClose(exchange, 200, "rabbitbot here,what's up");
                 return;
             }
 
@@ -109,8 +99,7 @@ public class PicqHttpServer
             String data = read(exchange.getRequestBody());
 
             // 验证 SHA1
-            if (!validateSHA1(exchange, data))
-            {
+            if (!validateSHA1(exchange, data)) {
                 respondAndClose(exchange, 403, "");
                 return;
             }
@@ -132,11 +121,9 @@ public class PicqHttpServer
      * @param exchange 请求
      * @return 是否为 CoolQ Http 请求
      */
-    private boolean validateHeader(HttpExchange exchange)
-    {
+    private boolean validateHeader(HttpExchange exchange) {
         // 必须是 POST
-        if (!exchange.getRequestMethod().toLowerCase().equals("post"))
-        {
+        if (!exchange.getRequestMethod().toLowerCase().equals("post")) {
             return failed(INCORRECT_REQUEST_METHOD, "Not POST");
         }
 
@@ -146,20 +133,17 @@ public class PicqHttpServer
         String userAgent = headers.getFirst("user-agent");
 
         // 必须是 UTF-8
-        if (!contentType.toLowerCase().contains("charset=utf-8"))
-        {
+        if (!contentType.toLowerCase().contains("charset=utf-8")) {
             return failed(INCORRECT_CHARSET, "Not UTF-8");
         }
 
         // 必须是 JSON
-        if (!contentType.contains("application/json"))
-        {
+        if (!contentType.contains("application/json")) {
             return failed(INCORRECT_APPLICATION_TYPE, "Not JSON");
         }
 
         // 判断版本
-        if (!bot.getConfig().isNoVerify() && !userAgent.matches(HTTP_API_VERSION_DETECTION))
-        {
+        if (!bot.getConfig().isNoVerify() && !userAgent.matches(HTTP_API_VERSION_DETECTION)) {
             reportIncorrectVersion(userAgent);
             return failed(INCORRECT_VERSION, "Supported Version: " + HTTP_API_VERSION_DETECTION);
         }
@@ -171,14 +155,12 @@ public class PicqHttpServer
      * 验证 HAMC SHA1 (如果有的话)
      *
      * @param exchange 请求
-     * @param data 数据
+     * @param data     数据
      * @return 如果有, 是否验证成功
      */
-    private boolean validateSHA1(HttpExchange exchange, String data)
-    {
+    private boolean validateSHA1(HttpExchange exchange, String data) {
         // 是否启用验证
-        if (bot.getConfig().getSecret().isEmpty())
-        {
+        if (bot.getConfig().getSecret().isEmpty()) {
             return true;
         }
 
@@ -186,8 +168,7 @@ public class PicqHttpServer
         String signature = exchange.getRequestHeaders().getFirst("x-signature");
 
         // CoolQ HTTP 是否有发送 SHA1
-        if (signature == null || signature.isEmpty())
-        {
+        if (signature == null || signature.isEmpty()) {
             return failed(INCORRECT_SHA1, "Signature Empty");
         }
 
@@ -198,8 +179,7 @@ public class PicqHttpServer
         String generatedSignature = SHA1Utils.generateHAMCSHA1(data, bot.getConfig().getSecret());
 
         // 判断生成的和获取的是不是一样的
-        if (!signature.equals(generatedSignature))
-        {
+        if (!signature.equals(generatedSignature)) {
             return failed(INCORRECT_SHA1, "Signature Mismatch: \n" +
                     "- Sent: " + signature + "\n- Generated: " + generatedSignature);
         }
@@ -211,8 +191,7 @@ public class PicqHttpServer
      *
      * @param reason 失败原因
      */
-    private boolean failed(Reason reason, String text)
-    {
+    private boolean failed(Reason reason, String text) {
         getBot().getEventManager().call(new EventLocalHttpFail(reason));
         LoggerRabbit.logger().debug("Http Failed: {}: {}", reason, text);
         return false;
@@ -223,8 +202,7 @@ public class PicqHttpServer
      *
      * @param currentVersion 当前版本
      */
-    private void reportIncorrectVersion(String currentVersion)
-    {
+    private void reportIncorrectVersion(String currentVersion) {
         LoggerRabbit.logger().error("HTTP API请求版本不正确, 设置的兼容版本为: " + HTTP_API_VERSION_DETECTION);
         LoggerRabbit.logger().error("当前版本为: " + currentVersion);
         LoggerRabbit.logger().error("推荐更新这个类库或者HTTP API的版本");
@@ -235,11 +213,10 @@ public class PicqHttpServer
      * 回复输出
      *
      * @param exchange 请求
-     * @param code HTTP返回码 (204 = CoolQ 处理成功)
+     * @param code     HTTP返回码 (204 = CoolQ 处理成功)
      * @param response 回复
      */
-    private void respondAndClose(HttpExchange exchange, int code, String response) throws IOException
-    {
+    private void respondAndClose(HttpExchange exchange, int code, String response) throws IOException {
         byte[] bytes = response.getBytes();
 
         exchange.sendResponseHeaders(code, bytes.length == 0 ? -1 : bytes.length);
@@ -253,13 +230,12 @@ public class PicqHttpServer
      * 输出Debug消息
      *
      * @param exchange 请求
-     * @param data 数据
+     * @param data     数据
      */
-    private void printDebug(HttpExchange exchange, String data)
-    {
-        if (!bot.getConfig().isDebug()) return;
-
-        LoggerRabbit.logger().debug("收到新请求: {}", exchange.getRequestHeaders().getFirst("user-agent"));
-        LoggerRabbit.logger().debug("- 数据: {}", data);
+    private void printDebug(HttpExchange exchange, String data) {
+        if (!bot.getConfig().isDebug()) {
+            return;
+        }
+        LoggerRabbit.logger().debug("收到新请求: {} - 数据: {}", exchange.getRequestHeaders().getFirst("user-agent"), data);
     }
 }

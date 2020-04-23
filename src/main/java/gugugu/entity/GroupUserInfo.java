@@ -104,10 +104,6 @@ public class GroupUserInfo {
 
     //是否为群主
     public boolean isOwner() {
-        //最高权限账号
-        if (BotRabbit.MASTER_QQ.contains(userId)) {
-            return true;
-        }
         if (StringUtil.isEmpty(role)) {
             return false;
         }

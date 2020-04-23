@@ -13,6 +13,7 @@ import utils.NumberUtil;
 import utils.StringUtil;
 
 import java.io.FileNotFoundException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 /**
@@ -58,6 +59,9 @@ public class CommandPid implements EverywhereCommand {
         } catch (FileNotFoundException fileNotFoundEx) {
             LoggerRabbit.logger().warning(ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString());
             return ConstantImage.PIXIV_IMAGE_DELETE;
+        } catch (SocketTimeoutException stockTimeoutEx) {
+            LoggerRabbit.logger().warning(ConstantImage.PIXIV_IMAGE_TIMEOUT + stockTimeoutEx.toString());
+            return ConstantImage.PIXIV_IMAGE_TIMEOUT;
         } catch (Exception ex) {
             LoggerRabbit.logger().error(ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE + ex.toString(), ex);
             result = ConstantImage.PIXIV_ID_GET_ERROR_GROUP_MESSAGE;

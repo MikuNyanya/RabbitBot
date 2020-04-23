@@ -86,7 +86,7 @@ BUG生产机
 三倍☆icecream
 十连不出货
 猎魔人的膝盖
-被冻结的Gallifrey
+Gallifrey
 TARDIS
 土耳其毡帽
 DoctorWho
@@ -95,7 +95,6 @@ DoctorWho
 gay
 TimeLord
 Dalek
-CyberMan
 霜之哀伤
 火之高兴
 笨蛋铃子
@@ -420,3 +419,4 @@ AT-AT
 madafaka
 妹汁
 illusion
+再来一瓶

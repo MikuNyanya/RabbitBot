@@ -10,6 +10,7 @@ import gugugu.service.PixivService;
 import gugugu.service.RabbitBotService;
 import utils.StringUtil;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,6 +65,9 @@ public class CommandPtag implements EverywhereCommand {
         String result = "";
         try {
             result = PixivService.getPixivIllustByTag(tag);
+        } catch (SocketTimeoutException stockTimeoutEx) {
+            LoggerRabbit.logger().warning(ConstantImage.PIXIV_IMAGE_TIMEOUT + stockTimeoutEx.toString());
+            return ConstantImage.PIXIV_IMAGE_TIMEOUT;
         } catch (Exception ex) {
             LoggerRabbit.logger().error(ConstantImage.PIXIV_TAG_GET_ERROR_GROUP_MESSAGE + ex.toString(), ex);
             result = ConstantImage.PIXIV_TAG_GET_ERROR_GROUP_MESSAGE;

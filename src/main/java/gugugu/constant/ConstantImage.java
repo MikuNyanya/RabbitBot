@@ -62,10 +62,12 @@ public class ConstantImage extends ConstantCommon {
     public static final String PIXIV_IMAGE_IGNORE_WARNING = "[P站图片已忽略加载]";
     public static final String PIXIV_IMAGE_DOWNLOAD_FAIL = "[P站图片下载失败]";
     public static final String PIXIV_IMAGE_DELETE = "[P站图片已被删除]";
+    public static final String PIXIV_IMAGE_TIMEOUT = "P站图片获取超时，请重试";
     public static final String PIXIV_IMAGE_RANK_ERROR = "P站日榜信息获取异常";
     public static final String PIXIV_IMAGE_RANK_JOB_ERROR = "P站日榜信息推送异常";
     public static final String PIXIV_IMAGE_ID_IS_EMPTY = "你得给我一个p站图片id";
     public static final String PIXIV_IMAGE_ID_IS_NUMBER_ONLY = "p站图片id只会是纯数字";
+    public static final String PIXIV_IMAGE_R18 = "[该图片为R18，不予展示]";
 
     public static final String PIXIV_IMAGE_TAG_IS_EMPTY = "你得给我一个p站图片tag";
     public static final String PIXIV_IMAGE_TAG_NO_RESULT = "[这个tag没有搜索结果]";
