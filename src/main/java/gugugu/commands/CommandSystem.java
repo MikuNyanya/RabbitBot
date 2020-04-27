@@ -36,7 +36,7 @@ public class CommandSystem implements EverywhereCommand {
         msg.append("==========\n");
         msg.append(String.format("[Name] %s(%s)\n", BotRabbit.BOT_NAME, BotRabbit.BOT_NAME_EN));
         msg.append("[Birthday] 2019-12-3\n");
-        msg.append("[Version] V2.3\n");
+        msg.append("[Version] V2.5\n");
         msg.append("[酷Q] " + capitalizeFirstLetterOfEachWord(versionInfo.getCoolqEdition()) + "\n");
         msg.append("[HTTP API] " + versionInfo.getPluginVersion() + "\n");
         msg.append("System Online\n");
