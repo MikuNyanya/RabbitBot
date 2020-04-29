@@ -3,6 +3,7 @@ package gugugu.service;
 import gugugu.apirequest.imjad.PixivImjadIllustGet;
 import gugugu.apirequest.imjad.PixivImjadIllustRankGet;
 import gugugu.apirequest.imjad.PixivImjadIllustSearch;
+import gugugu.apirequest.imjad.PixivImjadMemberIllustGet;
 import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantCommon;
 import gugugu.constant.ConstantConfig;
@@ -11,6 +12,7 @@ import gugugu.entity.apirequest.imjad.*;
 import gugugu.entity.apirequest.saucenao.SaucenaoSearchInfoResult;
 import gugugu.entity.pixiv.PixivRankImageInfo;
 import gugugu.exceptions.RabbitException;
+import gugugu.filemanage.FileManagerPixivMember;
 import gugugu.filemanage.FileManagerPixivTags;
 import utils.*;
 
@@ -92,6 +94,8 @@ public class PixivService {
 
             //保存一份tag
             saveTags(image.getWork().getTags());
+            //保存一份作者信息
+            saveMemberInfo(imageDetail.getUser());
         }
 
         return rankImageList;
@@ -187,6 +191,81 @@ public class PixivService {
 
         //4.返回结果
         return parsePixivImgInfoByApiInfo(respInfo, null);
+    }
+
+    /**
+     * 根据作者名称获取随机三个作品
+     * 作者名称进行精准查询
+     * 纯随机
+     *
+     * @param memberName 作者名称， 准确
+     * @return 拼装好的群消息
+     */
+    public static String getPixivIllustByMember(String memberName) throws IOException {
+        if (StringUtil.isEmpty(memberName)) {
+            return "";
+        }
+
+        Long memberId = null;
+        //查看当前本地作者缓存
+        for (String memberLocalStr : ConstantImage.PIXIV_MEMBER_LIST) {
+            String[] memberLocalInfos = memberLocalStr.split(",");
+            //忽略异常数据
+            if (memberLocalInfos.length < 2) {
+                continue;
+            }
+            String memberLocalName = memberLocalInfos[1];
+            if (memberName.equals(memberLocalName)) {
+                memberId = NumberUtil.toLong(memberLocalInfos[0]);
+                break;
+            }
+        }
+
+        //todo 缓存查不到去页面请求查作者
+
+        //都查不到返回结果
+        if (null == memberId) {
+            return ConstantImage.PIXIV_MEMBER_NOT_FOUND + "[" + memberName + "]";
+        }
+
+        int pageSize = 10;
+        //1.根据作者查询作品总数
+        PixivImjadMemberIllustGet request = new PixivImjadMemberIllustGet();
+        request.setPage(1);
+        request.setPageSize(10);
+        request.setMemberId(memberId);
+        request.doRequest();
+
+        ImjadPixivResult result = request.getEntity();
+        ImjadPixivPagination pagination = result.getPagination();
+        //总结果数量
+        int total = pagination.getTotal();
+        if (0 >= total) {
+            return "[" + memberName + "]" + ConstantImage.PIXIV_MEMBER_NO_ILLUST;
+        }
+
+        //2.随机获取作者作品中的三个
+        List<ImjadPixivResponse> randIllustList;
+        if (total <= pageSize) {
+            //如果作品少于1页，直接使用上面的结果随机即可
+            randIllustList = getMemberIllustListLessThanPageSize(result);
+        } else {
+            //如果多于1页，进行跳页随机
+            randIllustList = getMemberIllustListMoreThanPageSize(memberId, pagination.getPages(), pageSize);
+        }
+
+        //3.返回结果
+        boolean isFirst = true;
+        StringBuilder resultSb = new StringBuilder();
+        for (ImjadPixivResponse imjadPixivResponse : randIllustList) {
+            if (isFirst) {
+                isFirst = false;
+            }else{
+                resultSb.append("\n\n");
+            }
+            resultSb.append(parsePixivImgInfoByApiInfo(imjadPixivResponse, null));
+        }
+        return resultSb.toString();
     }
 
     /**
@@ -337,15 +416,15 @@ public class PixivService {
         //图片cq码
         String pixivImgCQ = null;
         //r18过滤
-//        if ("r18".equalsIgnoreCase(response.getAge_limit())) {
-//            String configR18 = ConstantConfig.common_config.get(ConstantConfig.CONFIG_R18);
-//            if (StringUtil.isEmpty(configR18) || ConstantCommon.OFF.equalsIgnoreCase(configR18)) {
-//                pixivImgCQ = ConstantImage.PIXIV_IMAGE_R18;
-//            }
-//        }
-//        if (null == pixivImgCQ) {
+        if ("r18".equalsIgnoreCase(response.getAge_limit())) {
+            String configR18 = ConstantConfig.common_config.get(ConstantConfig.CONFIG_R18);
+            if (StringUtil.isEmpty(configR18) || ConstantCommon.OFF.equalsIgnoreCase(configR18)) {
+                pixivImgCQ = ConstantImage.PIXIV_IMAGE_R18;
+            }
+        }
+        if (null == pixivImgCQ) {
             pixivImgCQ = getPixivImgCQByPixivImgUrl(response.getImage_urls().getLarge(), response.getId());
-//        }
+        }
 
         StringBuilder resultStr = new StringBuilder();
         resultStr.append(pixivImgCQ);
@@ -363,6 +442,8 @@ public class PixivService {
 
         //保存一份tag
         saveTags(response.getTags());
+        //保存一份作者信息
+        saveMemberInfo(response.getUser());
 
         return resultStr.toString();
     }
@@ -385,6 +466,61 @@ public class PixivService {
         return resultStr.toString();
     }
 
+    //从一页里随机出指定数量的结果
+    private static List<ImjadPixivResponse> getMemberIllustListLessThanPageSize(ImjadPixivResult result) {
+        int total = result.getPagination().getTotal();
+        List<ImjadPixivResponse> tempList = result.getResponse();
+        //如果小于等于指定阈值，直接展示所有
+        if (total <= ConstantImage.PIXIV_MEMBER_ILLUST_SHOW_COUNT) {
+            return tempList;
+        }
+
+        //随机出指定书目以内不重复的数字，结果为下标
+        List<Integer> randNumList = RandomUtil.roll(tempList.size() - 1, ConstantImage.PIXIV_MEMBER_ILLUST_SHOW_COUNT);
+        if (null == randNumList) {
+            return tempList;
+        }
+
+        List<ImjadPixivResponse> rspList = new ArrayList<>();
+        for (Integer randNum : randNumList) {
+            rspList.add(tempList.get(randNum));
+        }
+        return rspList;
+    }
+
+    //用户作品跳页随机
+    private static List<ImjadPixivResponse> getMemberIllustListMoreThanPageSize(Long memberId, Integer maxPage, int pageSize) throws IOException {
+        List<ImjadPixivResponse> reslutList = new ArrayList<>();
+
+        //防重复 k=page v=index
+//        Map<Integer,Integer> reMap = new HashMap<>();
+
+        int i = 1;
+        do {
+            //随机页数，随机作品下标，可能会有重复
+            int page = RandomUtil.roll(maxPage);
+            if (page == 0) {
+                page = 1;
+            }
+
+            PixivImjadMemberIllustGet request = new PixivImjadMemberIllustGet();
+            request.setPage(page);
+            request.setPageSize(pageSize);
+            request.setMemberId(memberId);
+            request.doRequest();
+
+            ImjadPixivResult result = request.getEntity();
+            List<ImjadPixivResponse> responseList = result.getResponse();
+            if (null != responseList && responseList.size() > 0) {
+                int index = RandomUtil.roll(responseList.size() - 1);
+                reslutList.add(responseList.get(index));
+            }
+            i++;
+        } while (i <= ConstantImage.PIXIV_MEMBER_ILLUST_SHOW_COUNT);
+        return reslutList;
+    }
+
+    //保存tag信息
     public static void saveTags(List<String> tags) {
         if (null == tags) {
             return;
@@ -407,6 +543,28 @@ public class PixivService {
         } catch (Exception ex) {
             //异常不上抛，不是主要业务
             LoggerRabbit.logger().error(ConstantImage.PIXIV_TAG_SAVE_ERROR + " " + ex.toString(), ex);
+        }
+    }
+
+    //保存一份作者信息
+    public static void saveMemberInfo(ImjadPixivUser user) {
+        if (null == user) {
+            return;
+        }
+        try {
+            //拼接为字符串
+            String memberStr = String.format("%s,%s,%s", user.getId(), user.getName(), user.getAccount(), user.getProfile_image_urls());
+
+            //判重
+            if (ConstantImage.PIXIV_MEMBER_LIST.contains(memberStr)) {
+                return;
+            }
+
+            //保存
+            FileManagerPixivMember.addMemberInfo(memberStr);
+        } catch (Exception ex) {
+            //不影响主业务
+            LoggerRabbit.logger().error(ConstantImage.PIXIV_MEMBER_SAVE_ERROR + ex.toString(), ex);
         }
     }
 }

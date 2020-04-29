@@ -10,7 +10,6 @@ import gugugu.listeners.GroupListener;
 import gugugu.listeners.GroupMemberDecreaseListener;
 import gugugu.listeners.GroupMemberIncreaseListener;
 import gugugu.listeners.SimpleTextLoggingListener;
-import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -113,7 +112,8 @@ public class BotRabbit {
             new CommandAnimeSearch(),
             new CommandMorseCode(),
             new CommandPtags(),
-            new CommandQRCode()
+            new CommandQRCode(),
+            new CommandPUserIllust()
     };
 
     /**

@@ -26,6 +26,36 @@ public class RandomUtil {
     }
 
     /**
+     * 随机多个正整数
+     * 最小为0
+     * 最大以传参为准
+     *
+     * @param maxNum 随机出的最大数
+     * @param count  返回元素数量
+     * @return 一个符合条件的随机数
+     */
+    public static List<Integer> roll(int maxNum, int count) {
+        //返回的元素数量不能大于可随机的元素数量
+        if (count > maxNum) {
+            return null;
+        }
+        List<Integer> randNumList = new ArrayList<>();
+        int i = 1;
+        do {
+            do {
+                //由于不会随机到入参本身，所以需要+1
+                Integer randNum = roll(maxNum);
+                if (!randNumList.contains(randNum)) {
+                    randNumList.add(randNum);
+                    break;
+                }
+            } while (true);
+            i++;
+        } while (maxNum > i);
+        return randNumList;
+    }
+
+    /**
      * 重载 随机一个正整数
      * 0-100 包含0和100
      *

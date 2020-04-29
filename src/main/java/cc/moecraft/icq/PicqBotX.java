@@ -184,6 +184,8 @@ public class PicqBotX {
         FileManagerPixivTags.loadFile();
         //pixiv图片已整理的tag
         FileManagerPixivTags.loadRabbitFile();
+        //pixiv用户信息
+        FileManagerPixivMember.loadFile();
 
         prgressIndex++;
         logInitDone(LoggerRabbit.logger(), "外部资源文件     ", prgressIndex, fullProgress - prgressIndex);

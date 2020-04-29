@@ -85,6 +85,15 @@ public class ConstantImage extends ConstantCommon {
     public static final String PIXIV_TAG_SAVE_ERROR = "P站图片tag保存异常";
     public static final String PIXIV_TAG_IS_EMPTY = "P站tag资料库里空空如也";
 
+    //p站作者相关
+    public static ArrayList<String> PIXIV_MEMBER_LIST = new ArrayList<>();
+    //每次使用作者搜图，展示多少张图片
+    public static final Integer PIXIV_MEMBER_ILLUST_SHOW_COUNT = 3;
+    public static final String PIXIV_MEMBER_IS_EMPTY = "你得给我一个p站作者名称";
+    public static final String PIXIV_MEMBER_NOT_FOUND = "没有查到这个作者的相关信息";
+    public static final String PIXIV_MEMBER_NO_ILLUST = "这个作者没有作品";
+    public static final String PIXIV_MEMBER_GET_ERROR_GROUP_MESSAGE = "根据P站作者获取信息异常";
+    public static final String PIXIV_MEMBER_SAVE_ERROR = "Pixiv作者信息保存异常";
 
     ///Danbooru
     public static final String DANBOORU_ID_GET_NOT_FOUND = "根据Danbooru图片id没有找到图片";
