@@ -553,7 +553,7 @@ public class PixivService {
         }
         try {
             //拼接为字符串
-            String memberStr = String.format("%s,%s,%s", user.getId(), user.getName(), user.getAccount(), user.getProfile_image_urls());
+            String memberStr = String.format("%s,%s,%s", user.getId(), user.getName(), user.getAccount());
 
             //判重
             if (ConstantImage.PIXIV_MEMBER_LIST.contains(memberStr)) {
