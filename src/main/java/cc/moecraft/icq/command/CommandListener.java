@@ -6,6 +6,7 @@ import cc.moecraft.icq.event.events.message.EventDiscussMessage;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
 import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.event.events.message.EventPrivateMessage;
+import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantBlackList;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +76,7 @@ public class CommandListener extends IcqListener {
             try {
                 commandManager.runCommand(event);
             } catch (Throwable e) {
-                e.printStackTrace();
+                LoggerRabbit.logger().error("CommandListener error", e);
                 event.getBot().getEventManager().callError(event, e);
                 event.getBot().getConfig().getCommandErrorHandler().accept(e);
             }

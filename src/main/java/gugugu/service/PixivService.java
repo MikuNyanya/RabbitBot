@@ -388,7 +388,7 @@ public class PixivService {
             }
         } catch (FileNotFoundException fileNotFoundEx) {
             //图片被删了
-            LoggerRabbit.logger().error("PixivService getPixivImgCQByPixivImgUrl " + ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString(), fileNotFoundEx);
+            LoggerRabbit.logger().warning("PixivService getPixivImgCQByPixivImgUrl " + ConstantImage.PIXIV_IMAGE_DELETE + fileNotFoundEx.toString(), fileNotFoundEx);
             imgCQ = ConstantImage.PIXIV_IMAGE_DELETE;
         }
         return imgCQ;
@@ -475,7 +475,7 @@ public class PixivService {
             return tempList;
         }
 
-        //随机出指定书目以内不重复的数字，结果为下标
+        //随机出指定数目以内不重复的数字，结果为下标
         List<Integer> randNumList = RandomUtil.roll(tempList.size() - 1, ConstantImage.PIXIV_MEMBER_ILLUST_SHOW_COUNT);
         if (null == randNumList) {
             return tempList;

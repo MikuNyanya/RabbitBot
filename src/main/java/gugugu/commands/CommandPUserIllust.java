@@ -52,7 +52,11 @@ public class CommandPUserIllust implements EverywhereCommand {
             return ConstantImage.PIXIV_MEMBER_IS_EMPTY;
         }
         //基本输入校验
-        String memberName = args.get(0);
+        String memberName = "";
+        for (String argStr : args) {
+            memberName = memberName + argStr + " ";
+        }
+        memberName = StringUtil.trim(memberName);
         if (StringUtil.isEmpty(memberName)) {
             return ConstantImage.PIXIV_MEMBER_IS_EMPTY;
         }

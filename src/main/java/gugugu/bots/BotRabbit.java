@@ -113,7 +113,8 @@ public class BotRabbit {
             new CommandMorseCode(),
             new CommandPtags(),
             new CommandQRCode(),
-            new CommandPUserIllust()
+            new CommandPUserIllust(),
+            new CommandPUsers()
     };
 
     /**

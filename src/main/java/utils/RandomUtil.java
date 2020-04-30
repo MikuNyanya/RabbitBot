@@ -51,7 +51,7 @@ public class RandomUtil {
                 }
             } while (true);
             i++;
-        } while (maxNum > i);
+        } while (count >= i);
         return randNumList;
     }
 
