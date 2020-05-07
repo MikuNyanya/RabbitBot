@@ -188,7 +188,7 @@ public class ImageService {
                     continue;
                 }
 
-                //过滤掉相似度50一下的 todo 写为可外部调整的配置
+                //过滤掉相似度50一下的
                 String similarity = infoResult.getHeader().getSimilarity();
                 if (StringUtil.isEmpty(similarity) || 50.0 > NumberUtil.toDouble(similarity)) {
                     continue;

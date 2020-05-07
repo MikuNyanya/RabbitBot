@@ -200,8 +200,6 @@ public class KeyWordService {
      * @return bol值 表示有没有进行群消息回复
      */
     private boolean groupKeyWordImage(EventGroupMessage event) throws IOException {
-        //todo 10秒响应一次
-
         String groupMsg = event.getMessage();
 
         //检测模糊关键词
