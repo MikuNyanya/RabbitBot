@@ -3,6 +3,7 @@ package gugugu.service;
 import gugugu.apirequest.saucenao.SaucenaoImageSearch;
 import gugugu.bots.LoggerRabbit;
 import gugugu.constant.ConstantCommon;
+import gugugu.constant.ConstantConfig;
 import gugugu.constant.ConstantImage;
 import gugugu.entity.ImageInfo;
 import gugugu.entity.apirequest.saucenao.SaucenaoSearchInfoResult;
@@ -114,11 +115,20 @@ public class ImageService {
 
         //如果图片超出大小，则缩小图片，不然无法通过酷Q发送
         //判断图片的大小
-        ImageInfo imageInfo = ImageUtil.getImageInfo(localImagePath);
-        boolean overSize = ConstantImage.IMAGE_SCALE_MIN_SIZE * 1024 * 1024 < imageInfo.getSize();
-        boolean overHeight = ConstantImage.IMAGE_SCALE_MIN_HEIGHT < imageInfo.getHeight();
-        boolean overWidth = ConstantImage.IMAGE_SCALE_MIN_WIDTH < imageInfo.getWidth();
-        if (overSize || overHeight || overWidth) {
+        boolean isScale = false;
+        //强制转化配置
+        //是否不加载p站图片，由于从p站本体拉数据，还没代理，很慢
+        String image_scale_force = ConstantCommon.common_config.get(ConstantConfig.CONFIG_IMAGE_SCALE_FORCE);
+        if (ConstantConfig.ON.equalsIgnoreCase(image_scale_force)) {
+            isScale = true;
+        } else {
+            ImageInfo imageInfo = ImageUtil.getImageInfo(localImagePath);
+            boolean overSize = ConstantImage.IMAGE_SCALE_MIN_SIZE * 1024 * 1024 < imageInfo.getSize();
+            boolean overHeight = ConstantImage.IMAGE_SCALE_MIN_HEIGHT < imageInfo.getHeight();
+            boolean overWidth = ConstantImage.IMAGE_SCALE_MIN_WIDTH < imageInfo.getWidth();
+            isScale = overSize || overHeight || overWidth;
+        }
+        if (isScale) {
             //生成修改后的文件名和路径，后缀为jpg
             imageFullName = imageFullName.substring(0, imageFullName.lastIndexOf("."));
             String scaleImgName = ConstantImage.IMAGE_SCALE_PREFIX + imageFullName + ".jpg";
