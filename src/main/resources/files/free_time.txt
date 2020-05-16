@@ -95,3 +95,4 @@ You've killed more than 2 people and less than 4.
 we are one\nwe are rabbitbot
 我们不生产BUG，我们只是。。。\n啊，算了\n\n我们的工作就是生产BUG
 愿与最重要之人能再次相会
+I'm not rabbit, but $20 is $20
