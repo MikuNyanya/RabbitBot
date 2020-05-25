@@ -20,7 +20,7 @@ import java.util.List;
  * 搜索P站作者信息指令
  */
 public class CommandPUsers implements EverywhereCommand {
-    private static final int SHOW_COUNT = 8;
+    private static final int SHOW_COUNT = 15;
 
     /**
      * 执行指令

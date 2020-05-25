@@ -14,6 +14,7 @@ import utils.StringUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.Proxy;
 
 /**
  * @author MikuLink
@@ -71,7 +72,8 @@ public class DanbooruService {
             //目标页面
             String danbooru = "https://danbooru.donmai.us/posts/" + danbooruId;
             //通过请求获取到返回的页面
-            String htmlStr = HttpUtil.get(danbooru);
+            Proxy proxy = HttpUtil.getProxy();
+            String htmlStr = HttpUtil.get(danbooru, proxy);
             //使用jsoup解析html
             Document document = Jsoup.parse(htmlStr);
             //选择目标节点，类似于JS的选择器
