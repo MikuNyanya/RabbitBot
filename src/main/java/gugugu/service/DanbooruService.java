@@ -96,7 +96,7 @@ public class DanbooruService {
             }
 
             //下载图片
-            String localUrl = ImageUtil.downloadImage(imageUrl, ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "danbooru", null);
+            String localUrl = ImageUtil.downloadImage(null, imageUrl, ConstantImage.DEFAULT_IMAGE_SAVE_PATH + File.separator + "danbooru", null, proxy);
             if (StringUtil.isNotEmpty(localUrl)) {
                 imgCQ = ImageService.parseCQByLocalImagePath(localDanbooruFilePath);
             }

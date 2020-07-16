@@ -34,7 +34,7 @@ public class JobTimeRabbit implements Job {
         clearRPMap();
 
         //疫情总览信息推送
-        nCoV();
+//        nCoV();
 
         //pixiv日榜，最好放在最后执行，要下载图片
         //也可以另起一个线程，但我懒

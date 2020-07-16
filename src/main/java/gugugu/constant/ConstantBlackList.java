@@ -14,6 +14,7 @@ public class ConstantBlackList {
     public static final List<Long> BLACK_LIST = Arrays.asList(
             0L,
             1784402819L,//盲盲
-            2413572936L //盲盲2号机
+            2413572936L,//盲盲2号机
+            243557854L//公主连结机器人
     );
 }
