@@ -106,8 +106,8 @@ public class JobTimeRabbit implements Job {
         }
 
         try {
-            //获取天气情况，固定获取上海市
-            String msg = WeatherService.getWeatherByCityName("上海市");
+            //获取天气情况
+            String msg = WeatherService.getWeatherByCityName("宿州市");
 
             //给每个群发送报时
             RabbitBotService.sendEveryGroupMsg(msg);

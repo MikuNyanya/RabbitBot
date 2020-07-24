@@ -65,7 +65,12 @@ public class PixivService {
         for (ImjadPixivRankWork image : imageList) {
             ImjadPixivRankWorkWork imageDetail = image.getWork();
             //下载图片
-            String imgCQ = getPixivImgCQByPixivImgUrl(imageDetail.getImage_urls().getLarge(), Long.valueOf(imageDetail.getId()));
+            String imgCQ = null;
+            if (1 < imageDetail.getPage_count()) {
+                imgCQ = getPixivImgCQsByPixivImgUrl(Long.valueOf(imageDetail.getId()));
+            } else {
+                imgCQ = getPixivImgCQByPixivImgUrl(imageDetail.getImage_urls().getLarge(), Long.valueOf(imageDetail.getId()));
+            }
 
             //拼接成对象并返回
             PixivRankImageInfo rankImageInfo = new PixivRankImageInfo();
@@ -260,7 +265,7 @@ public class PixivService {
         for (ImjadPixivResponse imjadPixivResponse : randIllustList) {
             if (isFirst) {
                 isFirst = false;
-            }else{
+            } else {
                 resultSb.append("\n\n");
             }
             resultSb.append(parsePixivImgInfoByApiInfo(imjadPixivResponse, null));
@@ -395,6 +400,56 @@ public class PixivService {
     }
 
     /**
+     * 根据p站图片资源链接生成CQ码(多图)
+     *
+     * @return 多个图片的cq码或者错误信息
+     */
+    public static String getPixivImgCQsByPixivImgUrl(Long pixivId) throws IOException, ConnectException {
+        //获取图片详情
+        ImjadPixivResponse imjadPixivResponse = null;
+        try {
+            imjadPixivResponse = getImgsByPixivId(pixivId);
+        } catch (RabbitException rex) {
+            LoggerRabbit.logger().log(rex);
+            return rex.getMessage();
+        }
+        if (null == imjadPixivResponse) {
+            return ConstantImage.PIXIV_ID_GET_FAIL_GROUP_MESSAGE;
+        }
+
+        //解析出图片列表
+        ImjadPixivMetadata imjadPixivMetadata = imjadPixivResponse.getMetadata();
+        if (null == imjadPixivMetadata || null == imjadPixivMetadata.getPages() || imjadPixivMetadata.getPages().size() <= 0) {
+            return ConstantImage.PIXIV_IMAGES_NOT_LEGAL;
+        }
+
+        //查看多图展示数量配置，默认为3
+        String pixiv_config_images_show_count = ConstantCommon.common_config.get(ConstantImage.PIXIV_CONFIG_IMAGES_SHOW_COUNT);
+        if (!NumberUtil.isNumberOnly(pixiv_config_images_show_count)) {
+            pixiv_config_images_show_count = ConstantImage.PIXIV_CONFIG_IMAGES_SHOW_COUNT_DEFAULT;
+        }
+        Integer showCount = NumberUtil.toInt(pixiv_config_images_show_count);
+
+        StringBuilder imagesSB = new StringBuilder();
+        int i = 0;
+
+        for (ImjadPixivMetadataPage metadataPage : imjadPixivMetadata.getPages()) {
+            String imageCQ = getPixivImgCQByPixivImgUrl(metadataPage.getImage_urls().getLarge(), pixivId);
+            if (imagesSB.length() > 0) {
+                imagesSB.append("\n");
+            }
+            imagesSB.append(imageCQ);
+            //达到指定数量，结束追加图片
+            i++;
+            if (i >= showCount) {
+                break;
+            }
+        }
+        return imagesSB.toString();
+    }
+
+
+    /**
      * 接口返回的图片信息拼装为群消息
      *
      * @param response   接口返回对象
@@ -422,14 +477,21 @@ public class PixivService {
                 pixivImgCQ = ConstantImage.PIXIV_IMAGE_R18;
             }
         }
+        //展示图片
         if (null == pixivImgCQ) {
-            pixivImgCQ = getPixivImgCQByPixivImgUrl(response.getImage_urls().getLarge(), response.getId());
+            if (1 < response.getPage_count()) {
+                //多图
+                pixivImgCQ = getPixivImgCQsByPixivImgUrl(response.getId());
+            } else {
+                //单图
+                pixivImgCQ = getPixivImgCQByPixivImgUrl(response.getImage_urls().getLarge(), response.getId());
+            }
         }
 
         StringBuilder resultStr = new StringBuilder();
         resultStr.append(pixivImgCQ);
         if (1 < response.getPage_count()) {
-            resultStr.append("\n该Pid包含" + response.getPage_count() + "张图片");
+            resultStr.append("\n该Pid共包含" + response.getPage_count() + "张图片");
         }
         if (StringUtil.isNotEmpty(similarity)) {
             resultStr.append("\n[相似度] " + similarity + "%");

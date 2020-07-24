@@ -13,7 +13,7 @@ public class ConstantImage extends ConstantCommon {
     //处理后的图片存放目录
     public static final String DEFAULT_IMAGE_SCALE_SAVE_PATH = "data/images/scale";
     //酷Q的图片目录
-    public static final String COOLQ_IMAGE_SAVE_PATH = "D:/酷Q Pro/data/image";
+    public static final String COOLQ_IMAGE_SAVE_PATH = "E:/rabbit/酷Q Pro/data/image";
 
     //酷Q所需要的图片CQ码 占位符处是文件名（带后缀）
     public static String IMAGE_CQ = "[CQ:image,file=%s]";
@@ -76,6 +76,10 @@ public class ConstantImage extends ConstantCommon {
 
     public static final String PIXIV_ID_GET_FAIL_GROUP_MESSAGE = "根据P站图片id获取信息失败";
     public static final String PIXIV_ID_GET_ERROR_GROUP_MESSAGE = "根据P站图片id获取信息异常";
+
+    public static final String PIXIV_CONFIG_IMAGES_SHOW_COUNT = "pixivImagesShowCount";
+    public static final String PIXIV_CONFIG_IMAGES_SHOW_COUNT_DEFAULT = "3";
+    public static final String PIXIV_IMAGES_NOT_LEGAL = "这不是一个多图Pid";
 
     //p站tag相关
     //所有已收集tag

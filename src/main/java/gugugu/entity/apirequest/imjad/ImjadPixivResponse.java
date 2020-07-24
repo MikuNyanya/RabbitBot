@@ -61,7 +61,7 @@ public class ImjadPixivResponse {
     private boolean is_liked;
     private int favorite_id;
     //pid下的总p数
-    private int page_count;
+    private Integer page_count;
     private String book_style;
     //illustration 代表插画，其他的不太清楚
     private String type;
