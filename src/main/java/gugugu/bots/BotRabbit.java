@@ -114,7 +114,8 @@ public class BotRabbit {
             new CommandPtags(),
             new CommandQRCode(),
             new CommandPUserIllust(),
-            new CommandPUsers()
+            new CommandPUsers(),
+            new CommandPwd()
     };
 
     /**
