@@ -7,6 +7,7 @@ import cc.moecraft.icq.user.User;
 import gugugu.bots.BotRabbit;
 import gugugu.constant.ConstantConfig;
 import gugugu.constant.ConstantFile;
+import gugugu.entity.ReString;
 import gugugu.filemanage.FileManagerConfig;
 import utils.RandomUtil;
 import utils.StringUtil;
@@ -32,10 +33,6 @@ public class CommandConfig implements EverywhereCommand {
      */
     @Override
     public String run(EventMessage event, User sender, String command, ArrayList<String> args) {
-        //判断权限
-        if (!BotRabbit.MASTER_QQ.contains(sender.getId())) {
-            return RandomUtil.rollStrFromList(ConstantConfig.COMMAND_MASTER_ONLY);
-        }
 
         if (null == args || args.size() < 1) {
             return ConstantConfig.ARGS_ERROR;
@@ -51,6 +48,11 @@ public class CommandConfig implements EverywhereCommand {
         String configValue = null;
         if (args.size() >= 3) {
             configValue = args.get(2);
+        }
+
+        ReString reString = accessCheck(sender.getId(), configName);
+        if (!reString.isSuccess()) {
+            return reString.getMessage();
         }
 
         String resultMsg = "";
@@ -111,5 +113,21 @@ public class CommandConfig implements EverywhereCommand {
         //更新配置文件
         FileManagerConfig.doCommand(ConstantFile.FILE_COMMAND_WRITE);
         return ConstantConfig.CONFIG_SET_SUCCESS;
+    }
+
+    /**
+     * 权限检查
+     * 以后有页面了做成页面配置
+     */
+    private ReString accessCheck(Long qq, String configName) {
+        if (qq == 403621469L && ConstantConfig.CONFIG_R18.equalsIgnoreCase(configName)) {
+            return new ReString(true);
+        }
+
+        if (!BotRabbit.MASTER_QQ.contains(qq)) {
+            return new ReString(false, RandomUtil.rollStrFromList(ConstantConfig.COMMAND_MASTER_ONLY));
+        }
+
+        return new ReString(true);
     }
 }
